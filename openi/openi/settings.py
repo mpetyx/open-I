@@ -204,8 +204,8 @@ PASSWORD_HASHERS = (
     'django.contrib.auth.hashers.CryptPasswordHasher',
     )
 
-TWITTER_CONSUMER_KEY         = ''
-TWITTER_CONSUMER_SECRET      = ''
+TWITTER_CONSUMER_KEY         = 'Uifi6oR2hXaDaUGtTT61hw'
+TWITTER_CONSUMER_SECRET      = 'UyCcdRcYO4Ls084dGZ5FaQVG1Il3FL1EnQI7doMs'
 FACEBOOK_APP_ID              = '116224591864093'
 FACEBOOK_API_SECRET          = '9e5c5993a5d70f7ceecf96be0be74a5b'
 GOOGLE_CONSUMER_KEY          = ''
