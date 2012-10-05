@@ -1,0 +1,151 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FormEncode Internationalization (gettext) &mdash; FormEncode v1.2.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FormEncode v1.2.3 documentation" href="index.html" />
+    <link rel="next" title="htmlfill" href="htmlfill.html" />
+    <link rel="prev" title="FormEncode Validation" href="Validator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="htmlfill.html" title="htmlfill"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Validator.html" title="FormEncode Validation"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="formencode-internationalization-gettext">
+<h1>FormEncode Internationalization (gettext)<a class="headerlink" href="#formencode-internationalization-gettext" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Gregor Horvath &lt;gh at gregor-horvath dot com&gt; 2006</td>
+</tr>
+</tbody>
+</table>
+<p>There are different translation options available:</p>
+<div class="section" id="domain-formencode">
+<h2>Domain &#8220;FormEncode&#8221;<a class="headerlink" href="#domain-formencode" title="Permalink to this headline">¶</a></h2>
+<p>for standalone use of FormEncode. The language to use is determined out of the local system (see gettext documentation <a class="reference external" href="http://docs.python.org/lib/node733.html">http://docs.python.org/lib/node733.html</a>). Optionally you can also set the language or the domain explicitly with the function.</p>
+<p>example:
+formencode.api.set_stdtranslation(domain=&#8221;FormEncode&#8221;, languages=[&#8220;de&#8221;])</p>
+<p>The mo files are located in the i18n subdirectory of the formencode installation.</p>
+</div>
+<div class="section" id="state">
+<h2>state._<a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h2>
+<p>A custom _ gettext function provided as attribute of the state object.</p>
+</div>
+<div class="section" id="builtins">
+<h2>__builtins__._<a class="headerlink" href="#builtins" title="Permalink to this headline">¶</a></h2>
+<p>A custom _ gettext function provided in the builtin namespace.
+This function is only used when:</p>
+<p>Validator.use_builtin_gettext == True (True is default)</p>
+</div>
+<div class="section" id="without-translation">
+<h2>Without translation<a class="headerlink" href="#without-translation" title="Permalink to this headline">¶</a></h2>
+<p>If no translation mechanism is found a fallback returns the plain string.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FormEncode Internationalization (gettext)</a><ul>
+<li><a class="reference internal" href="#domain-formencode">Domain &#8220;FormEncode&#8221;</a></li>
+<li><a class="reference internal" href="#state">state._</a></li>
+<li><a class="reference internal" href="#builtins">__builtins__._</a></li>
+<li><a class="reference internal" href="#without-translation">Without translation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Validator.html"
+                        title="previous chapter">FormEncode Validation</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="htmlfill.html"
+                        title="next chapter">htmlfill</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/i18n.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="htmlfill.html" title="htmlfill"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Validator.html" title="FormEncode Validation"
+             >previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2008, Ian Bicking and Contributors.
+      Last updated on Sep 14, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

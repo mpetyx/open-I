@@ -1,0 +1,9 @@
+#!/Users/mpetyx/Documents/workspace/moodeet/moodeetHeroku/bin/python
+# EASY-INSTALL-ENTRY-SCRIPT: 'TurboGears==1.5.1','console_scripts','tg-admin'
+__requires__ = 'TurboGears==1.5.1'
+import sys
+from pkg_resources import load_entry_point
+
+sys.exit(
+   load_entry_point('TurboGears==1.5.1', 'console_scripts', 'tg-admin')()
+)

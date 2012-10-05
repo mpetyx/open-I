@@ -1,0 +1,294 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>API Reference &mdash; ImageKit 1.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImageKit 1.1.0dev documentation" href="index.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="Getting Started" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">ImageKit 1.1.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="models-module">
+<h2><tt class="xref py py-mod docutils literal"><span class="pre">models</span></tt> Module<a class="headerlink" href="#models-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-imagekit.processors">
+<span id="processors-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">processors</span></tt> Module<a class="headerlink" href="#module-imagekit.processors" title="Permalink to this headline">¶</a></h2>
+<p>Imagekit image processors.</p>
+<p>A processor accepts an image, does some stuff, and returns the result.
+Processors can do anything with the image you want, but their responsibilities
+should be limited to image manipulations&#8211;they should be completely decoupled
+from both the filesystem and the ORM.</p>
+<dl class="class">
+<dt id="imagekit.processors.Adjust">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.</tt><tt class="descname">Adjust</tt><big>(</big><em>color=1.0</em>, <em>brightness=1.0</em>, <em>contrast=1.0</em>, <em>sharpness=1.0</em><big>)</big><a class="headerlink" href="#imagekit.processors.Adjust" title="Permalink to this definition">¶</a></dt>
+<dd><p>Performs color, brightness, contrast, and sharpness enhancements on the
+image. See <tt class="xref py py-mod docutils literal"><span class="pre">PIL.ImageEnhance</span></tt> for more imformation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>color</strong> &#8211; A number between 0 and 1 that specifies the saturation
+of the image. 0 corresponds to a completely desaturated image
+(black and white) and 1 to the original color.
+See <tt class="xref py py-class docutils literal"><span class="pre">PIL.ImageEnhance.Color</span></tt></li>
+<li><strong>brightness</strong> &#8211; A number representing the brightness; 0 results in
+a completely black image whereas 1 corresponds to the brightness
+of the original. See <tt class="xref py py-class docutils literal"><span class="pre">PIL.ImageEnhance.Brightness</span></tt></li>
+<li><strong>contrast</strong> &#8211; A number representing the contrast; 0 results in a
+completely gray image whereas 1 corresponds to the contrast of
+the original. See <tt class="xref py py-class docutils literal"><span class="pre">PIL.ImageEnhance.Contrast</span></tt></li>
+<li><strong>sharpness</strong> &#8211; A number representing the sharpness; 0 results in a
+blurred image; 1 corresponds to the original sharpness; 2
+results in a sharpened image. See
+<tt class="xref py py-class docutils literal"><span class="pre">PIL.ImageEnhance.Sharpness</span></tt></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagekit.processors.AutoConvert">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.</tt><tt class="descname">AutoConvert</tt><big>(</big><em>format</em><big>)</big><a class="headerlink" href="#imagekit.processors.AutoConvert" title="Permalink to this definition">¶</a></dt>
+<dd><p>A processor that does some common-sense conversions based on the target
+format. This includes things like preserving transparency and quantizing.
+This processors is used automatically by <tt class="docutils literal"><span class="pre">ImageSpec</span></tt> and
+<tt class="docutils literal"><span class="pre">ProcessedImageField</span></tt> immediately before saving the image unless you
+specify <tt class="docutils literal"><span class="pre">autoconvert=False</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagekit.processors.ProcessorPipeline">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.</tt><tt class="descname">ProcessorPipeline</tt><a class="headerlink" href="#imagekit.processors.ProcessorPipeline" title="Permalink to this definition">¶</a></dt>
+<dd><p>A <tt class="xref py py-class docutils literal"><span class="pre">list</span></tt> of other processors. This class allows any object that
+knows how to deal with a single processor to deal with a list of them.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">processed_image</span> <span class="o">=</span> <span class="n">ProcessorPipeline</span><span class="p">([</span><span class="n">ProcessorA</span><span class="p">(),</span> <span class="n">ProcessorB</span><span class="p">()])</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagekit.processors.Reflection">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.</tt><tt class="descname">Reflection</tt><a class="headerlink" href="#imagekit.processors.Reflection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates an image with a reflection.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagekit.processors.Transpose">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.</tt><tt class="descname">Transpose</tt><big>(</big><em>*args</em><big>)</big><a class="headerlink" href="#imagekit.processors.Transpose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotates or flips the image.</p>
+<dl class="docutils">
+<dt>Possible arguments:</dt>
+<dd><ul class="first last simple">
+<li>Transpose.AUTO</li>
+<li>Transpose.FLIP_HORIZONTAL</li>
+<li>Transpose.FLIP_VERTICAL</li>
+<li>Transpose.ROTATE_90</li>
+<li>Transpose.ROTATE_180</li>
+<li>Transpose.ROTATE_270</li>
+</ul>
+</dd>
+</dl>
+<p>The order of the arguments dictates the order in which the
+Transposition steps are taken.</p>
+<p>If Transpose.AUTO is present, all other arguments are ignored, and
+the processor will attempt to rotate the image according to the
+EXIF Orientation data.</p>
+</dd></dl>
+
+<span class="target" id="module-imagekit.processors.resize"></span><dl class="class">
+<dt id="imagekit.processors.resize.Crop">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.resize.</tt><tt class="descname">Crop</tt><big>(</big><em>width=None</em>, <em>height=None</em>, <em>anchor=None</em><big>)</big><a class="headerlink" href="#imagekit.processors.resize.Crop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes an image , cropping it to the specified width and height.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> &#8211; The target width, in pixels.</li>
+<li><strong>height</strong> &#8211; The target height, in pixels.</li>
+<li><strong>anchor</strong> &#8211; <p>Specifies which part of the image should be retained
+when cropping. Valid values are:</p>
+<ul>
+<li>Crop.TOP_LEFT</li>
+<li>Crop.TOP</li>
+<li>Crop.TOP_RIGHT</li>
+<li>Crop.LEFT</li>
+<li>Crop.CENTER</li>
+<li>Crop.RIGHT</li>
+<li>Crop.BOTTOM_LEFT</li>
+<li>Crop.BOTTOM</li>
+<li>Crop.BOTTOM_RIGHT</li>
+</ul>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="class">
+<dt id="imagekit.processors.resize.Fit">
+<em class="property">class </em><tt class="descclassname">imagekit.processors.resize.</tt><tt class="descname">Fit</tt><big>(</big><em>width=None</em>, <em>height=None</em>, <em>upscale=None</em><big>)</big><a class="headerlink" href="#imagekit.processors.resize.Fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resizes an image to fit within the specified dimensions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>width</strong> &#8211; The maximum width of the desired image.</li>
+<li><strong>height</strong> &#8211; The maximum height of the desired image.</li>
+<li><strong>upscale</strong> &#8211; A boolean value specifying whether the image should
+be enlarged if its dimensions are smaller than the target
+dimensions.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-imagekit.admin">
+<span id="admin-module"></span><h2><tt class="xref py py-mod docutils literal"><span class="pre">admin</span></tt> Module<a class="headerlink" href="#module-imagekit.admin" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="imagekit.admin.AdminThumbnail">
+<em class="property">class </em><tt class="descclassname">imagekit.admin.</tt><tt class="descname">AdminThumbnail</tt><big>(</big><em>image_field</em>, <em>template=None</em><big>)</big><a class="headerlink" href="#imagekit.admin.AdminThumbnail" title="Permalink to this definition">¶</a></dt>
+<dd><p>A convenience utility for adding thumbnails to Django&#8217;s admin change list.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>image_field</strong> &#8211; The name of the ImageField or ImageSpec on the
+model to use for the thumbnail.</li>
+<li><strong>template</strong> &#8211; The template with which to render the thumbnail</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">API Reference</a><ul>
+<li><a class="reference internal" href="#models-module"><tt class="docutils literal"><span class="pre">models</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-imagekit.processors"><tt class="docutils literal"><span class="pre">processors</span></tt> Module</a></li>
+<li><a class="reference internal" href="#module-imagekit.admin"><tt class="docutils literal"><span class="pre">admin</span></tt> Module</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Getting Started</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="changelog.html"
+                        title="next chapter">Changelog</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/apireference.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="changelog.html" title="Changelog"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Getting Started"
+             >previous</a> |</li>
+        <li><a href="index.html">ImageKit 1.1.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

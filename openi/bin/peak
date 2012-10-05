@@ -1,0 +1,5 @@
+#!/Users/mpetyx/Documents/workspace/moodeet/moodeetHeroku/bin/python
+
+from peak.running import commands
+commands.runMain( commands.Bootstrap )
+

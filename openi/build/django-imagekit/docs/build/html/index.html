@@ -1,0 +1,282 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Getting Started &mdash; ImageKit 1.1.0dev documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.1.0dev',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="ImageKit 1.1.0dev documentation" href="#" />
+    <link rel="next" title="API Reference" href="apireference.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apireference.html" title="API Reference"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">ImageKit 1.1.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>ImageKit is a Django app that helps you to add variations of uploaded images
+to your models. These variations are called &#8220;specs&#8221; and can include things
+like different sizes (e.g. thumbnails) and black and white versions.</p>
+<div class="section" id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li><tt class="docutils literal"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">django-imagekit</span></tt>
+(or clone the source and put the imagekit module on your path)</li>
+<li>Add <tt class="docutils literal"><span class="pre">'imagekit'</span></tt> to your <tt class="docutils literal"><span class="pre">INSTALLED_APPS</span></tt> list in your project&#8217;s settings.py</li>
+</ol>
+</div>
+<div class="section" id="adding-specs-to-a-model">
+<h2>Adding Specs to a Model<a class="headerlink" href="#adding-specs-to-a-model" title="Permalink to this headline">¶</a></h2>
+<p>Much like <tt class="docutils literal"><span class="pre">django.db.models.ImageField</span></tt>, Specs are defined as properties
+of a model class:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">imagekit.models</span> <span class="kn">import</span> <span class="n">ImageSpec</span>
+
+<span class="k">class</span> <span class="nc">Photo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">original_image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">&#39;photos&#39;</span><span class="p">)</span>
+    <span class="n">formatted_image</span> <span class="o">=</span> <span class="n">ImageSpec</span><span class="p">(</span><span class="n">image_field</span><span class="o">=</span><span class="s">&#39;original_image&#39;</span><span class="p">,</span> <span class="n">format</span><span class="o">=</span><span class="s">&#39;JPEG&#39;</span><span class="p">,</span>
+            <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Accessing the spec through a model instance will create the image and return
+an ImageFile-like object (just like with a normal
+<tt class="docutils literal"><span class="pre">django.db.models.ImageField</span></tt>):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">photo</span> <span class="o">=</span> <span class="n">Photo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">photo</span><span class="o">.</span><span class="n">original_image</span><span class="o">.</span><span class="n">url</span> <span class="c"># &gt; &#39;/media/photos/birthday.tiff&#39;</span>
+<span class="n">photo</span><span class="o">.</span><span class="n">formatted_image</span><span class="o">.</span><span class="n">url</span> <span class="c"># &gt; &#39;/media/cache/photos/birthday_formatted_image.jpeg&#39;</span>
+</pre></div>
+</div>
+<p>Check out <tt class="docutils literal"><span class="pre">imagekit.models.ImageSpec</span></tt> for more information.</p>
+</div>
+<div class="section" id="processors">
+<h2>Processors<a class="headerlink" href="#processors" title="Permalink to this headline">¶</a></h2>
+<p>The real power of ImageKit comes from processors. Processors take an image, do
+something to it, and return the result. By providing a list of processors to
+your spec, you can expose different versions of the original image:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span> <span class="nn">imagekit.models</span> <span class="kn">import</span> <span class="n">ImageSpec</span>
+<span class="kn">from</span> <span class="nn">imagekit.processors</span> <span class="kn">import</span> <span class="n">resize</span><span class="p">,</span> <span class="n">Adjust</span>
+
+<span class="k">class</span> <span class="nc">Photo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">original_image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">&#39;photos&#39;</span><span class="p">)</span>
+    <span class="n">thumbnail</span> <span class="o">=</span> <span class="n">ImageSpec</span><span class="p">([</span><span class="n">Adjust</span><span class="p">(</span><span class="n">contrast</span><span class="o">=</span><span class="mf">1.2</span><span class="p">,</span> <span class="n">sharpness</span><span class="o">=</span><span class="mf">1.1</span><span class="p">),</span>
+            <span class="n">resize</span><span class="o">.</span><span class="n">Crop</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)],</span> <span class="n">image_field</span><span class="o">=</span><span class="s">&#39;original_image&#39;</span><span class="p">,</span>
+            <span class="n">format</span><span class="o">=</span><span class="s">&#39;JPEG&#39;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">thumbnail</span></tt> property will now return a cropped image:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">photo</span> <span class="o">=</span> <span class="n">Photo</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">photo</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span><span class="n">url</span> <span class="c"># &gt; &#39;/media/cache/photos/birthday_thumbnail.jpeg&#39;</span>
+<span class="n">photo</span><span class="o">.</span><span class="n">thumbnail</span><span class="o">.</span><span class="n">width</span> <span class="c"># &gt; 50</span>
+<span class="n">photo</span><span class="o">.</span><span class="n">original_image</span><span class="o">.</span><span class="n">width</span> <span class="c"># &gt; 1000</span>
+</pre></div>
+</div>
+<p>The original image is not modified; <tt class="docutils literal"><span class="pre">thumbnail</span></tt> is a new file that is the
+result of running the <tt class="docutils literal"><span class="pre">imagekit.processors.resize.Crop</span></tt> processor on the
+original.</p>
+<p>The <tt class="docutils literal"><span class="pre">imagekit.processors</span></tt> module contains processors for many common
+image manipulations, like resizing, rotating, and color adjustments. However,
+if they aren&#8217;t up to the task, you can create your own. All you have to do is
+implement a <tt class="docutils literal"><span class="pre">process()</span></tt> method:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">Watermark</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="c"># Code for adding the watermark goes here.</span>
+        <span class="k">return</span> <span class="n">image</span>
+
+<span class="k">class</span> <span class="nc">Photo</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
+    <span class="n">original_image</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ImageField</span><span class="p">(</span><span class="n">upload_to</span><span class="o">=</span><span class="s">&#39;photos&#39;</span><span class="p">)</span>
+    <span class="n">watermarked_image</span> <span class="o">=</span> <span class="n">ImageSpec</span><span class="p">([</span><span class="n">Watermark</span><span class="p">()],</span> <span class="n">image_field</span><span class="o">=</span><span class="s">&#39;original_image&#39;</span><span class="p">,</span>
+            <span class="n">format</span><span class="o">=</span><span class="s">&#39;JPEG&#39;</span><span class="p">,</span> <span class="n">quality</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="admin">
+<h2>Admin<a class="headerlink" href="#admin" title="Permalink to this headline">¶</a></h2>
+<p>ImageKit also contains a class named <tt class="docutils literal"><span class="pre">imagekit.admin.AdminThumbnail</span></tt>
+for displaying specs (or even regular ImageFields) in the
+<a class="reference external" href="https://docs.djangoproject.com/en/dev/intro/tutorial02/#customize-the-admin-change-list">Django admin change list</a>. AdminThumbnail is used as a property on
+Django admin classes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">django.contrib</span> <span class="kn">import</span> <span class="n">admin</span>
+<span class="kn">from</span> <span class="nn">imagekit.admin</span> <span class="kn">import</span> <span class="n">AdminThumbnail</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Photo</span>
+
+
+<span class="k">class</span> <span class="nc">PhotoAdmin</span><span class="p">(</span><span class="n">admin</span><span class="o">.</span><span class="n">ModelAdmin</span><span class="p">):</span>
+    <span class="n">list_display</span> <span class="o">=</span> <span class="p">(</span><span class="s">&#39;__str__&#39;</span><span class="p">,</span> <span class="s">&#39;admin_thumbnail&#39;</span><span class="p">)</span>
+    <span class="n">admin_thumbnail</span> <span class="o">=</span> <span class="n">AdminThumbnail</span><span class="p">(</span><span class="n">image_field</span><span class="o">=</span><span class="s">&#39;thumbnail&#39;</span><span class="p">)</span>
+
+
+<span class="n">admin</span><span class="o">.</span><span class="n">site</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">Photo</span><span class="p">,</span> <span class="n">PhotoAdmin</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>AdminThumbnail can even use a custom template. For more information, see
+<tt class="docutils literal"><span class="pre">imagekit.admin.AdminThumbnail</span></tt>.</p>
+</div>
+<div class="section" id="commands">
+<h2>Commands<a class="headerlink" href="#commands" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="authors">
+<h2>Authors<a class="headerlink" href="#authors" title="Permalink to this headline">¶</a></h2>
+<p>ImageKit was originally written by <a class="reference external" href="http://github.com/jdriscoll">Justin Driscoll</a>.</p>
+<p>The field-based API was written by the bright minds at <a class="reference external" href="http://hzdg.com">HZDG</a>.</p>
+<div class="section" id="maintainers">
+<h3>Maintainers<a class="headerlink" href="#maintainers" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://github.com/bryanveloso">Bryan Veloso</a></li>
+<li><a class="reference external" href="http://github.com/chrisdrackett">Chris Drackett</a></li>
+<li><a class="reference external" href="http://github.com/gregnewman">Greg Newman</a></li>
+</ul>
+</div>
+<div class="section" id="contributors">
+<h3>Contributors<a class="headerlink" href="#contributors" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li><a class="reference external" href="http://github.com/joshourisman">Josh Ourisman</a></li>
+<li><a class="reference external" href="http://github.com/jonathanslenders">Jonathan Slenders</a></li>
+<li><a class="reference external" href="http://github.com/matthewwithanm">Matthew Tretter</a></li>
+<li><a class="reference external" href="http://github.com/lettertwo">Eric Eldredge</a></li>
+<li><a class="reference external" href="http://github.com/kenzic">Chris McKenzie</a></li>
+<li><a class="reference external" href="http://github.com/mkai">Markus Kaiserswerth</a></li>
+<li><a class="reference external" href="http://github.com/ryanbagwell">Ryan Bagwell</a></li>
+</ul>
+</div>
+</div>
+<div class="section" id="digging-deeper">
+<h2>Digging Deeper<a class="headerlink" href="#digging-deeper" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="apireference.html">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#models-module"><tt class="docutils literal"><span class="pre">models</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#module-imagekit.processors"><tt class="docutils literal"><span class="pre">processors</span></tt> Module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="apireference.html#module-imagekit.admin"><tt class="docutils literal"><span class="pre">admin</span></tt> Module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-3">v1.0.3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-2">v1.0.2</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0-1">v1.0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#v1-0">v1.0</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference internal" href="py-modindex.html"><em>Module Index</em></a></li>
+<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Getting Started</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#adding-specs-to-a-model">Adding Specs to a Model</a></li>
+<li><a class="reference internal" href="#processors">Processors</a></li>
+<li><a class="reference internal" href="#admin">Admin</a></li>
+<li><a class="reference internal" href="#commands">Commands</a></li>
+<li><a class="reference internal" href="#authors">Authors</a><ul>
+<li><a class="reference internal" href="#maintainers">Maintainers</a></li>
+<li><a class="reference internal" href="#contributors">Contributors</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#digging-deeper">Digging Deeper</a><ul>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="apireference.html"
+                        title="next chapter">API Reference</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="apireference.html" title="API Reference"
+             >next</a> |</li>
+        <li><a href="#">ImageKit 1.1.0dev documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.1.2.
+    </div>
+  </body>
+</html>

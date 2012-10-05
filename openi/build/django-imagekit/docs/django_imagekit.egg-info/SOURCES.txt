@@ -1,0 +1,5 @@
+django_imagekit.egg-info/PKG-INFO
+django_imagekit.egg-info/SOURCES.txt
+django_imagekit.egg-info/dependency_links.txt
+django_imagekit.egg-info/not-zip-safe
+django_imagekit.egg-info/top_level.txt

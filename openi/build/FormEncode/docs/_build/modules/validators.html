@@ -1,0 +1,159 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>formencode.validators – lots of useful validators &mdash; FormEncode v1.2.3 documentation</title>
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '1.2.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="FormEncode v1.2.3 documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li><a href="../index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="formencode-validators-lots-of-useful-validators">
+<h1><a class="toc-backref" href="#id1"><tt class="xref py py-mod docutils literal"><span class="pre">formencode.validators</span></tt> &#8211; lots of useful validators</a><a class="headerlink" href="#formencode-validators-lots-of-useful-validators" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference external" href="#formencode-validators-lots-of-useful-validators" id="id1"><tt class="xref py py-mod docutils literal"><span class="pre">formencode.validators</span></tt> &#8211; lots of useful validators</a><ul>
+<li><a class="reference external" href="#module-contents" id="id2">Module Contents</a><ul>
+<li><a class="reference external" href="#basic-types" id="id3">Basic Types</a></li>
+<li><a class="reference external" href="#basic-validator-converters" id="id4">Basic Validator/Converters</a></li>
+<li><a class="reference external" href="#simple-validators" id="id5">Simple Validators</a></li>
+<li><a class="reference external" href="#dates-and-times" id="id6">Dates and Times</a></li>
+<li><a class="reference external" href="#phones-and-addresses" id="id7">Phones and Addresses</a></li>
+<li><a class="reference external" href="#html-form-helpers" id="id8">HTML Form Helpers</a></li>
+<li><a class="reference external" href="#urls-email-etc" id="id9">URLs, Email, etc.</a></li>
+<li><a class="reference external" href="#form-wide-validation" id="id10">Form-wide Validation</a></li>
+<li><a class="reference external" href="#credit-cards" id="id11">Credit Cards</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="module-contents">
+<h2><a class="toc-backref" href="#id2">Module Contents</a><a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="basic-types">
+<h3><a class="toc-backref" href="#id3">Basic Types</a><a class="headerlink" href="#basic-types" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="basic-validator-converters">
+<h3><a class="toc-backref" href="#id4">Basic Validator/Converters</a><a class="headerlink" href="#basic-validator-converters" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="simple-validators">
+<h3><a class="toc-backref" href="#id5">Simple Validators</a><a class="headerlink" href="#simple-validators" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="dates-and-times">
+<h3><a class="toc-backref" href="#id6">Dates and Times</a><a class="headerlink" href="#dates-and-times" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="phones-and-addresses">
+<h3><a class="toc-backref" href="#id7">Phones and Addresses</a><a class="headerlink" href="#phones-and-addresses" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="html-form-helpers">
+<h3><a class="toc-backref" href="#id8">HTML Form Helpers</a><a class="headerlink" href="#html-form-helpers" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="urls-email-etc">
+<h3><a class="toc-backref" href="#id9">URLs, Email, etc.</a><a class="headerlink" href="#urls-email-etc" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="form-wide-validation">
+<h3><a class="toc-backref" href="#id10">Form-wide Validation</a><a class="headerlink" href="#form-wide-validation" title="Permalink to this headline">¶</a></h3>
+</div>
+<div class="section" id="credit-cards">
+<h3><a class="toc-backref" href="#id11">Credit Cards</a><a class="headerlink" href="#credit-cards" title="Permalink to this headline">¶</a></h3>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><tt class="docutils literal"><span class="pre">formencode.validators</span></tt> &#8211; lots of useful validators</a><ul>
+<li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#basic-types">Basic Types</a></li>
+<li><a class="reference internal" href="#basic-validator-converters">Basic Validator/Converters</a></li>
+<li><a class="reference internal" href="#simple-validators">Simple Validators</a></li>
+<li><a class="reference internal" href="#dates-and-times">Dates and Times</a></li>
+<li><a class="reference internal" href="#phones-and-addresses">Phones and Addresses</a></li>
+<li><a class="reference internal" href="#html-form-helpers">HTML Form Helpers</a></li>
+<li><a class="reference internal" href="#urls-email-etc">URLs, Email, etc.</a></li>
+<li><a class="reference internal" href="#form-wide-validation">Form-wide Validation</a></li>
+<li><a class="reference internal" href="#credit-cards">Credit Cards</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/modules/validators.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li><a href="../index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2008, Ian Bicking and Contributors.
+      Last updated on Sep 14, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

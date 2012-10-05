@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FormEncode Validation &mdash; FormEncode v1.2.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FormEncode v1.2.3 documentation" href="index.html" />
+    <link rel="next" title="FormEncode Internationalization (gettext)" href="i18n.html" />
+    <link rel="prev" title="News" href="news.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="FormEncode Internationalization (gettext)"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="news.html" title="News"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="formencode-validation">
+<h1><a class="toc-backref" href="#id3">FormEncode Validation</a><a class="headerlink" href="#formencode-validation" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Ian Bicking &lt;<a class="reference external" href="mailto:ianb&#37;&#52;&#48;colorstudy&#46;com">ianb<span>&#64;</span>colorstudy<span>&#46;</span>com</a>&gt;</td>
+</tr>
+<tr class="field"><th class="field-name">revision:</th><td class="field-body">$Rev$</td>
+</tr>
+<tr class="field"><th class="field-name">date:</th><td class="field-body">$LastChangedDate$</td>
+</tr>
+</tbody>
+</table>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference external" href="#formencode-validation" id="id3">FormEncode Validation</a><ul>
+<li><a class="reference external" href="#introduction" id="id4">Introduction</a></li>
+<li><a class="reference external" href="#using-validation" id="id5">Using Validation</a><ul>
+<li><a class="reference external" href="#available-validators" id="id6">Available Validators</a></li>
+<li><a class="reference external" href="#compound-validators" id="id7">Compound Validators</a></li>
+<li><a class="reference external" href="#writing-your-own-validator" id="id8">Writing Your Own Validator</a></li>
+<li><a class="reference external" href="#other-validator-usage" id="id9">Other Validator Usage</a></li>
+<li><a class="reference external" href="#state" id="id10">State</a></li>
+<li><a class="reference external" href="#invalid-exceptions" id="id11">Invalid Exceptions</a></li>
+<li><a class="reference external" href="#messages-language-customization" id="id12">Messages, Language Customization</a></li>
+<li><a class="reference external" href="#localization-of-error-messages-i18n" id="id13">Localization of Error Messages (i18n)</a><ul>
+<li><a class="reference external" href="#available-languages" id="id14">Available languages</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#http-html-form-input" id="id15">HTTP/HTML Form Input</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="introduction">
+<h2><a class="toc-backref" href="#id4">Introduction</a><a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
+<p>Validation (which encompasses conversion as well) is the core function
+of FormEncode.  FormEncode really tries to <em>encode</em> the values from
+one source into another (hence the name).  So a Python structure can
+be encoded in a series of HTML fields (a flat dictionary of strings).
+A HTML form submission can in turn be turned into a the original
+Python structure.</p>
+</div>
+<div class="section" id="using-validation">
+<h2><a class="toc-backref" href="#id5">Using Validation</a><a class="headerlink" href="#using-validation" title="Permalink to this headline">¶</a></h2>
+<p>In FormEncode validation and conversion happen simultaneously.
+Frequently you cannot convert a value without ensuring its validity,
+and validation problems can occur in the middle of conversion.</p>
+<p>The basic metaphor for validation is <strong>to_python</strong> and
+<strong>from_python</strong>.  In this context &#8220;Python&#8221; is meant to refer to &#8220;here&#8221;
+&#8211; the trusted application, your own Python objects.  The &#8220;other&#8221; may
+be a web form, an external database, an XML-RPC request, or any data
+source that is not completely trusted or does not map directly to
+Python&#8217;s object model.  <tt class="docutils literal"><span class="pre">to_python</span></tt> is the process of taking
+external data and preparing it for internal use, <tt class="docutils literal"><span class="pre">from_python</span></tt>
+generally reverses this process (<tt class="docutils literal"><span class="pre">from_python</span></tt> is usually the less
+interesting of the pair, but provides some important features).</p>
+<p>The core of this validation process is two methods and an exception:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">formencode</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">formencode</span> <span class="kn">import</span> <span class="n">validators</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validator</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validator</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="s">&quot;10&quot;</span><span class="p">)</span>
+<span class="go">10</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validator</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="s">&quot;ten&quot;</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="nc">Invalid</span>: <span class="n-Identifier">Please enter an integer value</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">&quot;ten&quot;</span></tt> isn&#8217;t a valid integer, so we get a <tt class="docutils literal"><span class="pre">formencode.Invalid</span></tt>
+exception.  Typically we&#8217;d catch that exception, and use it for some
+sort of feedback.  Like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">get_integer</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="n">value</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="s">&#39;Enter a number: &#39;</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="k">return</span> <span class="n">validator</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">except</span> <span class="n">formencode</span><span class="o">.</span><span class="n">Invalid</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">print</span> <span class="n">e</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">get_integer</span><span class="p">()</span>
+<span class="go">Enter a number: ten</span>
+<span class="go">Please enter an integer value</span>
+<span class="go">Enter a number: 10</span>
+<span class="go">10</span>
+</pre></div>
+</div>
+<p>We can also generalize this kind of function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">valid_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">,</span> <span class="n">validator</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">try</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="n">value</span> <span class="o">=</span> <span class="nb">raw_input</span><span class="p">(</span><span class="n">prompt</span><span class="p">)</span>
+<span class="gp">... </span>            <span class="k">return</span> <span class="n">validator</span><span class="o">.</span><span class="n">to_python</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">except</span> <span class="n">formencode</span><span class="o">.</span><span class="n">Invalid</span><span class="p">,</span> <span class="n">e</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">print</span> <span class="n">e</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">valid_input</span><span class="p">(</span><span class="s">&#39;Enter your email: &#39;</span><span class="p">,</span> <span class="n">validators</span><span class="o">.</span><span class="n">Email</span><span class="p">())</span>
+<span class="go">Enter your email: bob</span>
+<span class="go">An email address must contain a single @</span>
+<span class="go">Enter your email: bob@nowhere.com</span>
+<span class="go">&#39;bob@nowhere.com&#39;</span>
+</pre></div>
+</div>
+<p><tt class="docutils literal"><span class="pre">Invalid</span></tt> exceptions generally give a good, user-readable error
+message about the problem with the input.  Using the exception gets
+more complicated when you use compound data structures (dictionaries
+and lists), which we&#8217;ll talk about <a class="reference external" href="#compound-validators">later</a>.</p>
+<p>We&#8217;ll talk more about these individual validators later, but first
+we&#8217;ll talk about more complex validation than just integers or
+individual values.</p>
+<div class="section" id="available-validators">
+<span id="schemas"></span><h3><a class="toc-backref" href="#id6">Available Validators</a><a class="headerlink" href="#available-validators" title="Permalink to this headline">¶</a></h3>
+<p>There&#8217;s lots of validators.  The best way to read about the individual
+validators available in the <tt class="docutils literal"><span class="pre">formencode.validators</span></tt> module is to
+read about <tt class="xref py py-mod docutils literal"><span class="pre">formencode.validators</span></tt>.</p>
+</div>
+<div class="section" id="compound-validators">
+<h3><a class="toc-backref" href="#id7">Compound Validators</a><a class="headerlink" href="#compound-validators" title="Permalink to this headline">¶</a></h3>
+<p>While validating single values is useful, it&#8217;s only a <em>little</em> useful.
+Much more interesting is validating a set of values.  This is called a
+<em>Schema</em>.</p>
+<p>For instance, imagine a registration form for a website.  It takes the
+following fields, with restrictions:</p>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">first_name</span></tt> (not empty)</li>
+<li><tt class="docutils literal"><span class="pre">last_name</span></tt> (not empty)</li>
+<li><tt class="docutils literal"><span class="pre">email</span></tt> (not empty, valid email)</li>
+<li><tt class="docutils literal"><span class="pre">username</span></tt> (not empty, unique)</li>
+<li><tt class="docutils literal"><span class="pre">password</span></tt> (reasonably secure)</li>
+<li><tt class="docutils literal"><span class="pre">password_confirm</span></tt> (matches password)</li>
+</ul>
+<p>There&#8217;s a couple validators that aren&#8217;t part of FormEncode, because
+they&#8217;ll be specific to your application:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="c"># We don&#39;t really have a database of users, so we&#39;ll fake it:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">usernames</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">UniqueUsername</span><span class="p">(</span><span class="n">formencode</span><span class="o">.</span><span class="n">FancyValidator</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">_to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">usernames</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">raise</span> <span class="n">formencode</span><span class="o">.</span><span class="n">Invalid</span><span class="p">(</span>
+<span class="gp">... </span>                <span class="s">&#39;That username already exists&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last"><tt class="xref py py-class docutils literal"><span class="pre">formencode.FancyValidator</span></tt> is the superclass for most
+validators in FormEncode, and it provides a number of useful
+features that most validators can use &#8211; for instance, you can pass
+<tt class="docutils literal"><span class="pre">strip=True</span></tt> into any of these validators, and they&#8217;ll strip
+whitespace from the incoming value before any other validation.</p>
+</div>
+<p>This overrides <tt class="docutils literal"><span class="pre">_to_python</span></tt>: <tt class="docutils literal"><span class="pre">formencode.FancyValidator</span></tt> adds a
+number of extra features, and then calls the private <tt class="docutils literal"><span class="pre">_to_python</span></tt>
+method, which is the method you&#8217;ll typically write.  When a validator
+finds an error it raises an exception (<tt class="xref py py-class docutils literal"><span class="pre">formencode.Invalid</span></tt>),
+with the error message and the value and &#8220;state&#8221; objects.  We&#8217;ll talk
+about <a class="reference external" href="#state">state</a> later.  Here&#8217;s the other custom validator, that checks
+passwords against words in the standard Unix word file:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">SecurePassword</span><span class="p">(</span><span class="n">formencode</span><span class="o">.</span><span class="n">FancyValidator</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">words_filename</span> <span class="o">=</span> <span class="s">&#39;/usr/share/dict/words&#39;</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">_to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">words_filename</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">lower</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+<span class="gp">... </span>        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="n">lower</span><span class="p">:</span>
+<span class="gp">... </span>                <span class="k">raise</span> <span class="n">formencode</span><span class="o">.</span><span class="n">Invalid</span><span class="p">(</span>
+<span class="gp">... </span>                    <span class="s">&#39;Please do not base your password on a &#39;</span>
+<span class="gp">... </span>                    <span class="s">&#39;dictionary term&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">value</span>
+</pre></div>
+</div>
+<p>And here&#8217;s a schema:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Registration</span><span class="p">(</span><span class="n">formencode</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">first_name</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">not_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">last_name</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">not_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">email</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">Email</span><span class="p">(</span><span class="n">resolve_domain</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="n">username</span> <span class="o">=</span> <span class="n">formencode</span><span class="o">.</span><span class="n">All</span><span class="p">(</span><span class="n">validators</span><span class="o">.</span><span class="n">PlainText</span><span class="p">(),</span>
+<span class="gp">... </span>                              <span class="n">UniqueUsername</span><span class="p">())</span>
+<span class="gp">... </span>    <span class="n">password</span> <span class="o">=</span> <span class="n">SecurePassword</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">password_confirm</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">String</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">chained_validators</span> <span class="o">=</span> <span class="p">[</span><span class="n">validators</span><span class="o">.</span><span class="n">FieldsMatch</span><span class="p">(</span>
+<span class="gp">... </span>        <span class="s">&#39;password&#39;</span><span class="p">,</span> <span class="s">&#39;password_confirm&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>Like any other validator, a <tt class="docutils literal"><span class="pre">Registration</span></tt> instance will have the
+<tt class="docutils literal"><span class="pre">to_python</span></tt> and <tt class="docutils literal"><span class="pre">from_python</span></tt> methods.  The input should be a
+dictionary (or a Paste MultiDict), with keys like <tt class="docutils literal"><span class="pre">&quot;first_name&quot;</span></tt>,
+<tt class="docutils literal"><span class="pre">&quot;password&quot;</span></tt>, etc.  The validators you give as attributes will be
+applied to each of the values of the dictionary.  <em>All</em> the values
+will be validated, so if there are multiple invalid fields you will
+get information about all of them.</p>
+<p>Most validators (anything that subclasses
+<tt class="docutils literal"><span class="pre">formencode.FancyValidator</span></tt>) will take a certain standard set of
+constructor keyword arguments.  See
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.api.FancyValidator</span></tt> for more &#8211; here we use
+<tt class="docutils literal"><span class="pre">not_empty=True</span></tt>.</p>
+<p>Another notable validator is <tt class="xref py py-class docutils literal"><span class="pre">formencode.compound.All</span></tt> &#8211; this
+is a <em>compound validator</em> &#8211; that is, it&#8217;s a validator that takes
+validators as input.  Schemas are one example; in this case <tt class="docutils literal"><span class="pre">All</span></tt>
+takes a list of validators and applies each of them in turn.
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.compound.Any</span></tt> is its compliment, that uses the
+first passing validator in its list.</p>
+<p id="chained-validators"><span id="pre-validators"></span><tt class="docutils literal"><span class="pre">chained_validators</span></tt> are validators that are run on the entire
+dictionary after other validation is done (<tt class="docutils literal"><span class="pre">pre_validators</span></tt> are
+applied before the schema validation).  chained_validtors will also
+allow for multiple validators to fail and report to the error_dict
+so, for example, if you have an email_confirm and a password_confirm
+fields and use FieldsMatch on both of them as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">chained_validators</span> <span class="o">=</span> <span class="p">[</span>
+<span class="gp">... </span>    <span class="n">validators</span><span class="o">.</span><span class="n">FieldsMatch</span><span class="p">(</span><span class="s">&#39;password&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="s">&#39;password_confirm&#39;</span><span class="p">),</span>
+<span class="gp">... </span>    <span class="n">validators</span><span class="o">.</span><span class="n">FieldsMatch</span><span class="p">(</span><span class="s">&#39;email&#39;</span><span class="p">,</span>
+<span class="gp">... </span>                           <span class="s">&#39;email_confirm&#39;</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>This will leave the error_dict with both password_confirm and
+email_confirm error keys, which is likely the desired behavior
+for web forms.</p>
+<p>Since a <tt class="xref py py-class docutils literal"><span class="pre">formencode.schema.Schema</span></tt> is just another kind of
+validator, you can nest these indefinitely, validating dictionaries of
+dictionaries.</p>
+<p id="simpleformvalidator">Another way to do simple validation of a complete form is with
+<tt class="docutils literal"><span class="pre">formencode.schema.SimpleFormValidator</span></tt>.  This class wraps a simple
+function that you write.  For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">formencode.schema</span> <span class="kn">import</span> <span class="n">SimpleFormValidator</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">validate_state</span><span class="p">(</span><span class="n">value_dict</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">validator</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">value_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;country&#39;</span><span class="p">,</span> <span class="s">&#39;US&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="s">&#39;US&#39;</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="ow">not</span> <span class="n">value_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;state&#39;</span><span class="p">):</span>
+<span class="gp">... </span>            <span class="k">return</span> <span class="p">{</span><span class="s">&#39;state&#39;</span><span class="p">:</span> <span class="s">&#39;You must enter a state&#39;</span><span class="p">}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ValidateState</span> <span class="o">=</span> <span class="n">SimpleFormValidator</span><span class="p">(</span><span class="n">validate_state</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ValidateState</span><span class="o">.</span><span class="n">to_python</span><span class="p">({</span><span class="s">&#39;country&#39;</span><span class="p">:</span> <span class="s">&#39;US&#39;</span><span class="p">},</span> <span class="bp">None</span><span class="p">)</span>
+<span class="gt">Traceback (most recent call last):</span>
+    <span class="o">...</span>
+<span class="nc">Invalid: state</span>: <span class="n-Identifier">You must enter a state</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">validate_state</span></tt> function (or any validation function) returns
+any errors in the form (or it may raise Invalid directly).  It can
+also modify the <tt class="docutils literal"><span class="pre">value_dict</span></tt> dictionary directly.  When it returns
+None this indicates that everything is valid.  You can use this with a
+<tt class="docutils literal"><span class="pre">Schema</span></tt> by putting <tt class="docutils literal"><span class="pre">ValidateState</span></tt> in <tt class="docutils literal"><span class="pre">pre_validators</span></tt> (all
+validation will be done before the schema&#8217;s validation, and if there&#8217;s
+an error the schema won&#8217;t be run).  Or you can put it in
+<tt class="docutils literal"><span class="pre">chained_validators</span></tt> and it will be run <em>after</em> the schema.  If the
+schema fails (the values are invalid) then <tt class="docutils literal"><span class="pre">ValidateState</span></tt> will not
+be run, unless you set <tt class="docutils literal"><span class="pre">validate_partial_form</span></tt> to True (like
+<tt class="docutils literal"><span class="pre">ValidateState</span> <span class="pre">=</span> <span class="pre">SimpleFormValidator(validate_state,</span>
+<span class="pre">validate_partial_form=True)</span></tt>.  If you validate a partial form you
+should be careful that you handle missing keys and other
+possibly-invalid values gracefully.</p>
+<p id="foreach">You can also validate lists of items using
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.foreach.ForEach</span></tt>.  For example, let&#8217;s say we have a
+form where someone can edit a list of book titles.  Each title has an
+associated book ID, so we can match up the new title and the book it
+is for:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">BookSchema</span><span class="p">(</span><span class="n">formencode</span><span class="o">.</span><span class="n">Schema</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">id</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">Int</span><span class="p">()</span>
+<span class="gp">... </span>    <span class="n">title</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="n">not_empty</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">validator</span> <span class="o">=</span> <span class="n">formencode</span><span class="o">.</span><span class="n">ForEach</span><span class="p">(</span><span class="n">BookSchema</span><span class="p">())</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">validator</span></tt> we&#8217;ve created will take a list of dictionaries as
+input (like <tt class="docutils literal"><span class="pre">[{&quot;id&quot;:</span> <span class="pre">&quot;1&quot;,</span> <span class="pre">&quot;title&quot;:</span> <span class="pre">&quot;War</span> <span class="pre">&amp;</span> <span class="pre">Peace&quot;},</span> <span class="pre">{&quot;id&quot;:</span> <span class="pre">&quot;2&quot;,</span>
+<span class="pre">&quot;title&quot;:</span> <span class="pre">&quot;Brave</span> <span class="pre">New</span> <span class="pre">World&quot;},</span> <span class="pre">...]</span></tt>).  It applies the <tt class="docutils literal"><span class="pre">BookSchema</span></tt>
+to each entry, and collects any errors and reraises them.  Of course,
+when you are validating input from an HTML form you won&#8217;t get well
+structured data like this (we&#8217;ll talk about that <a class="reference external" href="#http-html-form-input">later</a>).</p>
+</div>
+<div class="section" id="writing-your-own-validator">
+<h3><a class="toc-backref" href="#id8">Writing Your Own Validator</a><a class="headerlink" href="#writing-your-own-validator" title="Permalink to this headline">¶</a></h3>
+<p>We gave a brief introduction to creating a validator earlier
+(<tt class="docutils literal"><span class="pre">UniqueUsername</span></tt> and <tt class="docutils literal"><span class="pre">SecurePassword</span></tt>).  We&#8217;ll discuss that a
+little more.  Here&#8217;s a more complete implementation of
+<tt class="docutils literal"><span class="pre">SecurePassword</span></tt>:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">re</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">SecurePassword</span><span class="p">(</span><span class="n">validators</span><span class="o">.</span><span class="n">FancyValidator</span><span class="p">):</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="nb">min</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">... </span>    <span class="n">non_letter</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="gp">... </span>    <span class="n">letter_regex</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s">r&#39;[a-zA-Z]&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="n">messages</span> <span class="o">=</span> <span class="p">{</span>
+<span class="gp">... </span>        <span class="s">&#39;too_few&#39;</span><span class="p">:</span> <span class="s">&#39;Your password must be longer than </span><span class="si">%(min)i</span><span class="s"> &#39;</span>
+<span class="gp">... </span>                  <span class="s">&#39;characters long&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s">&#39;non_letter&#39;</span><span class="p">:</span> <span class="s">&#39;You must include at least </span><span class="si">%(non_letter)i</span><span class="s"> &#39;</span>
+<span class="gp">... </span>                     <span class="s">&#39;characters in your password&#39;</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="p">}</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">_to_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="c"># _to_python gets run before validate_python.  Here we</span>
+<span class="gp">... </span>        <span class="c"># strip whitespace off the password, because leading and</span>
+<span class="gp">... </span>        <span class="c"># trailing whitespace in a password is too elite.</span>
+<span class="gp">... </span>        <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+<span class="gp">...</span>
+<span class="gp">... </span>    <span class="k">def</span> <span class="nf">validate_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">raise</span> <span class="n">Invalid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="s">&quot;too_few&quot;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span>
+<span class="gp">... </span>                                       <span class="nb">min</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">min</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="n">non_letters</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">letter_regex</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+<span class="gp">... </span>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">non_letters</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">non_letter</span><span class="p">:</span>
+<span class="gp">... </span>            <span class="k">raise</span> <span class="n">Invalid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="s">&quot;non_letter&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                                        <span class="n">non_letter</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">non_letter</span><span class="p">),</span>
+<span class="gp">... </span>                          <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With all validators, any arguments you pass to the constructor will be
+used to set instance variables.  So <tt class="docutils literal"><span class="pre">SecureValidator(min=5)</span></tt> will be
+a minimum-five-character validator.  This makes it easy to also
+subclass other validators, giving different default values.</p>
+<p>Unlike the previous implementation we use <tt class="docutils literal"><span class="pre">validate_python</span></tt> (which
+is another method <tt class="docutils literal"><span class="pre">FancyValidator</span></tt> allows us to use).
+<tt class="docutils literal"><span class="pre">validate_python</span></tt> doesn&#8217;t have any return value, it simply raises an
+exception if it needs to.  It validates the value <em>after</em> it has been
+converted (by <tt class="docutils literal"><span class="pre">_to_python</span></tt>).  <tt class="docutils literal"><span class="pre">validate_other</span></tt> validates before
+conversion, but that&#8217;s usually not that useful.</p>
+<p>The use of <tt class="docutils literal"><span class="pre">self.message(...)</span></tt> is meant to make the messages easy to
+format for different environments, and replacable (with translations,
+or simply with different text).  Each message should have an
+identifier (<tt class="docutils literal"><span class="pre">&quot;min&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;non_letter&quot;</span></tt> in this example).  The
+keyword arguments to <tt class="docutils literal"><span class="pre">message</span></tt> are used for message substitution.
+See <a class="reference external" href="#messages">Messages</a> for more.</p>
+</div>
+<div class="section" id="other-validator-usage">
+<h3><a class="toc-backref" href="#id9">Other Validator Usage</a><a class="headerlink" href="#other-validator-usage" title="Permalink to this headline">¶</a></h3>
+<p>Validators use instance variables to store their customization
+information.  You can use either subclassing or normal instantiation
+to set these.  These are (effectively) equivalent:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">plain</span> <span class="o">=</span> <span class="n">validators</span><span class="o">.</span><span class="n">Regex</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s">&#39;^[a-zA-Z]+$&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># and...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">Plain</span><span class="p">(</span><span class="n">validators</span><span class="o">.</span><span class="n">Regex</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="n">regex</span> <span class="o">=</span> <span class="s">&#39;^[a-zA-Z]+$&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plain</span> <span class="o">=</span> <span class="n">Plain</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>You can actually use classes most places where you could use an
+instance; <tt class="docutils literal"><span class="pre">.to_python()</span></tt> and <tt class="docutils literal"><span class="pre">.from_python()</span></tt> will create
+instances as necessary, and many other methods are available on both
+the instance and the class level.</p>
+<p>When dealing with nested validators this class syntax is often easier
+to work with, and better displays the structure.</p>
+<p id="fancyvalidator">There are several options that most validators support (including your
+own validators, if you subclass from
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.api.FancyValidator</span></tt>):</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">if_empty</span></tt>:</dt>
+<dd>If set, then this value will be returned if the input evaluates
+to false (empty list, empty string, None, etc), but not the 0 or
+False objects.  This only applies to <tt class="docutils literal"><span class="pre">.to_python()</span></tt>.</dd>
+<dt><tt class="docutils literal"><span class="pre">not_empty</span></tt>:</dt>
+<dd>If true, then if an empty value is given raise an error.
+(Both with <tt class="docutils literal"><span class="pre">.to_python()</span></tt> and also <tt class="docutils literal"><span class="pre">.from_python()</span></tt>
+if <tt class="docutils literal"><span class="pre">.validate_python</span></tt> is true).</dd>
+<dt><tt class="docutils literal"><span class="pre">strip</span></tt>:</dt>
+<dd>If true and the input is a string, strip it (occurs before empty
+tests).</dd>
+<dt><tt class="docutils literal"><span class="pre">if_invalid</span></tt>:</dt>
+<dd>If set, then when this validator would raise Invalid during
+<tt class="docutils literal"><span class="pre">.to_python()</span></tt>, instead return this value.</dd>
+<dt><tt class="docutils literal"><span class="pre">if_invalid_python</span></tt>:</dt>
+<dd>If set, when the Python value (converted with
+<tt class="docutils literal"><span class="pre">.from_python()</span></tt>) is invalid, this value will be returned.</dd>
+<dt><tt class="docutils literal"><span class="pre">accept_python</span></tt>:</dt>
+<dd>If True (the default), then <tt class="docutils literal"><span class="pre">.validate_python()</span></tt> and
+<tt class="docutils literal"><span class="pre">.validate_other()</span></tt> will not be called when
+<tt class="docutils literal"><span class="pre">.from_python()</span></tt> is used.</dd>
+<dt><tt class="docutils literal"><span class="pre">if_missing</span></tt>:</dt>
+<dd>Typically when a field is missing the schema will raise an
+error.  In that case no validation is run &#8211; so things like
+<tt class="docutils literal"><span class="pre">if_invalid</span></tt> won&#8217;t be triggered.  This special attribute (if
+set) will be used when the field is missing, and no error will
+occur.  (<tt class="xref docutils literal"><span class="pre">None</span></tt> or <tt class="docutils literal"><span class="pre">()</span></tt> are common values)</dd>
+</dl>
+</div>
+<div class="section" id="state">
+<h3><a class="toc-backref" href="#id10">State</a><a class="headerlink" href="#state" title="Permalink to this headline">¶</a></h3>
+<p>All the validators receive a magic, somewhat meaningless <tt class="docutils literal"><span class="pre">state</span></tt>
+argument (which defaults to <tt class="xref docutils literal"><span class="pre">None</span></tt>).  It&#8217;s used for very little in
+the validation system as distributed, but is primarily intended to be
+an object you can use to hook your validator into the context of the
+larger system.</p>
+<p>For instance, imagine a validator that checks that a user is permitted
+access to some resource.  How will the validator know which user is
+logged in?  State!  Imagine you are localizing it, how will the
+validator know the locale?  State!  Whatever else you need to pass in,
+just put it in the state object as an attribute, then look for that
+attribute in your validator.</p>
+<p>Also, during compound validation (a <tt class="xref py py-class docutils literal"><span class="pre">formencode.schema.Schema</span></tt>
+or <tt class="xref py py-class docutils literal"><span class="pre">formencode.foreach.ForEach</span></tt>) the state (if not None) will
+have more instance variables added to it.  During a <tt class="docutils literal"><span class="pre">Schema</span></tt>
+(dictionary) validation the instance variable <tt class="docutils literal"><span class="pre">key</span></tt> and
+<tt class="docutils literal"><span class="pre">full_dict</span></tt> will be added &#8211; <tt class="docutils literal"><span class="pre">key</span></tt> is the current key (i.e.,
+validator name), and <tt class="docutils literal"><span class="pre">full_dict</span></tt> is the rest of the values being
+validated.  During a <tt class="docutils literal"><span class="pre">ForEeach</span></tt> (list) validation, <tt class="docutils literal"><span class="pre">index</span></tt> and
+<tt class="docutils literal"><span class="pre">full_list</span></tt> will be set.</p>
+</div>
+<div class="section" id="invalid-exceptions">
+<h3><a class="toc-backref" href="#id11">Invalid Exceptions</a><a class="headerlink" href="#invalid-exceptions" title="Permalink to this headline">¶</a></h3>
+<p>Besides the string error message, <tt class="xref py py-class docutils literal"><span class="pre">formencode.api.Invalid</span></tt>
+exceptions have a few other instance variables:</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">value</span></tt>:</dt>
+<dd>The input to the validator that failed.</dd>
+<dt><tt class="docutils literal"><span class="pre">state</span></tt>:</dt>
+<dd>The associated <a class="reference external" href="#state">state</a>.</dd>
+<dt><tt class="docutils literal"><span class="pre">msg</span></tt>:</dt>
+<dd>The error message (<tt class="docutils literal"><span class="pre">str(exc)</span></tt> returns this)</dd>
+<dt><tt class="docutils literal"><span class="pre">error_list</span></tt>:</dt>
+<dd>If the exception happened in a <tt class="docutils literal"><span class="pre">ForEach</span></tt> (list) validator, then
+this will contain a list of <tt class="docutils literal"><span class="pre">Invalid</span></tt> exceptions.  Each item
+from the list will have an entry, either None for no error, or an
+exception.</dd>
+<dt><tt class="docutils literal"><span class="pre">error_dict</span></tt>:</dt>
+<dd>If the exception happened in a <tt class="docutils literal"><span class="pre">Schema</span></tt> (dictionary) validator,
+then this will contain <tt class="docutils literal"><span class="pre">Invalid</span></tt> exceptions for each failing
+field.  Passing fields not be included in this dictionary.</dd>
+<dt><tt class="docutils literal"><span class="pre">.unpack_errors()</span></tt>:</dt>
+<dd>This method returns a set of lists and dictionaries containing
+strings, for each error.  It&#8217;s an unpacking of <tt class="docutils literal"><span class="pre">error_list</span></tt>,
+<tt class="docutils literal"><span class="pre">error_dict</span></tt> and <tt class="docutils literal"><span class="pre">msg</span></tt>.  If you get an Invalid exception from
+a <tt class="docutils literal"><span class="pre">Schema</span></tt>, you probably want to call this method on the
+exception object.</dd>
+</dl>
+</div>
+<div class="section" id="messages-language-customization">
+<span id="messages"></span><h3><a class="toc-backref" href="#id12">Messages, Language Customization</a><a class="headerlink" href="#messages-language-customization" title="Permalink to this headline">¶</a></h3>
+<p>All of the error messages can be customized.  Each error message has a
+key associated with it, like <tt class="docutils literal"><span class="pre">&quot;too_few&quot;</span></tt> in the registration
+example.  You can overwrite these messages by using you own <tt class="docutils literal"><span class="pre">messages</span>
+<span class="pre">=</span> <span class="pre">{&quot;key&quot;:</span> <span class="pre">&quot;text&quot;}</span></tt> in the class statement, or as an argument when you
+call a class.  Either way, you do not lose messages that you do not
+define, you only overwrite ones that you specify.</p>
+<p>Messages often take arguments, like the number of characters, the
+invalid portion of the field, etc.  These are always substituted as a
+dictionary (by name).  So you will use placeholders like <tt class="docutils literal"><span class="pre">%(key)s</span></tt>
+for each substitution.  This way you can reorder or even ignore
+placeholders in your new message.</p>
+<p>When you are creating a validator, for maximum flexibility you should
+use the <tt class="docutils literal"><span class="pre">message</span></tt> function, like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">messages</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&#39;key&#39;</span><span class="p">:</span> <span class="s">&#39;my message (with a </span><span class="si">%(substitution)s</span><span class="s">)&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+<span class="k">def</span> <span class="nf">validate_python</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="k">raise</span> <span class="n">Invalid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">(</span><span class="s">&#39;key&#39;</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">substitution</span><span class="o">=</span><span class="s">&#39;apples&#39;</span><span class="p">),</span>
+                  <span class="n">value</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="localization-of-error-messages-i18n">
+<h3><a class="toc-backref" href="#id13">Localization of Error Messages (i18n)</a><a class="headerlink" href="#localization-of-error-messages-i18n" title="Permalink to this headline">¶</a></h3>
+<p>When a failed validation occurs FormEncode tries to output the error
+message in the appropriate language. For this it uses the standard
+<a class="reference external" href="http://docs.python.org/library/gettext.html">gettext</a> mechanism of
+python. To translate the message in the appropirate message FormEncode
+has to find a gettext function that translates the string. The
+language to be translated into and the used domain is determined by
+the found gettext function. To serve a standard translation mechanism
+and to enable custom translations it looks in the following order to
+find a gettext (<tt class="docutils literal"><span class="pre">_</span></tt>) function:</p>
+<ol class="arabic">
+<li><p class="first">method of the <tt class="docutils literal"><span class="pre">state</span></tt> object</p>
+</li>
+<li><p class="first">function <tt class="docutils literal"><span class="pre">__builtin__._</span></tt>.  This function is only used when:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Validator</span><span class="o">.</span><span class="n">use_builtin_gettext</span> <span class="o">==</span> <span class="bp">True</span> <span class="c">#True is default</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">formencode builtin <tt class="docutils literal"><span class="pre">_stdtrans</span></tt> function</p>
+<p>for standalone use of FormEncode. The language to use is determined
+out of the locale system (see gettext documentation). Optionally you
+can also set the language or the domain explicitly with the
+function:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">formencode</span><span class="o">.</span><span class="n">api</span><span class="o">.</span><span class="n">set_stdtranslation</span><span class="p">(</span><span class="n">domain</span><span class="o">=</span><span class="s">&quot;FormEncode&quot;</span><span class="p">,</span> <span class="n">languages</span><span class="o">=</span><span class="p">[</span><span class="s">&quot;de&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Formencode comes with a Domain <tt class="docutils literal"><span class="pre">FormEncode</span></tt> and the corresponding
+messages in the directory
+<tt class="docutils literal"><span class="pre">localedir/language/LC_MESSAGES/FormEncode.mo</span></tt></p>
+</li>
+<li><p class="first">Custom gettext function and addtional parameters</p>
+<p>If you use a custom gettext function and you want FormEncode to
+call your function with additional parameters you can set the
+dictionary:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Validators</span><span class="o">.</span><span class="n">gettextargs</span>
+</pre></div>
+</div>
+</li>
+</ol>
+<div class="section" id="available-languages">
+<h4><a class="toc-backref" href="#id14">Available languages</a><a class="headerlink" href="#available-languages" title="Permalink to this headline">¶</a></h4>
+<p>All available languages are distributed with the code. You can see the
+currently available languages in the source under the directory
+<tt class="docutils literal"><span class="pre">formencode/i18n</span></tt>.</p>
+<p>If your language is not present yet, please consider contributing a
+translation (where <tt class="docutils literal"><span class="pre">&lt;lang&gt;</span></tt> is you language code):</p>
+<div class="highlight-python"><pre>$ svn co http://svn.formencode.org/FormEncode/trunk/``
+$ easy_install Babel
+$ python setup.py init_catalog -l &lt;lang&gt;
+$ emacs formencode/i18n/&lt;lang&gt;/LC_MESSAGES/FormEncode.po # or whatever
+  # editor you prefer make the translation
+$ python setup.py compile_catalog -l &lt;lang&gt;</pre>
+</div>
+<p>Then test, and send the PO and MO files to g...&#64;gregor-horvath.com.</p>
+<p>See also <a class="reference external" href="http://docs.python.org/library/gettext.html">the Python internationalization documents</a>.</p>
+<p>Optionally you can also add a test of your language to
+<tt class="docutils literal"><span class="pre">tests/test_i18n.py</span></tt>.  An Example of a language test:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ne</span> <span class="o">=</span> <span class="n">formencode</span><span class="o">.</span><span class="n">validators</span><span class="o">.</span><span class="n">NotEmpty</span><span class="p">()</span>
+<span class="p">[</span><span class="o">...</span><span class="p">]</span>
+<span class="k">def</span> <span class="nf">test_de</span><span class="p">():</span>
+    <span class="n">_test_lang</span><span class="p">(</span><span class="s">&quot;de&quot;</span><span class="p">,</span> <span class="s">u&quot;Bitte einen Wert eingeben&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And the test for your language:</p>
+<div class="highlight-python"><pre>def test_&lt;lang&gt;():
+    _test_lang("&lt;lang&gt;", u"&lt;translation of Not Empty Text in the language &lt;lang&gt;")</pre>
+</div>
+</div>
+</div>
+<div class="section" id="http-html-form-input">
+<h3><a class="toc-backref" href="#id15">HTTP/HTML Form Input</a><a class="headerlink" href="#http-html-form-input" title="Permalink to this headline">¶</a></h3>
+<p>The validation expects nested data structures; specifically
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.schema.Schema</span></tt> and
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.foreach.ForEach</span></tt> deal with these structures well.
+HTML forms, however, do not produce nested structures &#8211; they produce
+flat structures with keys (input names) and associated values.</p>
+<p>Validator includes the module <tt class="xref py py-mod docutils literal"><span class="pre">formencode.variabledecode</span></tt>,
+which allows you to encode nested dictionary and list structures into
+a flat dictionary.</p>
+<p>To do this it uses keys with <tt class="docutils literal"><span class="pre">&quot;.&quot;</span></tt> for nested dictionaries, and
+<tt class="docutils literal"><span class="pre">&quot;-int&quot;</span></tt> for (ordered) lists.  So something like:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="50%" />
+<col width="50%" />
+</colgroup>
+<thead valign="bottom">
+<tr><th class="head">key</th>
+<th class="head">value</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr><td>names-1.fname</td>
+<td>John</td>
+</tr>
+<tr><td>names-1.lname</td>
+<td>Doe</td>
+</tr>
+<tr><td>names-2.fname</td>
+<td>Jane</td>
+</tr>
+<tr><td>names-2.lname</td>
+<td>Brown</td>
+</tr>
+<tr><td>names-3</td>
+<td>Tim Smith</td>
+</tr>
+<tr><td>action</td>
+<td>save</td>
+</tr>
+<tr><td>action.option</td>
+<td>overwrite</td>
+</tr>
+<tr><td>action.confirm</td>
+<td>yes</td>
+</tr>
+</tbody>
+</table>
+<p>Will be mapped to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">{</span><span class="s">&#39;names&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;fname&#39;</span><span class="p">:</span> <span class="s">&quot;John&quot;</span><span class="p">,</span> <span class="s">&#39;lname&#39;</span><span class="p">:</span> <span class="s">&quot;Doe&quot;</span><span class="p">},</span>
+           <span class="p">{</span><span class="s">&#39;fname&#39;</span><span class="p">:</span> <span class="s">&quot;Jane&quot;</span><span class="p">,</span> <span class="s">&#39;lname&#39;</span><span class="p">:</span> <span class="s">&#39;Brown&#39;</span><span class="p">},</span>
+           <span class="s">&quot;Tim Smith&quot;</span><span class="p">],</span>
+ <span class="s">&#39;action&#39;</span><span class="p">:</span> <span class="p">{</span><span class="bp">None</span><span class="p">:</span> <span class="s">&quot;save&quot;</span><span class="p">,</span>
+            <span class="s">&#39;option&#39;</span><span class="p">:</span> <span class="s">&quot;overwrite&quot;</span><span class="p">,</span>
+            <span class="s">&#39;confirm&#39;</span><span class="p">:</span> <span class="s">&quot;yes&quot;</span><span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>In other words, <tt class="docutils literal"><span class="pre">'a.b'</span></tt> creates a dictionary in <tt class="docutils literal"><span class="pre">'a'</span></tt>, with
+<tt class="docutils literal"><span class="pre">'b'</span></tt> as a key (and if <tt class="docutils literal"><span class="pre">'a'</span></tt> already had a value, then that value
+is associated with the key <tt class="xref docutils literal"><span class="pre">None</span></tt>).  Lists are created with keys
+with <tt class="docutils literal"><span class="pre">'-int'</span></tt>, where they are ordered by the integer (the integers
+are used for sorting, missing numbers in a sequence are ignored).</p>
+<p><tt class="xref py py-class docutils literal"><span class="pre">formencode.variabledecode.NestedVariables</span></tt> is a validator that
+decodes and encodes dictionaries using this algorithm.  You can use it
+with a Schema&#8217;s <a class="reference external" href="#pre-validators">pre_validators</a> attribute.</p>
+<p>Of course, in the example we use the data is rather eclectic &#8211; for
+instance, Tim Smith doesn&#8217;t have his name separated into first and
+last.  Validators work best when you keep lists homogeneous.  Also, it
+is hard to access the <tt class="docutils literal"><span class="pre">'action'</span></tt> key in the example; storing the
+options (action.option and action.confirm) under another key would be
+preferable.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FormEncode Validation</a><ul>
+<li><a class="reference internal" href="#introduction">Introduction</a></li>
+<li><a class="reference internal" href="#using-validation">Using Validation</a><ul>
+<li><a class="reference internal" href="#available-validators">Available Validators</a></li>
+<li><a class="reference internal" href="#compound-validators">Compound Validators</a></li>
+<li><a class="reference internal" href="#writing-your-own-validator">Writing Your Own Validator</a></li>
+<li><a class="reference internal" href="#other-validator-usage">Other Validator Usage</a></li>
+<li><a class="reference internal" href="#state">State</a></li>
+<li><a class="reference internal" href="#invalid-exceptions">Invalid Exceptions</a></li>
+<li><a class="reference internal" href="#messages-language-customization">Messages, Language Customization</a></li>
+<li><a class="reference internal" href="#localization-of-error-messages-i18n">Localization of Error Messages (i18n)</a><ul>
+<li><a class="reference internal" href="#available-languages">Available languages</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#http-html-form-input">HTTP/HTML Form Input</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="news.html"
+                        title="previous chapter">News</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="i18n.html"
+                        title="next chapter">FormEncode Internationalization (gettext)</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/Validator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="i18n.html" title="FormEncode Internationalization (gettext)"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="news.html" title="News"
+             >previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2008, Ian Bicking and Contributors.
+      Last updated on Sep 14, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

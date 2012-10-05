@@ -1,0 +1,146 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>On Intentions And History &mdash; FormEncode v1.2.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FormEncode v1.2.3 documentation" href="index.html" />
+    <link rel="next" title="FormEncode Design" href="Design.html" />
+    <link rel="prev" title="htmlfill" href="htmlfill.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Design.html" title="FormEncode Design"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="htmlfill.html" title="htmlfill"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="on-intentions-and-history">
+<h1>On Intentions And History<a class="headerlink" href="#on-intentions-and-history" title="Permalink to this headline">¶</a></h1>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">author:</th><td class="field-body">Ian Bicking</td>
+</tr>
+</tbody>
+</table>
+<p>I&#8217;m the author of <a class="reference external" href="http://funformkit.sf.net">FunFormKit</a>, a form generation and validation
+package for <a class="reference external" href="http://webware.sf.net">Webware</a>.  I considered FunFormKit (FFK) to be a very
+powerful and complete package, with features that few other form
+validation packages for Python had (as to other languages, I haven&#8217;t
+researched enough to know).  It supported repeating and compound
+fields (which most packages do not), and had a very expressive
+validation system.</p>
+<p>However, this is not FFK.  In fact, it is a deprecation of FFK and
+does not provide backward compatibility.  Why?</p>
+<p>Probably the biggest problem was that FFK didn&#8217;t support compound
+and repeating fields.  Adding them made everything <em>much</em> more
+difficult &#8211; it was a sort of clever hack (maybe not even clever), and
+the result was very hard for anyone else to understand.  Ultimately
+hard for me to understand.</p>
+<p>Ontop of this was a structure that had too much coupling.  Testing was
+difficult.  I only came to like unit testing after FFK had gone
+through several revisions.  FFK was not made with testability in mind.
+It can be hard to add later.</p>
+<p>Also, I wanted to use pieces of FFK without the entire framework.
+Validation without the form generation was the biggest one.  Alternate
+kinds of forms also interested me &#8211; making it easier to do highly
+granual templating, or non-HTML/HTTP forms.  Alternate data sources,
+like SQL or XMLRPC, also seemed important.  All of these were not easy
+within the interfaces that FFK used.</p>
+<p>So... FormEncode!  FormEncode takes a lot of ideas from FFK, and a lot
+of the code is just modified FFK code.  All of it is reviewed and
+actively inserted into FormEncode, I&#8217;m not transferring anything
+wholesale.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="htmlfill.html"
+                        title="previous chapter">htmlfill</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Design.html"
+                        title="next chapter">FormEncode Design</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/history.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Design.html" title="FormEncode Design"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="htmlfill.html" title="htmlfill"
+             >previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2008, Ian Bicking and Contributors.
+      Last updated on Sep 14, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

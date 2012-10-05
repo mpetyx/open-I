@@ -1,0 +1,513 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>News &mdash; FormEncode v1.2.3 documentation</title>
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '',
+        VERSION:     '1.2.3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="FormEncode v1.2.3 documentation" href="index.html" />
+    <link rel="next" title="FormEncode Validation" href="Validator.html" />
+    <link rel="prev" title="FormEncode" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="Validator.html" title="FormEncode Validation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="FormEncode"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="news">
+<h1><a class="toc-backref" href="#id17">News</a><a class="headerlink" href="#news" title="Permalink to this headline">¶</a></h1>
+<div class="contents topic" id="contents">
+<p class="topic-title first">Contents</p>
+<ul class="simple">
+<li><a class="reference external" href="#news" id="id17">News</a><ul>
+<li><a class="reference external" href="#id1" id="id18">1.2.3</a></li>
+<li><a class="reference external" href="#id2" id="id19">1.2.2</a></li>
+<li><a class="reference external" href="#id3" id="id20">1.2.1</a></li>
+<li><a class="reference external" href="#id4" id="id21">1.2</a></li>
+<li><a class="reference external" href="#id5" id="id22">1.1</a></li>
+<li><a class="reference external" href="#id6" id="id23">1.0.1</a></li>
+<li><a class="reference external" href="#id7" id="id24">1.0</a></li>
+<li><a class="reference external" href="#id8" id="id25">0.9</a><ul>
+<li><a class="reference external" href="#backward-incompatible-changes" id="id26">Backward incompatible changes</a></li>
+<li><a class="reference external" href="#enhancements" id="id27">Enhancements</a></li>
+<li><a class="reference external" href="#bug-fixes" id="id28">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#id9" id="id29">0.7.1</a></li>
+<li><a class="reference external" href="#id10" id="id30">0.7</a></li>
+<li><a class="reference external" href="#id11" id="id31">0.6</a></li>
+<li><a class="reference external" href="#id12" id="id32">0.5.1</a></li>
+<li><a class="reference external" href="#id13" id="id33">0.5</a></li>
+<li><a class="reference external" href="#id14" id="id34">0.4</a><ul>
+<li><a class="reference external" href="#bugfixes" id="id35">Bugfixes</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#id15" id="id36">0.3</a><ul>
+<li><a class="reference external" href="#id16" id="id37">Bugfixes</a></li>
+<li><a class="reference external" href="#experiments" id="id38">Experiments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="id1">
+<h2><a class="toc-backref" href="#id18">1.2.3</a><a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Moved to <a class="reference external" href="http://bitbucket.org/ianb/formencode">BitBucket</a>.</li>
+<li>Allowed <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.UnicodeString</span></tt> to use different
+encoding of input and output, or no encoding/decoding at all.</li>
+<li>Fixes <a class="reference external" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=2666139&amp;group_id=91231&amp;atid=596418">#2666139 DateValidator bug happening only in March under Windows in Germany :)</a></li>
+<li>Don&#8217;t let <tt class="xref py py-class docutils literal"><span class="pre">formencode.compound.Any</span></tt> shortcut validation when
+it gets an empty value (this same change had already been made to
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.compound.All</span></tt>).</li>
+<li>Really updated German translation</li>
+<li>Fixes <a class="reference external" href="https://sourceforge.net/tracker/?func=detail&amp;aid=2799713&amp;group_id=91231&amp;atid=596416">#2799713 force_defaults=False and &lt;select&gt; fields</a>
+(regarding <tt class="xref py py-func docutils literal"><span class="pre">formencode.htmlfill.render()</span></tt>)
+Thanks to w31rd0 for the bug report and patch to fix it.</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2><a class="toc-backref" href="#id19">1.2.2</a><a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added keyword argument <tt class="docutils literal"><span class="pre">force_defaults</span></tt> to
+<tt class="xref py py-func docutils literal"><span class="pre">formencode.htmlfill.render()</span></tt>; when this is True (the default)
+this will uncheck checkboxes, unselect select boxes, etc., when a
+value is missing from the default dictionary.</li>
+<li>Updated German translation</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2><a class="toc-backref" href="#id20">1.2.1</a><a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Be more careful about <tt class="docutils literal"><span class="pre">unicode(Invalid(...))</span></tt>, to make sure it
+always returns unicode.</li>
+<li>Fix broken <tt class="xref py py-mod docutils literal"><span class="pre">formencode.national</span></tt> zip code validators.</li>
+<li>In <tt class="xref py py-mod docutils literal"><span class="pre">formencode.national</span></tt> only warn about the pycountry or TG
+requirement when creating validators that require them.</li>
+<li>Fix another <tt class="xref py py-mod docutils literal"><span class="pre">formencode.htmlfill</span></tt> error due to a field with
+no explicit value.</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2><a class="toc-backref" href="#id21">1.2</a><a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.IPAddress</span></tt>, validating IP
+addresses, from Leandro Lucarella.</li>
+<li>Added <tt class="xref py py-meth docutils literal"><span class="pre">formencode.api.Invalid.__unicode__()</span></tt></li>
+<li>In <tt class="xref py py-mod docutils literal"><span class="pre">formencode.htmlfill</span></tt> use a default encoding of utf8 when
+handling mixed <tt class="docutils literal"><span class="pre">str</span></tt>/<tt class="docutils literal"><span class="pre">unicode</span></tt> content.  Also do not modify
+<tt class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;image&quot;&gt;</span></tt> tags (previously <tt class="docutils literal"><span class="pre">src</span></tt> would be
+overwritten, for no good reason).</li>
+<li>In <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.Email</span></tt> allow single-character
+domain names (like x.com).</li>
+<li>Make <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.FieldsMatch</span></tt> give a normal
+<tt class="docutils literal"><span class="pre">Invalid</span></tt> exception if you pass it a non-dictionary.  Also treat
+all missing keys as the empty string (previously the first key was
+required and would raise KeyError).</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.Number</span></tt> works with <tt class="docutils literal"><span class="pre">inf</span></tt> float
+values (before it would raise a OverflowError).</li>
+<li>The <tt class="docutils literal"><span class="pre">tw</span></tt> locale has been renamed to the more standard <tt class="docutils literal"><span class="pre">zh_TW</span></tt>.</li>
+<li>Added Japanese and Turkish translations.</li>
+<li>Fixed some outdated translations and errors in Spanish and Greek
+translations. Translations now managed with <a class="reference external" href="http://babel.edgewall.org/">Babel</a>.</li>
+</ul>
+</div>
+<div class="section" id="id5">
+<h2><a class="toc-backref" href="#id22">1.1</a><a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed the <tt class="docutils literal"><span class="pre">is_empty()</span></tt> method in
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.FieldStorageUploadConverter</span></tt>;
+previously it returned the opposite of the intended result.</li>
+<li>Added a parameter to <tt class="docutils literal"><span class="pre">htmlfill.render()</span></tt>: <tt class="docutils literal"><span class="pre">prefix_error</span></tt>.  If
+this parameter is true (the default) then errors automatically go
+before the input field; if false then they go after the input field.</li>
+<li>Remove deprecated modules: <tt class="docutils literal"><span class="pre">fields</span></tt>, <tt class="docutils literal"><span class="pre">formgen</span></tt>, <tt class="docutils literal"><span class="pre">htmlform</span></tt>,
+<tt class="docutils literal"><span class="pre">sqlformgen</span></tt>, and <tt class="docutils literal"><span class="pre">sqlschema</span></tt>.</li>
+<li>Added <tt class="docutils literal"><span class="pre">formencode.htmlrename</span></tt>, which renames HTML inputs.</li>
+<li>In <tt class="docutils literal"><span class="pre">formencode.htmlfill</span></tt>, non-string values are compared usefully
+(e.g., a select box with integer values).</li>
+<li>The validators <tt class="docutils literal"><span class="pre">Int</span></tt> and <tt class="docutils literal"><span class="pre">Number</span></tt> both take min/max arguments
+(from Shannon Behrens).</li>
+<li>Validators based on <tt class="docutils literal"><span class="pre">formencode.validators.FormValidator</span></tt> will not
+treat <tt class="docutils literal"><span class="pre">{}</span></tt> as an empty (unvalidated) value.</li>
+<li>Some adjustments to the URL validator.</li>
+<li><tt class="xref py py-class docutils literal"><span class="pre">formencode.compound.All</span></tt> does not handle empty values,
+instead relying on sub-validators to check for emptiness.</li>
+<li>Fixed the <tt class="docutils literal"><span class="pre">if_missing</span></tt> attribute in
+<tt class="xref py py-class docutils literal"><span class="pre">formencode.foreach.ForEach</span></tt>; previously it would be the same
+list instance, so if you modified it then it would effect future
+<tt class="docutils literal"><span class="pre">if_missing</span></tt> values (reported by Felix Schwarz).</li>
+<li>Added formatter to <tt class="xref py py-mod docutils literal"><span class="pre">formencode.htmlfill</span></tt>, so you can use
+<tt class="docutils literal"><span class="pre">&lt;form:error</span> <span class="pre">name=&quot;field_name&quot;</span> <span class="pre">formatter=&quot;ignore&quot;</span> <span class="pre">/&gt;</span></tt> &#8211; this will
+cause the error to be swallowed, not shown to the user.</li>
+<li>Added <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.XRI</span></tt> for validation i-names,
+i-numbers, URLs, etc (as used in OpenID).</li>
+<li>Look in <tt class="docutils literal"><span class="pre">/usr/share/locale</span></tt> for locale files, in addition to the
+normal locations.</li>
+<li>Quiet Python 2.6 deprecation warnings.</li>
+<li>Fix <tt class="xref py py-class docutils literal"><span class="pre">formencode.validators.URL</span></tt>, which was accepting illegal
+characters (like newlines) and did not accept <a class="reference external" href="http://domain:PORT/">http://domain:PORT/</a></li>
+</ul>
+</div>
+<div class="section" id="id6">
+<h2><a class="toc-backref" href="#id23">1.0.1</a><a class="headerlink" href="#id6" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">chained_validators</span></tt> were removed from Schema somehow; now
+replaced and working.</li>
+<li>Put in missing <tt class="docutils literal"><span class="pre">htmlfill.render(error_class=...)</span></tt> parameter (was
+documented and implemented, but <tt class="docutils literal"><span class="pre">render()</span></tt> did not pass it
+through).</li>
+</ul>
+</div>
+<div class="section" id="id7">
+<h2><a class="toc-backref" href="#id24">1.0</a><a class="headerlink" href="#id7" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added <tt class="docutils literal"><span class="pre">formencode.schema.SimpleFormValidator</span></tt>, which wraps a
+simple function to make it a validator.</li>
+<li>Changed the use of <tt class="docutils literal"><span class="pre">chained_validators</span></tt> in Schemas, so that all
+chained validators get run even when there are previous errors (to
+detect all the errors).</li>
+<li>While something like <tt class="docutils literal"><span class="pre">Int.to_python()</span></tt> worked, other methods like
+<tt class="docutils literal"><span class="pre">Int.message(...)</span></tt> didn&#8217;t work.  Now it does.</li>
+<li>Added Italian, Finnish, and Norwegian translations.</li>
+</ul>
+</div>
+<div class="section" id="id8">
+<h2><a class="toc-backref" href="#id25">0.9</a><a class="headerlink" href="#id8" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="backward-incompatible-changes">
+<h3><a class="toc-backref" href="#id26">Backward incompatible changes</a><a class="headerlink" href="#backward-incompatible-changes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>The notion of &#8220;empty&#8221; has changed to include empty lists,
+dictionaries, and tuples.  If you get one of these values passed
+into (or generated by) a validator with <tt class="docutils literal"><span class="pre">not_empty=True</span></tt> you can
+get exceptions where you didn&#8217;t previously.</li>
+</ul>
+</div>
+<div class="section" id="enhancements">
+<h3><a class="toc-backref" href="#id27">Enhancements</a><a class="headerlink" href="#enhancements" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Added support for Paste&#8217;s MultiDict dictionary as input to
+Schema.to_python, by converting it to a normal dict via MultiDict.mixed.
+Previously MultiDicts wouldn&#8217;t work with CompoundValidators (like
+ForEach)</li>
+<li>Added encoding parameter to htmlfill, which will handle cases when mixed
+str and unicode objects are used (turning all str objects into unicode)</li>
+<li>Include <tt class="docutils literal"><span class="pre">formencode.validators.InternationalPhoneNumber</span></tt> from
+W-Mark Kubacki.</li>
+<li><tt class="docutils literal"><span class="pre">validators.Int</span></tt> takes <tt class="docutils literal"><span class="pre">min</span></tt> and <tt class="docutils literal"><span class="pre">max</span></tt> options (from Felix
+Schwarz).</li>
+<li>You can control the missing message (which by default is just
+&#8220;Missing Value&#8221;) using the message <tt class="docutils literal"><span class="pre">&quot;missing&quot;</span></tt> in a validator
+(also from James Gardner).</li>
+<li>Added <tt class="docutils literal"><span class="pre">validators.CADR</span></tt> (for IP addresses with an optional range)
+and <tt class="docutils literal"><span class="pre">validators.MACAddress</span></tt> (from Christoph Haas).</li>
+</ul>
+</div>
+<div class="section" id="bug-fixes">
+<h3><a class="toc-backref" href="#id28">Bug Fixes</a><a class="headerlink" href="#bug-fixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Be friendlier when loaded from a zip file (as with py2exe);
+previously only egg zip files would work.</li>
+<li>Fixed bug in htmlfill when a document ends with no trailing text
+after the last tag.</li>
+<li>Fix problem with HTMLParser&#8217;s default unescaping routing, which only
+understood a very limited number of entities in attribute values.</li>
+<li>Fix problem with looking up A records for email addresses.</li>
+<li><tt class="docutils literal"><span class="pre">validators.String</span></tt> now always returns strings.  It also converts
+lists to comma-separated strings (no <tt class="docutils literal"><span class="pre">[...]</span></tt>), and can encode
+unicode if an <tt class="docutils literal"><span class="pre">encoding</span></tt> parameter is given.  Empty values are
+handled better.</li>
+<li><tt class="docutils literal"><span class="pre">validators.UnicodeString</span></tt> properly handles non-Unicode inputs.</li>
+<li>Make <tt class="docutils literal"><span class="pre">validators.DateConverter</span></tt> serialize dates properly
+(from James Gardner).</li>
+<li>Minor fix to setup.py to make FormEncode more friendly with
+zc.buildout.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id9">
+<h2><a class="toc-backref" href="#id29">0.7.1</a><a class="headerlink" href="#id9" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Set <tt class="docutils literal"><span class="pre">if_missing=()</span></tt> on <tt class="docutils literal"><span class="pre">validators.Set</span></tt>, as a missing value
+usually means empty for this value.</li>
+<li>Fix for <tt class="docutils literal"><span class="pre">Email</span></tt> validator that searches A records in addition to
+MX records (from Jacob Smullyan).</li>
+<li>Fixes for the <tt class="docutils literal"><span class="pre">es</span></tt> locale.</li>
+</ul>
+</div>
+<div class="section" id="id10">
+<h2><a class="toc-backref" href="#id30">0.7</a><a class="headerlink" href="#id10" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><strong>Backward compatibility issue</strong>: Due to the addition of i18n
+(internationalization) to FormEncode, Invalid exceptions now have
+unicode messages.  You may encounter unicode-related errors if you
+are mixing these messages with non-ASCII <tt class="docutils literal"><span class="pre">str</span></tt> strings.</li>
+<li>gettext-enabled branch merged in</li>
+<li>Fixes <a class="reference external" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1457145&amp;group_id=91231&amp;atid=596416">#1457145: Fails on URLs with port numbers</a></li>
+<li>Fixes <a class="reference external" href="http://sourceforge.net/tracker/index.php?func=detail&amp;aid=1559918&amp;group_id=91231&amp;atid=596416">#1559918 Schema fails to accept unicode errors</a></li>
+<li><tt class="docutils literal"><span class="pre">from</span> <span class="pre">formencode.validators</span> <span class="pre">import</span> <span class="pre">*</span></tt> will import the <tt class="docutils literal"><span class="pre">Invalid</span></tt>
+exception now.</li>
+<li><tt class="docutils literal"><span class="pre">Invalid().unpack_errors(encode_variables=True)</span></tt> now filters out
+None values (which <tt class="docutils literal"><span class="pre">ForEach</span></tt> can produce even for keys with no
+errors).</li>
+</ul>
+</div>
+<div class="section" id="id11">
+<h2><a class="toc-backref" href="#id31">0.6</a><a class="headerlink" href="#id11" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><tt class="docutils literal"><span class="pre">String(min=1)</span></tt> implies <tt class="docutils literal"><span class="pre">not_empty</span></tt> (which seems more intuitive)</li>
+<li>Added <tt class="docutils literal"><span class="pre">list_char</span></tt> and <tt class="docutils literal"><span class="pre">dict_char</span></tt> arguments to
+<tt class="docutils literal"><span class="pre">Invalid.unpack_errors</span></tt> (passed through to <tt class="docutils literal"><span class="pre">variable_encode</span></tt>)</li>
+<li>Added a <tt class="docutils literal"><span class="pre">use_datetime</span></tt> option to <tt class="docutils literal"><span class="pre">TimeValidator</span></tt>, which will
+cause it to use <tt class="docutils literal"><span class="pre">datetime.time</span></tt> objects instead of tuples.  It was
+previously able to consume but not produce these objects.</li>
+<li>Added <tt class="docutils literal"><span class="pre">&lt;form:iferror</span> <span class="pre">name=&quot;not</span> <span class="pre">field_name&quot;&gt;</span></tt> when you want to
+include text only when a field has no errors.</li>
+<li>There was a problem installing 0.5.1 on Windows with Python 2.5, now
+resolved.</li>
+</ul>
+</div>
+<div class="section" id="id12">
+<h2><a class="toc-backref" href="#id32">0.5.1</a><a class="headerlink" href="#id12" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed compound validators and <tt class="docutils literal"><span class="pre">not_empty</span></tt> (was breaking
+SQLObject&#8217;s PickleCol)</li>
+</ul>
+</div>
+<div class="section" id="id13">
+<h2><a class="toc-backref" href="#id33">0.5</a><a class="headerlink" href="#id13" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Added <tt class="docutils literal"><span class="pre">htmlfill.default_formatter_dict</span></tt>, and you can poke new
+formatters in there to effective register them.</li>
+<li>Added an <tt class="docutils literal"><span class="pre">escapenl</span></tt> formatter (nl=newline) that escapes HTML and
+turns newlines into <tt class="docutils literal"><span class="pre">&lt;br&gt;</span></tt>.</li>
+<li>When <tt class="docutils literal"><span class="pre">not_empty=False</span></tt>, empty is assumed to be allowed.  Thus
+<tt class="docutils literal"><span class="pre">Int().to_python(None)</span></tt> will now return <tt class="xref docutils literal"><span class="pre">None</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="id14">
+<h2><a class="toc-backref" href="#id34">0.4</a><a class="headerlink" href="#id14" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fixed up all the documentation.</li>
+<li>Validator <tt class="docutils literal"><span class="pre">__doc__</span></tt> attributes will include some
+automatically-appended information about all the message strings
+that validator uses.</li>
+<li>Deprecated <tt class="docutils literal"><span class="pre">formencode.htmlform</span></tt> module, because it is dumb.</li>
+<li>Added an <tt class="docutils literal"><span class="pre">.all_messages()</span></tt> method to all validators, primarily
+intended to be used for documentation purposes.</li>
+<li>Changed preferred name of <tt class="docutils literal"><span class="pre">StringBoolean</span></tt> to <tt class="docutils literal"><span class="pre">StringBool</span></tt> (to go
+with <tt class="docutils literal"><span class="pre">bool</span></tt> and <tt class="docutils literal"><span class="pre">validators.Bool</span></tt>).  Old alias still available.</li>
+<li>Added <tt class="docutils literal"><span class="pre">today_or_after</span></tt> option to <tt class="docutils literal"><span class="pre">validators.DateValidator</span></tt>.</li>
+<li>Added a <tt class="docutils literal"><span class="pre">validators.FileUploadKeeper</span></tt> validator for helping with
+file uploads in failed forms.  It still requires some annoying
+fiddling to make work, though, since file upload fields are so
+weird.</li>
+<li>Added <tt class="docutils literal"><span class="pre">text_as_default</span></tt> option to htmlfill.  This treats all
+<tt class="docutils literal"><span class="pre">&lt;input</span> <span class="pre">type=&quot;something-weird&quot;&gt;</span></tt> elements as text fields.  WHAT-WG
+adds weird input types, which can usually be usefully treated as
+text fields.</li>
+<li>Make all validators accept empty values if <tt class="docutils literal"><span class="pre">not_empty</span></tt> is False
+(the default).  &#8220;Empty&#8221; means <tt class="docutils literal"><span class="pre">&quot;&quot;</span></tt> or <tt class="xref docutils literal"><span class="pre">None</span></tt>, and will generally
+be converted None.</li>
+<li>Added <tt class="docutils literal"><span class="pre">accept_python</span></tt> boolean to all <tt class="docutils literal"><span class="pre">FancyValidator</span></tt> validators
+(which is most validators).  This is a fixed version of the broken
+<tt class="docutils literal"><span class="pre">validate_python</span></tt> boolean added in 0.3.  Also, it defaults to
+true, which means that all validators will not validate during
+<tt class="docutils literal"><span class="pre">.from_python()</span></tt> calls by default.</li>
+<li>Added <tt class="docutils literal"><span class="pre">htmlfill.render(form,</span> <span class="pre">defaults,</span> <span class="pre">errors)</span></tt> for easier
+rendering of forms.</li>
+<li>Errors automatically inserted by <tt class="docutils literal"><span class="pre">htmlfill</span></tt> will go at the top of
+the form if there&#8217;s no field associated with the error (raised an
+error in 0.3).</li>
+<li>Added <tt class="docutils literal"><span class="pre">formencode.sqlschema</span></tt> for wrapping SQLObject
+classes/instances.  See the docstring for more.</li>
+<li>Added <tt class="docutils literal"><span class="pre">ignore_key_missing</span></tt> to <tt class="docutils literal"><span class="pre">Schema</span></tt> objects, which ignore
+missing keys (where fields are present) when no <tt class="docutils literal"><span class="pre">if_missing</span></tt> is
+provided for the field.</li>
+<li>Renamed <tt class="docutils literal"><span class="pre">validators.StateProvince.extraStates</span></tt> to
+<tt class="docutils literal"><span class="pre">extra_states</span></tt>, to normalize style.</li>
+</ul>
+<div class="section" id="bugfixes">
+<h3><a class="toc-backref" href="#id35">Bugfixes</a><a class="headerlink" href="#bugfixes" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>When checking destinations, <tt class="docutils literal"><span class="pre">validators.URL</span></tt> now allows redirect
+codes, and catches socket errors and turns them into proper errors.</li>
+<li>Fix typo in <tt class="docutils literal"><span class="pre">htmlfill</span></tt></li>
+<li>Made URL and email regular expressions a little more lax/correct.</li>
+<li>A bunch of fixes to <tt class="docutils literal"><span class="pre">validators.SignedString</span></tt>, which apparently
+was completely broken.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="id15">
+<h2><a class="toc-backref" href="#id36">0.3</a><a class="headerlink" href="#id15" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Allow errors to be inserted automatically into a form when using
+<tt class="docutils literal"><span class="pre">formencode.htmlfill</span></tt>, when a <tt class="docutils literal"><span class="pre">&lt;form:error&gt;</span></tt> tag isn&#8217;t found for
+an error.</li>
+<li>Added <tt class="docutils literal"><span class="pre">if_key_missing</span></tt> attribute to <tt class="docutils literal"><span class="pre">schema.Schema</span></tt>, which will
+fill in any keys that are missing and pass them to the validator.</li>
+<li><tt class="docutils literal"><span class="pre">FancyValidator</span></tt> has changed, adding <tt class="docutils literal"><span class="pre">if_invalid_python</span></tt> and
+<tt class="docutils literal"><span class="pre">validate_python</span></tt> options (which also apply to all subclasses).
+Also <tt class="docutils literal"><span class="pre">if_empty</span></tt> only applies to <tt class="docutils literal"><span class="pre">to_python</span></tt> conversions.</li>
+<li><tt class="docutils literal"><span class="pre">FancyValidator</span></tt> now has a <tt class="docutils literal"><span class="pre">strip</span></tt> option, which if true and if
+input is a string, will strip whitespace from the string.</li>
+<li>Allow chained validators to validate otherwise-invalid forms, if
+they define a <tt class="docutils literal"><span class="pre">validate_partial</span></tt> method.  The credit card
+validator does this.</li>
+<li>Handle <tt class="docutils literal"><span class="pre">FieldStorage</span></tt> input (from file uploads); added a
+<tt class="docutils literal"><span class="pre">formencode.fieldstorage</span></tt> module to wrap those instances in
+something a bit nicer.  Added
+<tt class="docutils literal"><span class="pre">validators.FieldStorageUploadConverter</span></tt> to make this conversion.</li>
+<li>Added <tt class="docutils literal"><span class="pre">StringBoolean</span></tt> converter, which converts strings like
+<tt class="docutils literal"><span class="pre">&quot;true&quot;</span></tt> to Python booleans.</li>
+</ul>
+<div class="section" id="id16">
+<h3><a class="toc-backref" href="#id37">Bugfixes</a><a class="headerlink" href="#id16" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>A couple fixes to <tt class="docutils literal"><span class="pre">DateConverter</span></tt>, <tt class="docutils literal"><span class="pre">FieldsMatch</span></tt>,
+<tt class="docutils literal"><span class="pre">StringBoolean</span></tt>, <tt class="docutils literal"><span class="pre">CreditCardValidator</span></tt>.</li>
+<li>Added missing <tt class="docutils literal"><span class="pre">Validator.assert_string</span></tt> method.</li>
+<li><tt class="docutils literal"><span class="pre">formencode.htmlfill_schemabuilder</span></tt> handles checkboxes better.</li>
+<li>Be a little more careful about how <tt class="docutils literal"><span class="pre">Invalid</span></tt> exceptions are
+created (catch some errors sooner).</li>
+<li>Improved handling of non-string input in <tt class="docutils literal"><span class="pre">htmlfill</span></tt>.</li>
+</ul>
+</div>
+<div class="section" id="experiments">
+<h3><a class="toc-backref" href="#id38">Experiments</a><a class="headerlink" href="#experiments" title="Permalink to this headline">¶</a></h3>
+<ul class="simple">
+<li>Some experimental work in <tt class="docutils literal"><span class="pre">formencode.formgen</span></tt>.  Experimental, I
+say!</li>
+<li>Added an experimental <tt class="docutils literal"><span class="pre">formencode.context</span></tt> module for
+dynamically-scoped variables.</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">News</a><ul>
+<li><a class="reference internal" href="#id1">1.2.3</a></li>
+<li><a class="reference internal" href="#id2">1.2.2</a></li>
+<li><a class="reference internal" href="#id3">1.2.1</a></li>
+<li><a class="reference internal" href="#id4">1.2</a></li>
+<li><a class="reference internal" href="#id5">1.1</a></li>
+<li><a class="reference internal" href="#id6">1.0.1</a></li>
+<li><a class="reference internal" href="#id7">1.0</a></li>
+<li><a class="reference internal" href="#id8">0.9</a><ul>
+<li><a class="reference internal" href="#backward-incompatible-changes">Backward incompatible changes</a></li>
+<li><a class="reference internal" href="#enhancements">Enhancements</a></li>
+<li><a class="reference internal" href="#bug-fixes">Bug Fixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id9">0.7.1</a></li>
+<li><a class="reference internal" href="#id10">0.7</a></li>
+<li><a class="reference internal" href="#id11">0.6</a></li>
+<li><a class="reference internal" href="#id12">0.5.1</a></li>
+<li><a class="reference internal" href="#id13">0.5</a></li>
+<li><a class="reference internal" href="#id14">0.4</a><ul>
+<li><a class="reference internal" href="#bugfixes">Bugfixes</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id15">0.3</a><ul>
+<li><a class="reference internal" href="#id16">Bugfixes</a></li>
+<li><a class="reference internal" href="#experiments">Experiments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">FormEncode</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="Validator.html"
+                        title="next chapter">FormEncode Validation</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/news.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" size="18" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="Validator.html" title="FormEncode Validation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="FormEncode"
+             >previous</a> |</li>
+        <li><a href="index.html">FormEncode v1.2.3 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2008, Ian Bicking and Contributors.
+      Last updated on Sep 14, 2010.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 1.0.1.
+    </div>
+  </body>
+</html>

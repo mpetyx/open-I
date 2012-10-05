@@ -1,0 +1,3 @@
+#!/Users/mpetyx/Documents/workspace/moodeet/moodeetHeroku/bin/python
+from Cheetah.CheetahWrapper import _cheetah
+_cheetah()
