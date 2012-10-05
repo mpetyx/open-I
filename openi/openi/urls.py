@@ -1,7 +1,6 @@
 #from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from api import *
 from publi_query_api import *
 from tastypie.api import Api
 
