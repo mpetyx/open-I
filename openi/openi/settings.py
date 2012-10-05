@@ -78,7 +78,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = 'https://s3.amazonaws.com/openiphotos/media/'
+#MEDIA_URL = 'https://s3.amazonaws.com/openiphotos/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -88,7 +88,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = 'https://s3.amazonaws.com/openiphotos/'
+#STATIC_URL = 'https://s3.amazonaws.com/openiphotos/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -164,10 +164,10 @@ INSTALLED_APPS = (
 
 
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # stops IK checking S3 all the time - main reason to use IK v2 for me
-IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'imagekit.imagecache.NonValidatingImageCacheBackend'
+#IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'imagekit.imagecache.NonValidatingImageCacheBackend'
 
 # IMAGEKIT BACKEND
 #IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'https://s3.amazonaws.com/openiphotos/'
@@ -176,11 +176,11 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 
 
-STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+#STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-AWS_ACCESS_KEY_ID = ''
-AWS_SECRET_ACCESS_KEY = ''
-AWS_STORAGE_BUCKET_NAME = 'openiphotos'
+#AWS_ACCESS_KEY_ID = ''
+#AWS_SECRET_ACCESS_KEY = ''
+#AWS_STORAGE_BUCKET_NAME = 'openiphotos'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.twitter.TwitterBackend',
