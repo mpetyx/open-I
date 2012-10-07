@@ -28,9 +28,7 @@
         <entry file="file://$PROJECT_DIR$/openi/manage.py">
           <provider selected="true" editor-type-id="text-editor">
             <state line="5" column="58" selection-start="129" selection-end="129" vertical-scroll-proportion="0.0">
-              <folding>
-                <element signature="e#22#31#0" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -38,7 +36,7 @@
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openi/openi/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="30" column="0" selection-start="905" selection-end="3347" vertical-scroll-proportion="0.0">
+            <state line="148" column="8" selection-start="4761" selection-end="4765" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#24#52#0" expanded="true" />
               </folding>
@@ -46,10 +44,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="settings.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="settings.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openi/openi/settings.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="207" column="72" selection-start="7179" selection-end="7179" vertical-scroll-proportion="0.39772728">
+            <state line="162" column="35" selection-start="5539" selection-end="5539" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#23#32#0" expanded="true" />
               </folding>
@@ -57,11 +55,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Procfile" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/logger/Procfile">
+      <file leaf-file-name="api.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/openi/openi/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="1" column="18" selection-start="95" selection-end="95" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="44" column="24" selection-start="1698" selection-end="1698" vertical-scroll-proportion="-16.26923">
+              <folding>
+                <element signature="e#24#75#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="admin.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/openi/openi/admin.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="0" selection-start="365" selection-end="365" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="e#49#81#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="urls.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="5" column="18" selection-start="204" selection-end="204" vertical-scroll-proportion="-0.08303249">
+              <folding>
+                <element signature="e#53#92#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -90,7 +112,10 @@
         <option value="$PROJECT_DIR$/openi/Procfile" />
         <option value="$PROJECT_DIR$/openi/openi/wsgi.py" />
         <option value="$PROJECT_DIR$/openi/openi/models.py" />
+        <option value="$PROJECT_DIR$/openi/openi/urls.py" />
         <option value="$PROJECT_DIR$/openi/openi/settings.py" />
+        <option value="$PROJECT_DIR$/openi/openi/admin.py" />
+        <option value="$PROJECT_DIR$/openi/openi/api.py" />
       </list>
     </option>
   </component>
@@ -125,16 +150,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Project Files">
-          <PATH>
-            <PATH_ELEMENT USER_OBJECT="Root">
-              <option name="myItemId" value="" />
-              <option name="myItemType" value="" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -201,6 +216,16 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Project Files">
+          <PATH>
+            <PATH_ELEMENT USER_OBJECT="Root">
+              <option name="myItemId" value="" />
+              <option name="myItemType" value="" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -209,6 +234,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/openi/openi" />
       <recent name="$PROJECT_DIR$/openi" />
       <recent name="$PROJECT_DIR$" />
       <recent name="$PROJECT_DIR$/openIlib" />
@@ -290,9 +316,8 @@
       <window_info id="Data Sources" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32874355" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25364667" sideWeight="0.6712565" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25769854" sideWeight="0.6712565" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -301,6 +326,7 @@
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32874355" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -361,73 +387,72 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="19" column="26" selection-start="490" selection-end="490" vertical-scroll-proportion="0.29602888">
-          <folding>
-            <element signature="e#53#92#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/api.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/openi/requirements.txt">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.16425993">
-          <folding />
-        </state>
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.16425993" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/public_query_api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="8" column="0" selection-start="129" selection-end="129" vertical-scroll-proportion="0.2166065">
-          <folding />
-        </state>
+        <state line="8" column="0" selection-start="129" selection-end="129" vertical-scroll-proportion="0.2166065" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/wsgi.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="21" selection-start="25" selection-end="25" vertical-scroll-proportion="0.027075812">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openi/manage.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="5" column="58" selection-start="129" selection-end="129" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#22#31#0" expanded="true" />
-          </folding>
-        </state>
+        <state line="1" column="21" selection-start="25" selection-end="25" vertical-scroll-proportion="0.027075812" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/logger/Procfile">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="18" selection-start="95" selection-end="95" vertical-scroll-proportion="0.0">
-          <folding />
+        <state line="1" column="18" selection-start="95" selection-end="95" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/manage.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="58" selection-start="129" selection-end="129" vertical-scroll-proportion="0.0" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="162" column="35" selection-start="5539" selection-end="5539" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="e#23#32#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="30" column="0" selection-start="905" selection-end="3347" vertical-scroll-proportion="0.0">
+        <state line="148" column="8" selection-start="4761" selection-end="4765" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#24#52#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/settings.py">
+    <entry file="file://$PROJECT_DIR$/openi/openi/admin.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="207" column="72" selection-start="7179" selection-end="7179" vertical-scroll-proportion="0.39772728">
+        <state line="24" column="0" selection-start="365" selection-end="365" vertical-scroll-proportion="0.0">
           <folding>
-            <element signature="e#23#32#0" expanded="true" />
+            <element signature="e#49#81#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/api.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="44" column="24" selection-start="1698" selection-end="1698" vertical-scroll-proportion="-16.26923">
+          <folding>
+            <element signature="e#24#75#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="18" selection-start="204" selection-end="204" vertical-scroll-proportion="-0.08303249">
+          <folding>
+            <element signature="e#53#92#0" expanded="true" />
           </folding>
         </state>
       </provider>

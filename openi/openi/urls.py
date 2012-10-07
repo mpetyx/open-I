@@ -1,19 +1,20 @@
 #from django.conf.urls import patterns, include, url
 from django.conf.urls.defaults import *
 from django.contrib import admin
-from publi_query_api import *
+#from publi_query_api import *
 from tastypie.api import Api
+from api import  *
 
 
 admin.autodiscover()
 
 # private closed api for user
 openi_api = Api(api_name='openi')
-openi_api.register(UserResource())
+openi_api.register(PhotoResource())
 
 # public open api for requests
-public_open_api = Api(api_name='query_openi')
-public_openi_api.register(publi_query_api.UserResource())
+#public_open_api = Api(api_name='query_openi')
+#public_openi_api.register(publi_query_api.UserResource())
 
 
 urlpatterns = patterns('',
@@ -27,7 +28,7 @@ urlpatterns = patterns('',
     # urls.py
 
     # The normal jazz here...
-    (r'^api/', include(public_open_api.urls)),
+#    (r'^publicapi/', include(public_open_api.urls)),
     (r'^api/', include(openi_api.urls)),
     url(r'^social/', include('social_auth.urls')),
 

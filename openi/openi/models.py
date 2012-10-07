@@ -139,8 +139,28 @@ class TwitterProfile(models.Model):
     username  = models.CharField(max_length=255,null=True, blank=True)
     credentials  = models.CharField(max_length=255,null=True, blank=True)
 
+
+class Photo(models.Model):
+    # code here http://django-imagekit.readthedocs.org/en/latest/index.html
+
+    """
+        Photo model
+    """
+    name = models.CharField(max_length=100)
+    original_image = models.ImageField(upload_to='photos')
+    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
+        options={'quality': 90})
+    #    original_image = models.CharField(max_length=100)
+    #    formatted_image = models.CharField(max_length=100)
+    published = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return "%d"%self.id
+
+
 class Person( User ):
 
 #    photo = S3EnabledImageField(blank=True,upload_to='media/persons')
     facebook = models.OneToOneField( FacebookProfile )
-    twitter = models.OneToOneField( TwitterProfile )
+    twitter  = models.OneToOneField( TwitterProfile )
+    photo    = models.ForeignKey(Photo)

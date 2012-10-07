@@ -78,7 +78,7 @@ MEDIA_ROOT = ''
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-#MEDIA_URL = 'https://s3.amazonaws.com/openiphotos/media/'
+MEDIA_URL = 'https://s3.amazonaws.com/openiphotos/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
@@ -88,7 +88,7 @@ STATIC_ROOT = ''
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-#STATIC_URL = 'https://s3.amazonaws.com/openiphotos/'
+STATIC_URL = 'https://s3.amazonaws.com/openiphotos/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -106,7 +106,7 @@ STATICFILES_FINDERS = (
     )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '5w1u7a%!#27qu60_bk-ew66!9wb5^g#321dsadi92321&amp;%qa%=&amp;+=o#@b&amp;n(p6m'
+SECRET_KEY = '5w1u7a%!#27qu60_bk-ew66!9wb5^g#&amp;%qa%=&amp;+=o#@b&amp;n(p6m'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -162,15 +162,23 @@ INSTALLED_APPS = (
 
 #AUTH_PROFILE_MODULE = 'openi.User'
 
+"""
+Deprecated support for activation mail account
+"""
+#ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+#EMAIL_HOST = ' tsx.websitewelcome.com '
+#EMAIL_PORT = 465
+#ACCOUNT_ACTIVATION_DAYS=7
+#EMAIL_HOST_USER='contact@openi.com'
+#EMAIL_HOST_PASSWORD='starbucks13'
+#EMAIL_USE_TLS = False
+#DEFAULT_FROM_EMAIL = 'contact@openi.com'
 
 
-#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
 # stops IK checking S3 all the time - main reason to use IK v2 for me
-#IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'imagekit.imagecache.NonValidatingImageCacheBackend'
-
-# IMAGEKIT BACKEND
-#IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'https://s3.amazonaws.com/openiphotos/'
+IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'imagekit.imagecache.NonValidatingImageCacheBackend'
 
 INTERNAL_IPS = ('127.0.0.1',)
 
@@ -178,9 +186,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 #STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
-#AWS_ACCESS_KEY_ID = ''
-#AWS_SECRET_ACCESS_KEY = ''
-#AWS_STORAGE_BUCKET_NAME = 'openiphotos'
+AWS_ACCESS_KEY_ID = 'AKIAJWJD4LJWZ4PMCWTA'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'openiphotos'
 
 AUTHENTICATION_BACKENDS = (
     'social_auth.backends.twitter.TwitterBackend',
