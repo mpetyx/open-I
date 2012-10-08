@@ -21,26 +21,31 @@ from PIL import Image
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from django.core.files.storage import FileSystemStorage
+from django.core.files.storage import default_storage as s3_storage
 from django.core.files import File
 import os
 
 
-class Photo(models.Model):
-    # code here http://django-imagekit.readthedocs.org/en/latest/index.html
+import urllib2 as urllib
+from cStringIO import StringIO
 
-    """
-        Photo model
-    """
-    name = models.CharField(max_length=100)
-    original_image = models.ImageField(upload_to='photos')
-    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
-        options={'quality': 90})
-    #    original_image = models.CharField(max_length=100)
-    #    formatted_image = models.CharField(max_length=100)
-    published = models.DateTimeField(auto_now_add=True)
 
-    def __unicode__(self):
-        return "%d"%self.id
+#class Photo(models.Model):
+#    # code here http://django-imagekit.readthedocs.org/en/latest/index.html
+#
+#    """
+#        Photo model
+#    """
+#    name = models.CharField(max_length=100)
+#    original_image = models.ImageField(upload_to='photos')
+#    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
+#        options={'quality': 90})
+#    #    original_image = models.CharField(max_length=100)
+#    #    formatted_image = models.CharField(max_length=100)
+#    published = models.DateTimeField(auto_now_add=True)
+#
+#    def __unicode__(self):
+#        return "%d"%self.id
 
 
 class IKOptions:
@@ -103,7 +108,7 @@ class Photo(models.Model):
     photo_thumb = models.CharField(max_length=255, blank=True)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    content_date = models.DateField()
+#    content_date = models.DateField(blank=True,null=True)
     permissions = models.CharField(max_length=255)
     photo_credits = models.CharField(max_length=255, blank=True)
     approved = models.BooleanField(default=False)
@@ -126,13 +131,29 @@ class Photo(models.Model):
         sizes = {'thumbnail': {'height': 100, 'width': 100}, 'medium': {'height': 300, 'width': 300},}
 
         super(Photo, self).save()
-        photopath = str(self.photo_original.path)  # this returns the full system path to the original file
-        im = Image.open(photopath)  # open the image using PIL
+        photopath = str(s3_storage.open(self.photo_original.name))  # this returns the full system path to the original file
+
+        #custom handling of s3
+#        url= "http://s3-eu-west-1.amazonaws.com/openiphotos/photos/"+self.photo_original.name
+#
+#        img_file = urllib.urlopen(url)
+#        original_image = StringIO(img_file.read())
+#        im = Image.open( original_image )
+
+#        im = Image.open(photopath)  # open the image using PIL
+
 
         # pull a few variables out of that full path
         extension = photopath.rsplit('.', 1)[1]  # the file extension
         filename = photopath.rsplit('/', 1)[1].rsplit('.', 1)[0]  # the file name only (minus path or extension)
         fullpath = photopath.rsplit('/', 1)[0]  # the path only (minus the filename.extension)
+
+
+        from s3fs import S3FS
+        lol =  S3FS( "openiphotos","photos",'AKIAJWJD4LJWZ4PMCWTA','mwuo3YgUVrNoCW+XXvGr/Fk8YIpx+AmAZITMFX+L')
+
+        picture = lol.open(filename+"."+extension)
+        im = Image.open(picture)
 
         # use the file extension to determine if the image is valid before proceeding
         if extension not in ['jpg', 'jpeg', 'gif', 'png']: sys.exit()
@@ -152,4 +173,4 @@ class Photo(models.Model):
         super(Photo, self).save()
 
     class Meta:
-        ordering = ['-content_date']
+        ordering = ['-created_at']

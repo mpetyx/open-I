@@ -1,3 +1,4 @@
+fs
 pil
 django-mailer
 django-email-confirmation
