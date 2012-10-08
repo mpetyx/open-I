@@ -1,4 +1,5 @@
 fs
+sorl-thumbnail
 pil
 django-mailer
 django-email-confirmation

@@ -37,6 +37,7 @@ from form_data_resources import ModelResource
 
 #from CamelCaseJSONSerializer import CamelCaseJSONSerializer
 from models import *
+from sorl.thumbnail import get_thumbnail
 
 
 class PhotoResource(ModelResource):
@@ -46,6 +47,37 @@ class PhotoResource(ModelResource):
         queryset = Photo.objects.all()
         authorization = Authorization()
 
+
+    def override_urls(self):
+
+        return [
+            url(r"^(?P<resource_name>%s)/resize%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('resize'), name="resize"),
+
+            url(r"^(?P<resource_name>%s)/handler%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('handler'), name="handler"),
+
+        ]
+
+
+    def resize(self, request, **kwargs):
+
+        self.is_authorized(request)
+
+        if 'photo_id' in kwargs:
+            photo_id = kwargs['photo_id']
+        else:
+            photo_id   = request.REQUEST.get('photo_id', '')
+
+        bundle = Photo.objects.get(name = photo_id)
+        from s3fs import S3FS
+        lol =  S3FS( "openiphotos","photos",'AKIAJWJD4LJWZ4PMCWTA','mwuo3YgUVrNoCW+XXvGr/Fk8YIpx+AmAZITMFX+L')
+
+        picture = lol.open(bundle)
+        im = get_thumbnail(picture.photo_original, '100x100', crop='center', quality=99)
+        return self.create_response(request, im)
 
 #class PhotoSearchResource(ModelResource):
 #
