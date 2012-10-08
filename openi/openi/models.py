@@ -147,9 +147,10 @@ class Photo(models.Model):
         Photo model
     """
     name = models.CharField(max_length=100)
-    original_image = models.ImageField(upload_to='photos')
-    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
-        options={'quality': 90})
+#    original_image = models.ImageField(upload_to='photos')
+#    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
+#        options={'quality': 90})
+    original_image = models.FileField(upload_to='photos')
     #    original_image = models.CharField(max_length=100)
     #    formatted_image = models.CharField(max_length=100)
     published = models.DateTimeField(auto_now_add=True)
@@ -158,9 +159,9 @@ class Photo(models.Model):
         return "%d"%self.id
 
 
-class Person( User ):
-
-#    photo = S3EnabledImageField(blank=True,upload_to='media/persons')
-    facebook = models.OneToOneField( FacebookProfile )
-    twitter  = models.OneToOneField( TwitterProfile )
-    photo    = models.ForeignKey(Photo)
+#class Person( User ):
+#
+##    photo = S3EnabledImageField(blank=True,upload_to='media/persons')
+#    facebook = models.OneToOneField( FacebookProfile )
+#    twitter  = models.OneToOneField( TwitterProfile )
+#    photo    = models.ForeignKey(Photo)

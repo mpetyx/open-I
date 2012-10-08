@@ -21,18 +21,18 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+#DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
 
-#DATABASES = {
-#  'default': {
-#    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#    'NAME': 'd6pts7ocrnb4ct',
-#    'HOST': 'ec2-107-22-164-147.compute-1.amazonaws.com',
-#    'PORT': 5432,
-#    'USER': 'xmrudbmoifvdqp',
-#    'PASSWORD': 'qJllvOtO310E0hKAEt_8rOJBZZ'
-#  }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd8f5anqe7jmu4m',
+        'HOST': 'ec2-54-243-241-170.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'nrdtilpuxoqoqw',
+        'PASSWORD': 'dOi2087mPjEMD6SFgsdMRgmlmo'
+    }
+}
 
 #DATABASES = {
 #    'default': {

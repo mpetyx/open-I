@@ -11,6 +11,7 @@ admin.autodiscover()
 # private closed api for user
 openi_api = Api(api_name='openi')
 openi_api.register(PhotoResource())
+#openi_api.register(PhotoSearchResource())
 
 # public open api for requests
 #public_open_api = Api(api_name='query_openi')

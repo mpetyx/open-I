@@ -31,16 +31,25 @@ import django
 from django.conf import settings
 from tastypie import fields
 
+from b64custom import Base64FileField
+from form_data_resources import ModelResource
 
 
 #from CamelCaseJSONSerializer import CamelCaseJSONSerializer
 from models import *
-#import fields
 
 
 class PhotoResource(ModelResource):
-    original_image = fields.FileField(attribute="original_image", null=True, blank=True)
+# test query working
+# curl --form "name=koukli" --form "original_image=@mike.jpg" http://openi.herokuapp.com/api/openi/photo/
     class Meta:
         queryset = Photo.objects.all()
         authorization = Authorization()
 
+
+#class PhotoSearchResource(ModelResource):
+#
+#    class Meta:
+#        queryset = Photo.objects.filter(status='PU', date_published__lt=datetime.datetime.now).order_by('-date_published')
+#        resource_name = 'news'
+#
