@@ -2,6 +2,7 @@ __author__ = 'mpetyx'
 
 
 from django.db import models
+import time
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 
@@ -16,89 +17,12 @@ from django.utils.hashcompat import sha_constructor
 from django.contrib.sites.models import Site
 
 from imagekit.models import ImageSpecField
+from PIL import Image
 from boto.s3.connection import S3Connection
 from boto.s3.key import Key
 from django.core.files.storage import FileSystemStorage
 from django.core.files import File
 import os
-
-
-# ###############################
-#Credits go to http://djangosnippets.org/snippets/1976/
-#and
-#http://wavesandmaps.com/utilizing-s3-for-a-heroku-django-app/
-# ###############################
-#class S3Storage(FileSystemStorage):
-#    def __init__(self, bucket=None, location=None, base_url=None):
-#        assert bucket
-#        if location is None:
-#            location = settings.MEDIA_ROOT
-#        if base_url is None:
-#            base_url = settings.MEDIA_URL
-#        self.location = os.path.abspath(location)
-#        self.bucket = bucket
-#        self.base_url = base_url
-#
-#    def _open(self, name, mode='rb'):
-#        class S3File(File):
-#            def __init__(self, key):
-#                self.key = key
-#
-#            def size(self):
-#                return self.key.size
-#
-#            def read(self, *args, **kwargs):
-#                return self.key.read(*args, **kwargs)
-#
-#            def write(self, content):
-#                self.key.set_contents_from_string(content)
-#
-#            def close(self):
-#                self.key.close()
-#
-#        return S3File(Key(self.bucket, name))
-#
-#    def _save(self, name, content):
-#        key = Key(self.bucket, name)
-#        if hasattr(content, 'temporary_file_path'):
-#            key.set_contents_from_filename(content.temporary_file_path())
-#        elif isinstance(content, File):
-#            key.set_contents_from_file(content)
-#        else:
-#            key.set_contents_from_string(content)
-#
-#        return name
-#
-#    def delete(self, name):
-#        self.bucket.delete_key(name)
-#
-#    def exists(self, name):
-#        return Key(self.bucket, name).exists()
-#
-#    def listdir(self, path):
-#        return [key.name for key in self.bucket.list()]
-#
-#    def path(self, name):
-#        raise NotImplementedError
-#
-#    def size(self, name):
-#        return self.bucket.get_key(name).size
-#
-#    def url(self, name):
-#        return Key(self.bucket, name).generate_url(100000)
-#
-#    def get_available_name(self, name):
-#        return name
-#
-#
-#class S3EnabledImageField(models.ImageField):
-#    def __init__(self, bucket=settings.AWS_STORAGE_BUCKET_NAME, verbose_name=None, name=None, width_field=None, height_field=None, **kwargs):
-#        self.connection = S3Connection(settings.AWS_ACCESS_KEY_ID, settings.AWS_SECRET_ACCESS_KEY)
-#        if not self.connection.lookup(bucket):
-#            self.connection.create_bucket(bucket)
-#        self.bucket = self.connection.get_bucket(bucket)
-#        kwargs['storage'] = S3Storage(self.bucket)
-#        super(S3EnabledImageField, self).__init__(verbose_name, name, width_field, height_field, **kwargs)
 
 
 class Photo(models.Model):
@@ -140,23 +64,19 @@ class TwitterProfile(models.Model):
     credentials  = models.CharField(max_length=255,null=True, blank=True)
 
 
-class Photo(models.Model):
-    # code here http://django-imagekit.readthedocs.org/en/latest/index.html
-
-    """
-        Photo model
-    """
-    name = models.CharField(max_length=100)
-#    original_image = models.ImageField(upload_to='photos')
-#    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
-#        options={'quality': 90})
-    original_image = models.FileField(upload_to='photos')
-    #    original_image = models.CharField(max_length=100)
-    #    formatted_image = models.CharField(max_length=100)
-    published = models.DateTimeField(auto_now_add=True)
-
-    def __unicode__(self):
-        return "%d"%self.id
+#class Photo(models.Model):
+#
+#    name = models.CharField(max_length=100)
+#    original_image = models.FileField(upload_to='photos')
+#    #    original_image = models.ImageField(upload_to='photos')
+#    #    formatted_image = ImageSpecField(image_field='original_image', format='JPEG',
+#    #        options={'quality': 90})
+#    #    original_image = models.CharField(max_length=100)
+#    #    formatted_image = models.CharField(max_length=100)
+#    published = models.DateTimeField(auto_now_add=True)
+#
+#    def __unicode__(self):
+#        return "%d"%self.id
 
 
 #class Person( User ):
@@ -165,3 +85,71 @@ class Photo(models.Model):
 #    facebook = models.OneToOneField( FacebookProfile )
 #    twitter  = models.OneToOneField( TwitterProfile )
 #    photo    = models.ForeignKey(Photo)
+
+
+class Photo(models.Model):
+    """
+    three size sets:
+        thumbnail (photo_thumb)
+        medium (photo_medium)
+        original (photo_original)
+    """
+
+    now = str(int(time.time()))
+    filepath = 'photos/'+now+'/'
+
+    photo_original = models.FileField('original file upload', upload_to="photos")
+    photo_medium = models.CharField(max_length=255, blank=True)
+    photo_thumb = models.CharField(max_length=255, blank=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    content_date = models.DateField()
+    permissions = models.CharField(max_length=255)
+    photo_credits = models.CharField(max_length=255, blank=True)
+    approved = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
+    def get_thumb(self):
+        return "/site_media/%s" % self.photo_thumb
+
+    def get_medium(self):
+        return "/site_media/%s" % self.photo_medium
+
+    def get_original(self):
+        return "/site_media/%s" % self.photo_original
+
+    def save(self):
+        sizes = {'thumbnail': {'height': 100, 'width': 100}, 'medium': {'height': 300, 'width': 300},}
+
+        super(Photo, self).save()
+        photopath = str(self.photo_original.path)  # this returns the full system path to the original file
+        im = Image.open(photopath)  # open the image using PIL
+
+        # pull a few variables out of that full path
+        extension = photopath.rsplit('.', 1)[1]  # the file extension
+        filename = photopath.rsplit('/', 1)[1].rsplit('.', 1)[0]  # the file name only (minus path or extension)
+        fullpath = photopath.rsplit('/', 1)[0]  # the path only (minus the filename.extension)
+
+        # use the file extension to determine if the image is valid before proceeding
+        if extension not in ['jpg', 'jpeg', 'gif', 'png']: sys.exit()
+
+        # create medium image
+        im.thumbnail((sizes['medium']['width'], sizes['medium']['height']), Image.ANTIALIAS)
+        medname = filename + "_" + str(sizes['medium']['width']) + "x" + str(sizes['medium']['height']) + ".jpg"
+        im.save(fullpath + '/' + medname)
+        self.photo_medium = self.filepath + medname
+
+        # create thumbnail
+        im.thumbnail((sizes['thumbnail']['width'], sizes['thumbnail']['height']), Image.ANTIALIAS)
+        thumbname = filename + "_" + str(sizes['thumbnail']['width']) + "x" + str(sizes['thumbnail']['height']) + ".jpg"
+        im.save(fullpath + '/' + thumbname)
+        self.photo_thumb = self.filepath + thumbname
+
+        super(Photo, self).save()
+
+    class Meta:
+        ordering = ['-content_date']
