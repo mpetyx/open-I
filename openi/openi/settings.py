@@ -138,6 +138,7 @@ TEMPLATE_DIRS = (
     #===========================================================================
     )
 
+
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -149,7 +150,6 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.admindocs',
     'tastypie',
-    #    'registration',
     'imagekit',
     'django.contrib.humanize',
     'storages',
@@ -157,6 +157,7 @@ INSTALLED_APPS = (
     "mailer",
     "notification",
     "emailconfirmation",
+    "athumb",
     #    'south',
     )
 
@@ -182,7 +183,10 @@ IMAGEKIT_DEFAULT_IMAGE_CACHE_BACKEND = 'imagekit.imagecache.NonValidatingImageCa
 
 INTERNAL_IPS = ('127.0.0.1',)
 
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.request',
+    )
 
 #STATICFILES_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 

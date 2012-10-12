@@ -174,3 +174,26 @@ class Photo(models.Model):
 
     class Meta:
         ordering = ['-created_at']
+
+
+from athumb.fields import ImageWithThumbsField
+from athumb.backends.s3boto import S3BotoStorage_AllPublic
+
+# It is generally good to keep these stored in their own module, to allow
+# for other models.py modules to import the values. This assumes that more
+# than one model stores stuff in the same bucket.
+PUBLIC_MEDIA_BUCKET = S3BotoStorage_AllPublic(bucket='openiphotos')
+
+class YourModel(models.Model):
+    photo_original = ImageWithThumbsField(
+    upload_to="photos",
+    thumbs=(
+        ('50x50_cropped', {'size': (50, 50), 'crop': True}),
+        ('60x60', {'size': (60, 60)}),
+        ('80x1000', {'size': (80, 1000)}),
+        ('front_page', {'size': (120, 1000)}),
+        ('medium', {'size': (161, 1000)}),
+        ('large', {'size': (200, 1000)}),
+        ),
+    blank=True, null=True,
+    storage=PUBLIC_MEDIA_BUCKET)

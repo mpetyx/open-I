@@ -44,7 +44,7 @@ class PhotoResource(ModelResource):
 # test query working
 # curl --form "name=koukli" --form "original_image=@mike.jpg" http://openi.herokuapp.com/api/openi/photo/
     class Meta:
-        queryset = Photo.objects.all()
+        queryset = YourModel.objects.all()
         authorization = Authorization()
 
 
