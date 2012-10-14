@@ -163,18 +163,6 @@ INSTALLED_APPS = (
 
 #AUTH_PROFILE_MODULE = 'openi.User'
 
-"""
-Deprecated support for activation mail account
-"""
-#ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
-#EMAIL_HOST = ' tsx.websitewelcome.com '
-#EMAIL_PORT = 465
-#ACCOUNT_ACTIVATION_DAYS=7
-#EMAIL_HOST_USER='contact@openi.com'
-#EMAIL_HOST_PASSWORD='starbucks13'
-#EMAIL_USE_TLS = False
-#DEFAULT_FROM_EMAIL = 'contact@openi.com'
-
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
 
