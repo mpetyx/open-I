@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2956d1f1-d4ed-48e0-8e55-bc27ee6408a7" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/openi/openi/api.py" afterPath="$PROJECT_DIR$/openi/openi/api.py" />
-    </list>
+    <list default="true" id="2956d1f1-d4ed-48e0-8e55-bc27ee6408a7" name="Default" comment="" />
     <ignored path="open-I.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -36,13 +33,22 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="10" column="128" selection-start="656" selection-end="656" vertical-scroll-proportion="0.27726433">
+            <state line="16" column="28" selection-start="782" selection-end="782" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#663#706#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="facepyExample.py" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="0" selection-start="429" selection-end="429" vertical-scroll-proportion="0.54151624">
+              <folding />
             </state>
           </provider>
         </entry>
@@ -60,7 +66,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/manage.py" />
         <option value="$PROJECT_DIR$/Procfile" />
         <option value="$PROJECT_DIR$/openi/Procfile" />
         <option value="$PROJECT_DIR$/openi/openi/wsgi.py" />
@@ -76,6 +81,7 @@
         <option value="$PROJECT_DIR$/openi/openi/api.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/getAvatars.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/models.py" />
+        <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py" />
       </list>
     </option>
   </component>
@@ -369,11 +375,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/openi/openi/wsgi.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="1" column="21" selection-start="25" selection-end="25" vertical-scroll-proportion="0.027075812" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/logger/Procfile">
       <provider selected="true" editor-type-id="text-editor">
         <state line="1" column="18" selection-start="95" selection-end="95" vertical-scroll-proportion="0.0" />
@@ -454,10 +455,17 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/models.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="128" selection-start="656" selection-end="656" vertical-scroll-proportion="0.27726433">
+        <state line="16" column="28" selection-start="782" selection-end="782" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#663#706#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="429" selection-end="429" vertical-scroll-proportion="0.54151624">
+          <folding />
         </state>
       </provider>
     </entry>
