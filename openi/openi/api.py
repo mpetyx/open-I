@@ -32,7 +32,7 @@ from django.conf import settings
 from tastypie import fields
 
 from b64custom import Base64FileField
-from form_data_resources import ModelResource
+#from form_data_resources import ModelResource
 
 
 #from CamelCaseJSONSerializer import CamelCaseJSONSerializer
