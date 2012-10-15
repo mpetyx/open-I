@@ -4,8 +4,6 @@ class FacebookOpeni():
 
     def __init__(self):
 
-
-
         from facepy import GraphAPI
 
         # Initialize the Graph API with a valid access token (optional,
@@ -19,7 +17,11 @@ class FacebookOpeni():
 
     def post_photo(self, photo):
 
-        self.graph.post(
-            path = 'me/photos',
-            source = open( photo )
-            )
+        return self.graph.post(
+                    path = 'me/photos',
+                    source = open( photo )
+                            )
+
+    def fql(self, query):
+
+        return self.graph.fql(query)

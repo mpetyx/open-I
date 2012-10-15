@@ -47,7 +47,7 @@
       <file leaf-file-name="facepyExample.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="20" column="0" selection-start="429" selection-end="429" vertical-scroll-proportion="0.54151624">
+            <state line="15" column="41" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4061372">
               <folding />
             </state>
           </provider>
@@ -78,10 +78,10 @@
         <option value="$PROJECT_DIR$/openi/requirements.txt" />
         <option value="$PROJECT_DIR$/openi/openi/models.py" />
         <option value="$PROJECT_DIR$/openi/openi/settings.py" />
-        <option value="$PROJECT_DIR$/openi/openi/api.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/getAvatars.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/models.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py" />
+        <option value="$PROJECT_DIR$/openi/openi/api.py" />
       </list>
     </option>
   </component>
@@ -173,28 +173,6 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="openi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="open-I" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="open-I" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="openi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="openi" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="socialMediaApis" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -464,7 +442,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="20" column="0" selection-start="429" selection-end="429" vertical-scroll-proportion="0.54151624">
+        <state line="15" column="41" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4061372">
           <folding />
         </state>
       </provider>

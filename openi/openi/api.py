@@ -78,10 +78,3 @@ class PhotoResource(ModelResource):
         picture = lol.open(bundle)
         im = get_thumbnail(picture.photo_original, '100x100', crop='center', quality=99)
         return self.create_response(request, im)
-
-#class PhotoSearchResource(ModelResource):
-#
-#    class Meta:
-#        queryset = Photo.objects.filter(status='PU', date_published__lt=datetime.datetime.now).order_by('-date_published')
-#        resource_name = 'news'
-#
