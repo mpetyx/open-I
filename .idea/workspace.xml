@@ -25,7 +25,7 @@
       <file leaf-file-name="api.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openi/openi/api.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="49" column="0" selection-start="1868" selection-end="1868" vertical-scroll-proportion="0.0">
+            <state line="47" column="39" selection-start="1866" selection-end="1866" vertical-scroll-proportion="0.0">
               <folding>
                 <element signature="e#24#75#0" expanded="true" />
               </folding>
@@ -33,10 +33,28 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="urls.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="14" column="0" selection-start="372" selection-end="372" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="models.py" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/openi/openi/models.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="192" column="32" selection-start="6832" selection-end="6832" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="models.py" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/models.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="16" column="28" selection-start="782" selection-end="782" vertical-scroll-proportion="0.0">
+            <state line="23" column="22" selection-start="939" selection-end="939" vertical-scroll-proportion="0.63770795">
               <folding>
                 <element signature="e#663#706#0" expanded="true" />
               </folding>
@@ -44,10 +62,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="facepyExample.py" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="facepyExample.py" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="41" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4061372">
+            <state line="22" column="29" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -77,11 +95,11 @@
         <option value="$PROJECT_DIR$/openi/openi/views.py" />
         <option value="$PROJECT_DIR$/openi/requirements.txt" />
         <option value="$PROJECT_DIR$/openi/openi/models.py" />
-        <option value="$PROJECT_DIR$/openi/openi/settings.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/getAvatars.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/models.py" />
         <option value="$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py" />
         <option value="$PROJECT_DIR$/openi/openi/api.py" />
+        <option value="$PROJECT_DIR$/openi/openi/settings.py" />
       </list>
     </option>
   </component>
@@ -363,11 +381,6 @@
         <state line="24" column="0" selection-start="365" selection-end="365" vertical-scroll-proportion="0.62274367" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="0" selection-start="372" selection-end="372" vertical-scroll-proportion="0.35198557" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/form_data_serializer.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="27" column="6" selection-start="803" selection-end="803" vertical-scroll-proportion="0.74861366" />
@@ -393,21 +406,6 @@
         <state line="2" column="0" selection-start="18" selection-end="31" vertical-scroll-proportion="0.054151624" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/views.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="4" column="0" selection-start="65" selection-end="130" vertical-scroll-proportion="0.10830325" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/settings.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="163" column="35" selection-start="5548" selection-end="5548" vertical-scroll-proportion="4.3862815" />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/models.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="192" column="32" selection-start="6832" selection-end="6832" vertical-scroll-proportion="0.6672828" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/openi/manage.py">
       <provider selected="true" editor-type-id="text-editor">
         <state line="10" column="0" selection-start="248" selection-end="248" vertical-scroll-proportion="0.27075812" />
@@ -422,28 +420,54 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/views.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="4" column="0" selection-start="65" selection-end="130" vertical-scroll-proportion="0.10830325" />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/api.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="49" column="0" selection-start="1868" selection-end="1868" vertical-scroll-proportion="0.0">
+        <state line="47" column="39" selection-start="1866" selection-end="1866" vertical-scroll-proportion="0.0">
           <folding>
             <element signature="e#24#75#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/models.py">
+    <entry file="file://$PROJECT_DIR$/openi/openi/urls.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="28" selection-start="782" selection-end="782" vertical-scroll-proportion="0.0">
-          <folding>
-            <element signature="e#663#706#0" expanded="true" />
-          </folding>
+        <state line="14" column="0" selection-start="372" selection-end="372" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="192" column="32" selection-start="6832" selection-end="6832" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/settings.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="0" selection-start="450" selection-end="450" vertical-scroll-proportion="0.0">
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/facepyExample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="41" selection-start="392" selection-end="392" vertical-scroll-proportion="0.4061372">
+        <state line="22" column="29" selection-start="572" selection-end="572" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/openi/openi/socialMediaApis/models.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="23" column="22" selection-start="939" selection-end="939" vertical-scroll-proportion="0.63770795">
+          <folding>
+            <element signature="e#663#706#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
