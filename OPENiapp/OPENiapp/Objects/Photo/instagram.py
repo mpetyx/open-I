@@ -20,7 +20,7 @@ class connector:
 
     def Delete_comment (self):
 
-    """
+        """
     DELETE API_PATH/[COMMENT_ID]
     DELETE graph.facebook.com/[COMMENT_ID]
     """
@@ -46,7 +46,7 @@ GET graph.facebook.com/[PHOTO_ID]/likes
 GET api.tumblr.com/v2/blog/{base-hostname}/likes
 """
 
-    return Unimplemnted()
+    """return Unimplemented()"""
 
 # Unlike Photo	DELETE API_PATH/[PHOTO_ID]/likes
 # DELETE graph.facebook.com/[PHOTO_ID]/likes
