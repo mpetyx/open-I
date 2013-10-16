@@ -2,3 +2,9 @@
 OPENiapp/.idea/*
 OPENiapp/.idea/
 OPENiapp/.idea
+
+.idea/workspace.xml
+
+.idea/other.xml
+
+.idea/testrunner.xml
