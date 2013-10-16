@@ -8,3 +8,5 @@ OPENiapp/.idea
 .idea/other.xml
 
 .idea/testrunner.xml
+.idea/*
+
