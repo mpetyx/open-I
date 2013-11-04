@@ -151,6 +151,8 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.vimeo',
     # 'allauth.socialaccount.providers.weibo',
 
+    'OPENiapp',
+
 )
 
 # A sample logging configuration. The only tangible logging
