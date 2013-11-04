@@ -25,24 +25,25 @@ User = get_user_model()
 
 
 @override_settings \
-    (ACCOUNT_EMAIL_VERIFICATION=app_settings.EmailVerificationMethod.MANDATORY,
-     ACCOUNT_AUTHENTICATION_METHOD=app_settings.AuthenticationMethod.USERNAME,
-     ACCOUNT_SIGNUP_FORM_CLASS=None,
-     ACCOUNT_EMAIL_SUBJECT_PREFIX=None,
-     LOGIN_REDIRECT_URL='/accounts/profile/',
-     ACCOUNT_ADAPTER='allauth.account.adapter.DefaultAccountAdapter',
-     ACCOUNT_USERNAME_REQUIRED=True)
+        (ACCOUNT_EMAIL_VERIFICATION=app_settings.EmailVerificationMethod.MANDATORY,
+         ACCOUNT_AUTHENTICATION_METHOD=app_settings.AuthenticationMethod.USERNAME,
+         ACCOUNT_SIGNUP_FORM_CLASS=None,
+         ACCOUNT_EMAIL_SUBJECT_PREFIX=None,
+         LOGIN_REDIRECT_URL='/accounts/profile/',
+         ACCOUNT_ADAPTER='allauth.account.adapter.DefaultAccountAdapter',
+         ACCOUNT_USERNAME_REQUIRED=True)
 class AccountTests(TestCase):
     def setUp(self):
         if 'allauth.socialaccount' in settings.INSTALLED_APPS:
             # Otherwise ImproperlyConfigured exceptions may occur
             from ..socialaccount.models import SocialApp
+
             sa = SocialApp.objects.create(name='testfb',
                                           provider='facebook')
             sa.sites.add(Site.objects.get_current())
 
     @override_settings \
-        (ACCOUNT_AUTHENTICATION_METHOD=app_settings.AuthenticationMethod.USERNAME_EMAIL)
+            (ACCOUNT_AUTHENTICATION_METHOD=app_settings.AuthenticationMethod.USERNAME_EMAIL)
     def test_username_containing_at(self):
         user = User.objects.create(username='@raymond.penners')
         user.set_password('psst')
@@ -55,7 +56,7 @@ class AccountTests(TestCase):
                                 {'login': '@raymond.penners',
                                  'password': 'psst'})
         self.assertEqual(resp['location'],
-                         'http://testserver'+settings.LOGIN_REDIRECT_URL)
+                         'http://testserver' + settings.LOGIN_REDIRECT_URL)
 
     def test_signup_same_email_verified_externally(self):
         user = self._test_signup_email_verified_externally('john@doe.com',
@@ -97,11 +98,13 @@ class AccountTests(TestCase):
         # Fake stash_verified_email
         from django.contrib.messages.middleware import MessageMiddleware
         from django.contrib.sessions.middleware import SessionMiddleware
+
         SessionMiddleware().process_request(request)
         MessageMiddleware().process_request(request)
         request.user = AnonymousUser()
         request.session['account_verified_email'] = verified_email
         from .views import signup
+
         resp = signup(request)
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp['location'],
@@ -185,7 +188,7 @@ class AccountTests(TestCase):
             self.assertEqual(len(mail.outbox), attempt)
             self.assertEqual(EmailConfirmation.objects
                              .filter(email_address__email=
-                                     'john@doe.com').count(),
+            'john@doe.com').count(),
                              attempt)
             if attempt == 2:
                 self.assertTemplateUsed(resp,
@@ -193,11 +196,11 @@ class AccountTests(TestCase):
 
             # Wait for cooldown
             EmailConfirmation.objects.update(sent=now()
-                                             - timedelta(days=1))
-        # Verify, and re-attempt to login.
+                                                  - timedelta(days=1))
+            # Verify, and re-attempt to login.
         confirmation = EmailConfirmation \
-            .objects \
-            .filter(email_address__user__username='johndoe')[:1] \
+                           .objects \
+                           .filter(email_address__user__username='johndoe')[:1] \
             .get()
         c.post(reverse('account_confirm_email',
                        args=[confirmation.key]))
@@ -205,7 +208,7 @@ class AccountTests(TestCase):
                       {'login': 'johndoe',
                        'password': 'johndoe'})
         self.assertEqual(resp['location'],
-                         'http://testserver'+settings.LOGIN_REDIRECT_URL)
+                         'http://testserver' + settings.LOGIN_REDIRECT_URL)
 
     def test_email_escaping(self):
         site = Site.objects.get_current()
@@ -218,7 +221,7 @@ class AccountTests(TestCase):
         self.assertTrue(mail.outbox[0].subject[1:].startswith(site.name))
 
     @override_settings \
-        (ACCOUNT_EMAIL_VERIFICATION=app_settings.EmailVerificationMethod.OPTIONAL)
+            (ACCOUNT_EMAIL_VERIFICATION=app_settings.EmailVerificationMethod.OPTIONAL)
     def test_optional_email_verification(self):
         c = Client()
         # Signup
@@ -230,7 +233,7 @@ class AccountTests(TestCase):
                        'password2': 'johndoe'})
         # Logged in
         self.assertEqual(resp['location'],
-                         'http://testserver'+settings.LOGIN_REDIRECT_URL)
+                         'http://testserver' + settings.LOGIN_REDIRECT_URL)
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(mail.outbox[0].to, ['john@doe.com'])
         self.assertEqual(len(mail.outbox), 1)
@@ -244,7 +247,7 @@ class AccountTests(TestCase):
                        'password': 'johndoe'})
         self.assertEqual(resp.status_code, 302)
         self.assertEqual(resp['location'],
-                         'http://testserver'+settings.LOGIN_REDIRECT_URL)
+                         'http://testserver' + settings.LOGIN_REDIRECT_URL)
         self.assertEqual(mail.outbox[0].to, ['john@doe.com'])
         # There was an issue that we sent out email confirmation mails
         # on each login in case of optional verification. Make sure
@@ -253,7 +256,6 @@ class AccountTests(TestCase):
 
 
 class BaseSignupFormTests(TestCase):
-
     @override_settings(
         ACCOUNT_USERNAME_REQUIRED=True,
         ACCOUNT_USERNAME_BLACKLIST=['username'])

@@ -18,7 +18,7 @@ class LinkedInAccount(ProviderAccount):
         first_name = self.account.extra_data.get('first-name', None)
         last_name = self.account.extra_data.get('last-name', None)
         if first_name and last_name:
-            name = first_name+' '+last_name
+            name = first_name + ' ' + last_name
         return name
 
 
@@ -41,5 +41,6 @@ class LinkedInProvider(OAuthProvider):
         return dict(email=data.get('email-address'),
                     first_name=data.get('first-name'),
                     last_name=data.get('last-name'))
+
 
 providers.registry.register(LinkedInProvider)

@@ -51,7 +51,7 @@ class FacebookProvider(OAuth2Provider):
             process = "'%s'" % (kwargs.get('process') or AuthProcess.LOGIN)
             action = "'%s'" % (kwargs.get('action') or AuthAction.AUTHENTICATE)
             ret = "javascript:allauth.facebook.login(%s, %s, %s)" \
-                % (next, action, process)
+                  % (next, action, process)
         else:
             assert method == 'oauth2'
             ret = super(FacebookProvider, self).get_login_url(request,
@@ -101,7 +101,7 @@ class FacebookProvider(OAuth2Provider):
         fb_login_options = self.get_fb_login_options(request)
         ctx = {'facebook_app': app,
                'facebook_channel_url':
-               request.build_absolute_uri(reverse('facebook_channel')),
+                   request.build_absolute_uri(reverse('facebook_channel')),
                'fb_login_options': mark_safe(json.dumps(fb_login_options)),
                'facebook_jssdk_locale': locale}
         return render_to_string('facebook/fbconnect.html',

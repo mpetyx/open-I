@@ -1,13 +1,12 @@
 from __future__ import absolute_import
 
-import json
-
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.crypto import get_random_string
+
 try:
     from django.utils.encoding import force_text
 except ImportError:
@@ -44,7 +43,7 @@ class SocialApp(models.Model):
                            help_text='Key (Stack Exchange only)')
     secret = models.CharField(max_length=100,
                               help_text='API secret, client secret, or'
-                              ' consumer secret')
+                                        ' consumer secret')
     # Most apps can be used across multiple domains, therefore we use
     # a ManyToManyField. Note that Facebook requires an app per domain
     # (unless the domains share a common base name).
@@ -111,7 +110,7 @@ class SocialToken(models.Model):
         .CharField(max_length=200,
                    blank=True,
                    help_text='"oauth_token_secret" (OAuth1) or refresh'
-                   ' token (OAuth2)')
+                             ' token (OAuth2)')
     expires_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:

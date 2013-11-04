@@ -2,8 +2,10 @@ __author__ = 'mpetyx'
 
 # Twython implementation
 
-from twython import Twython
 import json
+
+from twython import Twython
+
 
 APP_KEY = ''
 APP_SECRET = ''

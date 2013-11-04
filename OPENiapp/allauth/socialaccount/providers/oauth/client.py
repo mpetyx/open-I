@@ -38,9 +38,8 @@ class OAuthError(Exception):
 
 
 class OAuthClient(object):
-
-    def __init__(self, request, consumer_key, consumer_secret, 
-                 request_token_url, access_token_url, callback_url, 
+    def __init__(self, request, consumer_key, consumer_secret,
+                 request_token_url, access_token_url, callback_url,
                  parameters=None):
 
         self.request = request
@@ -75,9 +74,11 @@ class OAuthClient(object):
             response = requests.post(url=rt_url, auth=oauth)
             if response.status_code != 200:
                 raise OAuthError(
-                    _('Invalid response while obtaining request token from "%s".') % get_token_prefix(self.request_token_url))
+                    _('Invalid response while obtaining request token from "%s".') % get_token_prefix(
+                        self.request_token_url))
             self.request_token = dict(parse_qsl(response.text))
-            self.request.session['oauth_%s_request_token' % get_token_prefix(self.request_token_url)] = self.request_token
+            self.request.session[
+                'oauth_%s_request_token' % get_token_prefix(self.request_token_url)] = self.request_token
         return self.request_token
 
     def get_access_token(self):
@@ -86,9 +87,9 @@ class OAuthClient(object):
         """
         if self.access_token is None:
             request_token = self._get_rt_from_session()
-            oauth = OAuth1(self.consumer_key, 
+            oauth = OAuth1(self.consumer_key,
                            client_secret=self.consumer_secret,
-                           resource_owner_key=request_token['oauth_token'], 
+                           resource_owner_key=request_token['oauth_token'],
                            resource_owner_secret=request_token['oauth_token_secret'])
             at_url = self.access_token_url
             # Passing along oauth_verifier is required according to:
@@ -99,7 +100,8 @@ class OAuthClient(object):
             response = requests.post(url=at_url, auth=oauth)
             if response.status_code != 200:
                 raise OAuthError(
-                    _('Invalid response while obtaining access token from "%s".') % get_token_prefix(self.request_token_url))
+                    _('Invalid response while obtaining access token from "%s".') % get_token_prefix(
+                        self.request_token_url))
             self.access_token = dict(parse_qsl(response.text))
 
             self.request.session['oauth_%s_access_token' % get_token_prefix(self.request_token_url)] = self.access_token
@@ -130,8 +132,8 @@ class OAuthClient(object):
         """
         request_token = self._get_request_token()
         url = '%s?oauth_token=%s&oauth_callback=%s' \
-            % (authorization_url, request_token['oauth_token'], 
-               self.request.build_absolute_uri(self.callback_url))
+              % (authorization_url, request_token['oauth_token'],
+                 self.request.build_absolute_uri(self.callback_url))
         return HttpResponseRedirect(url)
 
 

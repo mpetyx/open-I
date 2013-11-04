@@ -189,6 +189,7 @@ def _copy_avatar(request, user, account):
     import urllib2
     from django.core.files.base import ContentFile
     from avatar.models import Avatar
+
     url = account.get_avatar_url()
     if url:
         ava = Avatar(user=user)

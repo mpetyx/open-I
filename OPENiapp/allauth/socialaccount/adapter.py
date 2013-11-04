@@ -15,7 +15,6 @@ from . import app_settings
 
 
 class DefaultSocialAccountAdapter(object):
-
     def pre_social_login(self, request, sociallogin):
         """
         Invoked just after a user successfully authenticates via a
@@ -100,7 +99,7 @@ class DefaultSocialAccountAdapter(object):
             if not account.user.has_usable_password():
                 raise ValidationError(_("Your account has no password set"
                                         " up."))
-            # No email address, no password reset
+                # No email address, no password reset
             if app_settings.EMAIL_VERIFICATION \
                     == EmailVerificationMethod.MANDATORY:
                 if EmailAddress.objects.filter(user=account.user,

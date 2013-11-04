@@ -56,8 +56,8 @@ class GoogleProvider(OAuth2Provider):
         email = data.get('email')
         if email and data.get('verified_email'):
             ret.append(EmailAddress(email=email,
-                       verified=True,
-                       primary=True))
+                                    verified=True,
+                                    primary=True))
         return ret
 
 

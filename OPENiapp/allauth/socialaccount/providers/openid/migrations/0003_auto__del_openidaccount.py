@@ -2,19 +2,19 @@
 from south.db import db
 from south.v2 import SchemaMigration
 
-class Migration(SchemaMigration):
 
+class Migration(SchemaMigration):
     def forwards(self, orm):
-        
         # Deleting model 'OpenIDAccount'
         db.delete_table('openid_openidaccount')
 
 
     def backwards(self, orm):
-        
         # Adding model 'OpenIDAccount'
         db.create_table('openid_openidaccount', (
-            ('socialaccount_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['socialaccount.SocialAccount'], unique=True, primary_key=True)),
+            ('socialaccount_ptr',
+             self.gf('django.db.models.fields.related.OneToOneField')(to=orm['socialaccount.SocialAccount'],
+                                                                      unique=True, primary_key=True)),
             ('identity', self.gf('django.db.models.fields.URLField')(max_length=255, unique=True)),
         ))
         db.send_create_signal('openid', ['OpenIDAccount'])

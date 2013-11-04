@@ -2,10 +2,9 @@
 from south.db import db
 from south.v2 import SchemaMigration
 
-class Migration(SchemaMigration):
 
+class Migration(SchemaMigration):
     def forwards(self, orm):
-        
         # Deleting model 'TwitterAccount'
         db.delete_table('twitter_twitteraccount')
 
@@ -14,12 +13,13 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        
         # Adding model 'TwitterAccount'
         db.create_table('twitter_twitteraccount', (
             ('username', self.gf('django.db.models.fields.CharField')(max_length=15)),
             ('social_id', self.gf('django.db.models.fields.BigIntegerField')(unique=True)),
-            ('socialaccount_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['socialaccount.SocialAccount'], unique=True, primary_key=True)),
+            ('socialaccount_ptr',
+             self.gf('django.db.models.fields.related.OneToOneField')(to=orm['socialaccount.SocialAccount'],
+                                                                      unique=True, primary_key=True)),
             ('profile_image_url', self.gf('django.db.models.fields.URLField')(max_length=200)),
         ))
         db.send_create_signal('twitter', ['TwitterAccount'])
@@ -39,7 +39,7 @@ class Migration(SchemaMigration):
 
 
     models = {
-        
+
     }
 
     complete_apps = ['twitter']

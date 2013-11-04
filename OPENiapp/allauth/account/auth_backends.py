@@ -10,7 +10,6 @@ User = get_user_model()
 
 
 class AuthenticationBackend(ModelBackend):
-
     def authenticate(self, **credentials):
         ret = None
         if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
@@ -30,7 +29,7 @@ class AuthenticationBackend(ModelBackend):
             return None
         try:
             # Username query is case insensitive
-            query = {username_field+'__iexact': credentials["username"]}
+            query = {username_field + '__iexact': credentials["username"]}
             user = User.objects.get(**query)
             if user.check_password(credentials["password"]):
                 return user

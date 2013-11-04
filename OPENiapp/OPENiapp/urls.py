@@ -1,19 +1,29 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
+
+from user_management.SignIn import facebook, twitter
+
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'OPENiapp.views.home', name='home'),
-    # url(r'^OPENiapp/', include('OPENiapp.foo.urls')),
+                       # Examples:
+                       # url(r'^$', 'OPENiapp.views.home', name='home'),
+                       # url(r'^OPENiapp/', include('OPENiapp.foo.urls')),
 
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+                       url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    url(r'^admin/', include(admin.site.urls)),
+                       url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^accounts/', include('allauth.urls')),
+                       url(r'^accounts/', include('allauth.urls')),
 
-    url(r'^media/', include('OPENIapp.APIS.Media.urls')),
+                       url(r'^media/', include('OPENIapp.APIS.Media.urls')),
+
+                       #https://github.com/mpetyx/moodeet/wiki/Facebook
+                       url(r'^person/signin/facebook$', facebook, name='facebook'),
+
+                       #https://github.com/mpetyx/moodeet/wiki/Twitter
+                       url(r'^person/signin/twitter$', twitter, name='twitter'),
 
 )

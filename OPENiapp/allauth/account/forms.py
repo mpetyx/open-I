@@ -25,18 +25,16 @@ User = get_user_model()
 
 
 class PasswordField(forms.CharField):
-
     def __init__(self, *args, **kwargs):
         render_value = kwargs.pop('render_value',
                                   app_settings.PASSWORD_INPUT_RENDER_VALUE)
         kwargs['widget'] = forms.PasswordInput(render_value=render_value,
                                                attrs={'placeholder':
-                                                      _('Password')})
+                                                          _('Password')})
         super(PasswordField, self).__init__(*args, **kwargs)
 
 
 class SetPasswordField(PasswordField):
-
     def clean(self, value):
         value = super(SetPasswordField, self).clean(value)
         min_length = app_settings.PASSWORD_MIN_LENGTH
@@ -47,7 +45,6 @@ class SetPasswordField(PasswordField):
 
 
 class LoginForm(forms.Form):
-
     password = PasswordField(label=_("Password"))
     remember = forms.BooleanField(label=_("Remember Me"),
                                   required=False)
@@ -58,26 +55,26 @@ class LoginForm(forms.Form):
         super(LoginForm, self).__init__(*args, **kwargs)
         if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
             login_widget = forms.TextInput(attrs={'placeholder':
-                                                  _('E-mail address')})
+                                                      _('E-mail address')})
             login_field = forms.EmailField(label=_("E-mail"),
                                            widget=login_widget)
         elif app_settings.AUTHENTICATION_METHOD \
                 == AuthenticationMethod.USERNAME:
             login_widget = forms.TextInput(attrs={'placeholder':
-                                                  _('Username')})
+                                                      _('Username')})
             login_field = forms.CharField(label=_("Username"),
                                           widget=login_widget,
                                           max_length=30)
         else:
             assert app_settings.AUTHENTICATION_METHOD \
-                == AuthenticationMethod.USERNAME_EMAIL
+                   == AuthenticationMethod.USERNAME_EMAIL
             login_widget = forms.TextInput(attrs={'placeholder':
-                                                  _('Username or e-mail')})
+                                                      _('Username or e-mail')})
             login_field = forms.CharField(label=pgettext("field label",
                                                          "Login"),
                                           widget=login_widget)
         self.fields["login"] = login_field
-        set_form_field_order(self,  ["login", "password", "remember"])
+        set_form_field_order(self, ["login", "password", "remember"])
 
     def user_credentials(self):
         """
@@ -89,7 +86,7 @@ class LoginForm(forms.Form):
         if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
             credentials["email"] = login
         elif (app_settings.AUTHENTICATION_METHOD
-              == AuthenticationMethod.USERNAME):
+                  == AuthenticationMethod.USERNAME):
             credentials["username"] = login
         else:
             if "@" in login and "." in login:
@@ -174,10 +171,10 @@ class BaseSignupForm(_base_signup_form_class()):
                                max_length=30,
                                min_length=app_settings.USERNAME_MIN_LENGTH,
                                widget=forms.TextInput(attrs={'placeholder':
-                                                             _('Username')}))
+                                                                 _('Username')}))
     email = forms.EmailField(widget=forms.TextInput(attrs=
-                                                    {'placeholder':
-                                                     _('E-mail address')}))
+    {'placeholder':
+         _('E-mail address')}))
 
     def __init__(self, *args, **kwargs):
         email_required = kwargs.pop('email_required')
@@ -232,7 +229,6 @@ class BaseSignupForm(_base_signup_form_class()):
 
 
 class SignupForm(BaseSignupForm):
-
     password1 = SetPasswordField(label=_("Password"))
     password2 = PasswordField(label=_("Password (again)"))
     confirmation_key = forms.CharField(max_length=40,
@@ -248,8 +244,8 @@ class SignupForm(BaseSignupForm):
     def clean(self):
         super(SignupForm, self).clean()
         if app_settings.SIGNUP_PASSWORD_VERIFICATION \
-                and "password1" in self.cleaned_data \
-                and "password2" in self.cleaned_data:
+            and "password1" in self.cleaned_data \
+            and "password2" in self.cleaned_data:
             if self.cleaned_data["password1"] \
                     != self.cleaned_data["password2"]:
                 raise forms.ValidationError(_("You must type the same password"
@@ -268,14 +264,12 @@ class SignupForm(BaseSignupForm):
 
 
 class UserForm(forms.Form):
-
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
         super(UserForm, self).__init__(*args, **kwargs)
 
 
 class AddEmailForm(UserForm):
-
     email = forms.EmailField(label=_("E-mail"),
                              required=True,
                              widget=forms.TextInput(attrs={"size": "30"}))
@@ -305,7 +299,6 @@ class AddEmailForm(UserForm):
 
 
 class ChangePasswordForm(UserForm):
-
     oldpassword = PasswordField(label=_("Current Password"))
     password1 = SetPasswordField(label=_("New Password"))
     password2 = PasswordField(label=_("New Password (again)"))
@@ -318,7 +311,7 @@ class ChangePasswordForm(UserForm):
 
     def clean_password2(self):
         if ("password1" in self.cleaned_data
-                and "password2" in self.cleaned_data):
+            and "password2" in self.cleaned_data):
             if (self.cleaned_data["password1"]
                     != self.cleaned_data["password2"]):
                 raise forms.ValidationError(_("You must type the same password"
@@ -331,13 +324,12 @@ class ChangePasswordForm(UserForm):
 
 
 class SetPasswordForm(UserForm):
-
     password1 = SetPasswordField(label=_("Password"))
     password2 = PasswordField(label=_("Password (again)"))
 
     def clean_password2(self):
         if ("password1" in self.cleaned_data
-                and "password2" in self.cleaned_data):
+            and "password2" in self.cleaned_data):
             if (self.cleaned_data["password1"]
                     != self.cleaned_data["password2"]):
                 raise forms.ValidationError(_("You must type the same password"
@@ -350,7 +342,6 @@ class SetPasswordForm(UserForm):
 
 
 class ResetPasswordForm(forms.Form):
-
     email = forms.EmailField(label=_("E-mail"),
                              required=True,
                              widget=forms.TextInput(attrs={"size": "30"}))
@@ -373,7 +364,6 @@ class ResetPasswordForm(forms.Form):
                                      default_token_generator)
 
         for user in self.users:
-
             temp_key = token_generator.make_token(user)
 
             # save it to the password reset model
@@ -398,7 +388,6 @@ class ResetPasswordForm(forms.Form):
 
 
 class ResetPasswordKeyForm(forms.Form):
-
     password1 = SetPasswordField(label=_("New Password"))
     password2 = PasswordField(label=_("New Password (again)"))
 
@@ -410,7 +399,7 @@ class ResetPasswordKeyForm(forms.Form):
     # FIXME: Inspecting other fields -> should be put in def clean(self) ?
     def clean_password2(self):
         if ("password1" in self.cleaned_data
-                and "password2" in self.cleaned_data):
+            and "password2" in self.cleaned_data):
             if (self.cleaned_data["password1"]
                     != self.cleaned_data["password2"]):
                 raise forms.ValidationError(_("You must type the same"

@@ -14,7 +14,6 @@ from ..base import AuthAction
 
 
 class OAuthAdapter(object):
-
     def complete_login(self, request, app):
         """
         Returns a SocialLogin instance
@@ -33,6 +32,7 @@ class OAuthView(object):
             self.request = request
             self.adapter = adapter()
             return self.dispatch(request, *args, **kwargs)
+
         return view
 
     def _get_client(self, request, callback_url):

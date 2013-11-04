@@ -13,7 +13,6 @@ from . import signals
 
 
 class SignupForm(BaseSignupForm):
-
     def __init__(self, *args, **kwargs):
         self.sociallogin = kwargs.pop('sociallogin')
         user = self.sociallogin.account.user

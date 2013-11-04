@@ -22,7 +22,6 @@ from . import app_settings
 
 
 class DefaultAccountAdapter(object):
-
     def stash_verified_email(self, request, email):
         request.session['account_verified_email'] = email
 
@@ -117,7 +116,7 @@ class DefaultAccountAdapter(object):
         """
         if request.user.is_authenticated():
             if app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL:
-                return  \
+                return \
                     app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL
             else:
                 return self.get_login_redirect_url(request)
@@ -192,6 +191,7 @@ class DefaultAccountAdapter(object):
         (dynamically) restrict what usernames can be chosen.
         """
         from django.contrib.auth.forms import UserCreationForm
+
         USERNAME_REGEX = UserCreationForm().fields['username'].regex
         if not USERNAME_REGEX.match(username):
             raise forms.ValidationError(_("Usernames can only contain "

@@ -79,6 +79,7 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
                     "redirect_field_value": redirect_field_value})
         return ret
 
+
 login = LoginView.as_view()
 
 
@@ -144,11 +145,11 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin,
                     "redirect_field_value": redirect_field_value})
         return ret
 
+
 signup = SignupView.as_view()
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
-
     def get_template_names(self):
         if self.request.method == 'POST':
             return ["account/email_confirmed.html"]
@@ -202,6 +203,7 @@ class ConfirmEmailView(TemplateResponseMixin, View):
 
     def get_redirect_url(self):
         return get_adapter().get_email_confirmation_redirect_url(self.request)
+
 
 confirm_email = ConfirmEmailView.as_view()
 
@@ -338,6 +340,7 @@ class EmailView(FormView):
         # (end NOTE)
         return ret
 
+
 email = login_required(EmailView.as_view())
 
 
@@ -374,6 +377,7 @@ class PasswordChangeView(FormView):
         # (end NOTE)
         return ret
 
+
 password_change = login_required(PasswordChangeView.as_view())
 
 
@@ -408,6 +412,7 @@ class PasswordSetView(FormView):
         # (end NOTE)
         return ret
 
+
 password_set = login_required(PasswordSetView.as_view())
 
 
@@ -427,11 +432,13 @@ class PasswordResetView(FormView):
         # (end NOTE)
         return ret
 
+
 password_reset = PasswordResetView.as_view()
 
 
 class PasswordResetDoneView(TemplateView):
     template_name = "account/password_reset_done.html"
+
 
 password_reset_done = PasswordResetDoneView.as_view()
 
@@ -482,17 +489,18 @@ class PasswordResetFromKeyView(FormView):
     def _response_bad_token(self, request, uidb36, key, **kwargs):
         return self.render_to_response(self.get_context_data(token_fail=True))
 
+
 password_reset_from_key = PasswordResetFromKeyView.as_view()
 
 
 class PasswordResetFromKeyDoneView(TemplateView):
     template_name = "account/password_reset_from_key_done.html"
 
+
 password_reset_from_key_done = PasswordResetFromKeyDoneView.as_view()
 
 
 class LogoutView(TemplateResponseMixin, View):
-
     template_name = "account/logout.html"
     redirect_field_name = "next"
 
@@ -529,5 +537,6 @@ class LogoutView(TemplateResponseMixin, View):
         return (get_next_redirect_url(self.request,
                                       self.redirect_field_name)
                 or get_adapter().get_logout_redirect_url(self.request))
+
 
 logout = LogoutView.as_view()

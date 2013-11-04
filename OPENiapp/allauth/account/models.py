@@ -19,7 +19,6 @@ from .adapter import get_adapter
 
 @python_2_unicode_compatible
 class EmailAddress(models.Model):
-
     user = models.ForeignKey(allauth_app_settings.USER_MODEL)
     email = models.EmailField(unique=app_settings.UNIQUE_EMAIL)
     verified = models.BooleanField(default=False)
@@ -70,7 +69,6 @@ class EmailAddress(models.Model):
 
 @python_2_unicode_compatible
 class EmailConfirmation(models.Model):
-
     email_address = models.ForeignKey(EmailAddress)
     created = models.DateTimeField(default=timezone.now)
     sent = models.DateTimeField(null=True)
@@ -93,6 +91,7 @@ class EmailConfirmation(models.Model):
     def key_expired(self):
         expiration_date = self.sent + datetime.timedelta(days=app_settings.EMAIL_CONFIRMATION_EXPIRE_DAYS)
         return expiration_date <= timezone.now()
+
     key_expired.boolean = True
 
     def confirm(self, request):

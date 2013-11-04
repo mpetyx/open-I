@@ -1,9 +1,9 @@
-(function() {
+(function () {
     "use strict";
 
     var allauth = window.allauth = window.allauth || {};
 
-    var init = function(opts) {
+    var init = function (opts) {
 
         function postForm(action, data) {
             var f = document.createElement('form');
@@ -22,27 +22,31 @@
             f.submit();
         }
 
-        allauth.facebook = { login: function() {}, logout: function() {} };
-        window.fbAsyncInit = function() {
+        allauth.facebook = { login: function () {
+        }, logout: function () {
+        } };
+        window.fbAsyncInit = function () {
             FB.init({
-                appId      : opts.appId,
-                channelUrl : opts.channelUrl,
-                status     : true,
-                cookie     : true,
-                oauth      : true,
-                xfbml      : true
+                appId: opts.appId,
+                channelUrl: opts.channelUrl,
+                status: true,
+                cookie: true,
+                oauth: true,
+                xfbml: true
             });
-            allauth.facebook.login = function(nextUrl, action, process) {
-		if (action == 'reauthenticate') {
-		    opts.loginOptions.auth_type = action;
-		}
-                FB.login(function(response) {
+            allauth.facebook.login = function (nextUrl, action, process) {
+                if (action == 'reauthenticate') {
+                    opts.loginOptions.auth_type = action;
+                }
+                FB.login(function (response) {
                     if (response.authResponse) {
                         postForm(opts.loginByTokenUrl,
-                                 [['next', nextUrl || ''],
-                                  ['process', process],
-                                  ['access_token', response.authResponse.accessToken],
-                                  ['expires_in', response.authResponse.expiresIn]]);
+                            [
+                                ['next', nextUrl || ''],
+                                ['process', process],
+                                ['access_token', response.authResponse.accessToken],
+                                ['expires_in', response.authResponse.expiresIn]
+                            ]);
                     } else {
                         var next;
                         if (response && response.status && response.status == "notConnected") {
@@ -54,8 +58,8 @@
                     }
                 }, opts.loginOptions);
             };
-            allauth.facebook.logout = function(nextUrl) {
-                FB.logout(function() {
+            allauth.facebook.logout = function (nextUrl) {
+                FB.logout(function () {
                     var data = [];
                     if (nextUrl) {
                         data.push(['next', nextUrl]);
@@ -64,10 +68,15 @@
                 });
             };
         };
-        (function(d){
-            var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-            js = d.createElement('script'); js.id = id; js.async = true;
-            js.src = "//connect.facebook.net/"+opts.locale+"/all.js";
+        (function (d) {
+            var js, id = 'facebook-jssdk';
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "//connect.facebook.net/" + opts.locale + "/all.js";
             d.getElementsByTagName('head')[0].appendChild(js);
         }(document));
     };

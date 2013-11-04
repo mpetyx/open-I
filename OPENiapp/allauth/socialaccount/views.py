@@ -50,11 +50,13 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin,
     def get_authenticated_redirect_url(self):
         return reverse(connections)
 
+
 signup = SignupView.as_view()
 
 
 class LoginCancelledView(TemplateView):
     template_name = "socialaccount/login_cancelled.html"
+
 
 login_cancelled = LoginCancelledView.as_view()
 
@@ -62,6 +64,7 @@ login_cancelled = LoginCancelledView.as_view()
 class LoginErrorView(View):
     def get(self, request):
         return helpers.render_authentication_error(request)
+
 
 login_error = LoginErrorView.as_view()
 
@@ -83,5 +86,6 @@ class ConnectionsView(FormView):
                                           'account_disconnected.txt')
         form.save()
         return super(ConnectionsView, self).form_valid(form)
+
 
 connections = login_required(ConnectionsView.as_view())

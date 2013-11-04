@@ -2,8 +2,10 @@ __author__ = 'romdim'
 
 # PyTumblr implementation
 
-import pytumblr
 import json
+
+import pytumblr
+
 
 consumer_key = ''
 consumer_secret = ''

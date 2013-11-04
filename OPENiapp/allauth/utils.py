@@ -11,6 +11,7 @@ from django.db.models.fields import (DateTimeField, DateField,
 from django.utils import importlib, six, dateparse
 from django.utils.datastructures import SortedDict
 from django.core.serializers.json import DjangoJSONEncoder
+
 try:
     from django.utils.encoding import force_text
 except ImportError:
@@ -80,7 +81,7 @@ def email_address_exists(email, exclude_user=None):
             users = get_user_model().objects
             if exclude_user:
                 users = users.exclude(pk=exclude_user.pk)
-            ret = users.filter(**{email_field+'__iexact': email}).exists()
+            ret = users.filter(**{email_field + '__iexact': email}).exists()
     return ret
 
 
@@ -125,7 +126,7 @@ def resolve_url(to):
         # If this doesn't "feel" like a URL, re-raise.
         if '/' not in to and '.' not in to:
             raise
-    # Finally, fall back and assume it's a URL
+        # Finally, fall back and assume it's a URL
     return to
 
 
@@ -167,6 +168,7 @@ def set_form_field_order(form, fields_order):
     else:
         # Python 2.7+
         from collections import OrderedDict
+
         assert isinstance(form.fields, OrderedDict)
         form.fields = OrderedDict((f, form.fields[f])
                                   for f in fields_order)

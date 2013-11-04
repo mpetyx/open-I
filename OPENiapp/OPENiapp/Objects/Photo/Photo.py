@@ -2,9 +2,7 @@ __author__ = 'mpetyx'
 
 
 class OpeniPhoto:
-
     def __init__(self):
-
         """
         id	id	GET	id
 url	-		post_url
@@ -30,13 +28,10 @@ height
         return 1
 
     def get(self):
-
         return 1
 
     def delete(self):
-
         return 1
 
     def like(self):
-
         return 1
