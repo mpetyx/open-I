@@ -125,8 +125,8 @@ def perform_login(request, user, email_verification,
             return render(request,
                           "account/verification_sent.html",
                           {"email": user_email(user)})
-        # HACK: This may not be nice. The proper Django way is to use an
-    # authentication backend, but I fail to see any added benefit
+            # HACK: This may not be nice. The proper Django way is to use an
+        # authentication backend, but I fail to see any added benefit
     # whereas I do see the downsides (having to bother the integrator
     # to set up authentication backends in settings.py
     if not hasattr(user, 'backend'):
@@ -197,7 +197,7 @@ def cleanup_email_addresses(request, addresses):
                 primary_verified_addresses.append(a)
         if a.verified:
             verified_addresses.append(a)
-        # Now that we got things sorted out, let's assign a primary
+            # Now that we got things sorted out, let's assign a primary
     if primary_verified_addresses:
         primary_address = primary_verified_addresses[0]
     elif verified_addresses:

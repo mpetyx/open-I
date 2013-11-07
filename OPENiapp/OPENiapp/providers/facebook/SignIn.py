@@ -11,8 +11,8 @@ from allauth.socialaccount.helpers import render_authentication_error
 from allauth.socialaccount.adapter import get_adapter
 from allauth.socialaccount import providers
 from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
-                                                                   OAuth2LoginView,
-                                                                   OAuth2CallbackView)
+                                                          OAuth2LoginView,
+                                                          OAuth2CallbackView)
 
 from OPENiapp.allauth.socialaccount.providers.facebook.provider import FacebookProvider
 

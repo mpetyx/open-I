@@ -37,7 +37,7 @@ class Command(BaseCommand):
         for email_address in EmailAddress.objects.raw('SELECT * from emailconfirmation_emailaddress order by id desc'):
             if app_settings.UNIQUE_EMAIL and email_address.email in seen_emails:
                 print('Duplicate e-mail address skipped: %s collides with %s' % (
-                email_address, seen_emails[email_address.email]))
+                    email_address, seen_emails[email_address.email]))
                 continue
             seen_emails[email_address.email] = email_address
             email_address.save()

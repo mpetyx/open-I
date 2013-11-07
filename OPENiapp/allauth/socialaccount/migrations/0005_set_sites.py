@@ -25,7 +25,7 @@ class Migration(DataMigration):
                      'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'content_type': (
-            'django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+                'django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
@@ -79,9 +79,10 @@ class Migration(DataMigration):
             'provider': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
             'secret': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'site': (
-            'django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['sites.Site']"}),
+                'django.db.models.fields.related.ForeignKey', [], {'related_name': "'+'", 'to': "orm['sites.Site']"}),
             'sites': (
-            'django.db.models.fields.related.ManyToManyField', [], {'to': "orm['sites.Site']", 'symmetrical': 'False'})
+                'django.db.models.fields.related.ManyToManyField', [],
+                {'to': "orm['sites.Site']", 'symmetrical': 'False'})
         },
         'socialaccount.socialtoken': {
             'Meta': {'unique_together': "(('app', 'account'),)", 'object_name': 'SocialToken'},

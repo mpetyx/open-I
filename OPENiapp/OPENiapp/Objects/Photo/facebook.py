@@ -7,12 +7,10 @@ from facepy import GraphAPI
 # For testing purposes go to https://developers.facebook.com/tools/explorer/ and play
 #access_token = utils.get_application_access_token(application_id, application_secret_key)
 class provider:
-
     def __init__(self, access_token):
         self.graph = GraphAPI(access_token)
 
     def examples(self):
-
         # Profile pic
         self.graph.get('me/picture')
 
@@ -62,7 +60,6 @@ class provider:
         result = self.graph.get('me/photos', limit=1)
 
         return result
-
 
 
 # OLD TRY! DOESN'T WORK

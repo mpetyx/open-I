@@ -28,6 +28,6 @@ urlpatterns = patterns('',
                        #https://github.com/mpetyx/moodeet/wiki/Twitter
                        url(r'^person/signin/twitter$', twitter, name='twitter'),
 
-                       url('facebook/photos$',facebook_get_photos,name='facebook_get_photos')
+                       url('facebook/photos$', facebook_get_photos, name='facebook_get_photos')
 
 )
