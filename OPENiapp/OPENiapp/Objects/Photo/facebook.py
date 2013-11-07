@@ -6,53 +6,62 @@ from facepy import GraphAPI
 # Get the access_token somehow
 # For testing purposes go to https://developers.facebook.com/tools/explorer/ and play
 #access_token = utils.get_application_access_token(application_id, application_secret_key)
+class provider:
 
-graph = GraphAPI(access_token)
+    def __init__(self, access_token):
+        self.graph = GraphAPI(access_token)
 
-# Profile pic
-graph.get('me/picture')
+    def examples(self):
 
-# Get all photos in file
-text_file = open("all_photos.txt", "w")
-result = graph.get('me/photos')
-s = str(result)
-text_file.write(s)
-text_file.close()
+        # Profile pic
+        self.graph.get('me/picture')
 
-# Get 1st photo
-result = graph.get('me/photos', limit=1)
-# Access results: ie the whole data
-result['data']
+        # Get all photos in file
+        text_file = open("all_photos.txt", "w")
+        result = self.graph.get('me/photos')
+        s = str(result)
+        text_file.write(s)
+        text_file.close()
 
-# Get photos id:
-result['data'][0]['id']
+        # Get 1st photo
+        result = self.graph.get('me/photos', limit=1)
+        # Access results: ie the whole data
+        result['data']
 
-# Get from:id
-result['data'][0]['from']['id']
+        # Get photos id:
+        result['data'][0]['id']
 
-# Get from:name
-result['data'][0]['from']['name']
+        # Get from:id
+        result['data'][0]['from']['id']
 
-# Get name (they propably mean picture here, there is no name field)
-result['data'][0]['picture']
+        # Get from:name
+        result['data'][0]['from']['name']
 
-# Get icon (this is the source of the file)
-result['data'][0]['source']
+        # Get name (they propably mean picture here, there is no name field)
+        result['data'][0]['picture']
 
-# Get created_time
-result['data'][0]['created_time']
+        # Get icon (this is the source of the file)
+        result['data'][0]['source']
 
-# Get updated_time
-result['data'][0]['updated_time']
+        # Get created_time
+        result['data'][0]['created_time']
 
-# Get name_tags (this retrieves the whole tag system, not only names)
-result['data'][0]['tags']['data']
+        # Get updated_time
+        result['data'][0]['updated_time']
 
-# Get width
-result['data'][0]['width']
+        # Get name_tags (this retrieves the whole tag system, not only names)
+        result['data'][0]['tags']['data']
 
-# Get height
-result['data'][0]['height']
+        # Get width
+        result['data'][0]['width']
+
+        # Get height
+        result['data'][0]['height']
+
+    def get_photos(self):
+        result = self.graph.get('me/photos', limit=1)
+
+        return result
 
 
 

@@ -1,6 +1,6 @@
 __author__ = 'mpetyx'
 
-from OPENiapp.OPENiapp.models import Person
+from OPENiapp.models import Person
 
 
 def profileJson(person, secret, function=""):

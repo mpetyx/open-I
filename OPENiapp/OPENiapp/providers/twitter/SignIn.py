@@ -4,10 +4,11 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.test import RequestFactory
 
-from OPENiapp.allauth.socialaccount.models import SocialAccount, SocialLogin, SocialToken, SocialApp
-from OPENiapp.allauth.socialaccount.adapter import get_adapter
-from OPENiapp.allauth.socialaccount.providers.twitter.views import TwitterAPI, TwitterProvider, TwitterOAuthAdapter
-from OPENiapp.allauth.account.utils import send_email_confirmation
+# from OPENiapp.allauth.socialaccount.models import SocialAccount, SocialLogin, SocialToken, SocialApp
+from allauth.socialaccount.models import SocialAccount, SocialLogin, SocialToken, SocialApp
+from allauth.socialaccount.adapter import get_adapter
+from allauth.socialaccount.providers.twitter.views import TwitterAPI, TwitterProvider, TwitterOAuthAdapter
+from allauth.account.utils import send_email_confirmation
 
 
 class App():

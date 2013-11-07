@@ -4,6 +4,8 @@ from django.contrib import admin
 
 from user_management.SignIn import facebook, twitter
 
+from views import facebook_get_photos
+
 
 admin.autodiscover()
 
@@ -18,12 +20,14 @@ urlpatterns = patterns('',
 
                        url(r'^accounts/', include('allauth.urls')),
 
-                       url(r'^media/', include('OPENIapp.APIS.Media.urls')),
+                       # url(r'^media/', include('OPENIapp.APIS.Media.urls')),
 
                        #https://github.com/mpetyx/moodeet/wiki/Facebook
                        url(r'^person/signin/facebook$', facebook, name='facebook'),
 
                        #https://github.com/mpetyx/moodeet/wiki/Twitter
                        url(r'^person/signin/twitter$', twitter, name='twitter'),
+
+                       url('facebook/photos$',facebook_get_photos,name='facebook_get_photos')
 
 )
