@@ -1,2 +1,11 @@
 Django==1.6
 wsgiref==0.1.2
+gunicorn==0.17.2
+django-allauth==0.9.0
+psycopg2==2.4.6
+dj-database-url==0.2.1
+python-openid>=2.2.5
+requests>=1.0.3
+requests-oauthlib>=0.3.0
+simplejson
+facepy
