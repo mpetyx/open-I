@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Profile</h1>
+
+<p>Your profile</p>
+
+{% if user.is_authenticated %}
+    <p>You're logged in with {{ user.get_provider }} as {{ user }}.</p>
+
+    {{ user }} <br />
+    {{ verified }} <br />
+
+    <p>Go to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a></p>
+{% endif %}
+
+{% endblock %}

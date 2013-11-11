@@ -188,8 +188,9 @@ LOGGING = {
 }
 
 SOCIALACCOUNT_PROVIDERS = \
-    {'facebook':
-         {'SCOPE': ['email', 'publish_stream'],
-          'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-          'METHOD': 'oauth2',
-          'LOCALE_FUNC': lambda request: 'en-US'}}
+    { 'facebook':
+        { 'SCOPE': ['email', 'publish_stream', 'user_photos'],
+          'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
+          'METHOD': 'oauth2'
+        }
+     }

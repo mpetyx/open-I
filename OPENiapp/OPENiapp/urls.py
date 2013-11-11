@@ -2,6 +2,8 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 
+from django.views.generic.base import TemplateView
+
 from user_management.SignIn import facebook, twitter
 
 from views import facebook_get_photos
@@ -27,7 +29,9 @@ urlpatterns = patterns('',
 
                        #https://github.com/mpetyx/moodeet/wiki/Twitter
                        url(r'^person/signin/twitter$', twitter, name='twitter'),
+                       
+                       url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 
-                       url('facebook/photos$', facebook_get_photos, name='facebook_get_photos')
+                       url(r'^facebook/photos$', facebook_get_photos, name='facebook_get_photos')
 
 )

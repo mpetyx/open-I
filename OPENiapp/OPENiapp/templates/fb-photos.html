@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Picture</th>
+        <th>From</th>
+        <th>Source</th>
+        <th>Height</th>
+        <th>Width</th>
+        <th>Link</th>
+        <th>Likes</th>
+    </tr>
+    {% for data in result.data %}
+    <tr>
+        <td><img src="{{ data.picture }}"></img></td>
+        <td>name: {{ data.from.name }} | id: {{ data.from.id }}</td>
+        <td><img src="{{ data.source }}"></img></td>
+        <td>{{ data.height }}</td>
+        <td>{{ data.width }}</td>
+        <td><a href="{{ data.link }}" target="_blank">Photo Link</a></td>
+        <td>{% for likes in data.likes.data %}id: {{likes.id}} | name: {{likes.name}}<br />{% endfor %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
