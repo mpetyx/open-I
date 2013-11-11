@@ -8,7 +8,9 @@ from django.http import HttpResponse
 
 def facebook_get_photos(request):
 
-    connector = provider(access_token=request.token)
+    access_token = request.GET.get("access_token","")
+
+    connector = provider(access_token=access_token)
 
     photos = connector.get_photos()
 
