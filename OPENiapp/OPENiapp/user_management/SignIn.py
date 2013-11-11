@@ -13,31 +13,37 @@ import simplejson
 import allauth
 
 from OPENiapp.providers import Login
+from django.contrib.auth.models import User
 # from OPENiapp.api.Responses import *
 from OPENiapp.models import *
 from LoggedUserResponse import profileJson
 
+from OPENiapp.providers.facebook.SignIn import fb_complete_login2
+
 
 @csrf_exempt
 def facebook(request):
-    app = request.app
-    token = request.token
+    """
+    curl -v -X POST -d 'access_token=CAABptKWDIR0BAGzauRlnRvAcFY2lrCyyb15UHRxb45gZA6gKQjMbdqRwIT3BMGfjKWIUmDAHmXgadMv5dbaYL4AzRfVsUOcHZBmVxcnEZBFF0hpWADWrU1u0ZBtvL7uHtjXVAfYyiHtP98rYB2H7Jq9fSCTKNrWNMvfIKEjLZCOnyLKBdVtvLvB329kZAx1PlmlouOhTG0BzAQ4JDHqUXOQ7IkQ3epCoMZD' http://openi.herokuapp.com/person/signin/facebook
+    """
+    # app = request.app
+    # token = request.token
 
     access_token = request.POST.get('access_token', '')
 
     if access_token is '':
         return "wrong credentials"
     else:
-        try:
-            user = facebook.fb_complete_login2(None, access_token)
+        # try:
+            user = fb_complete_login2(None, access_token)
             if type(user) == allauth.socialaccount.models.SocialLogin:
                 user = User.objects.get(username=user.account.user.username)
             elif list(user) != []:
                 user = user[0]
             else:
                 user = None
-        except:
-            user = None
+        # except:
+        #     user = None
 
     if user is not None:
         if user.is_active:

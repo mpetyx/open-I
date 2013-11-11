@@ -14,7 +14,7 @@ from allauth.socialaccount.providers.oauth2.views import (OAuth2Adapter,
                                                           OAuth2LoginView,
                                                           OAuth2CallbackView)
 
-from OPENiapp.allauth.socialaccount.providers.facebook.provider import FacebookProvider
+from allauth.socialaccount.providers.facebook.provider import FacebookProvider
 
 
 def fb_complete_login(app, token):
