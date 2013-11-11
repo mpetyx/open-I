@@ -7,7 +7,6 @@ class SocialAppAdmin(admin.ModelAdmin):
     list_display = ('name', 'provider',)
     filter_horizontal = ('sites',)
 
-
 class SocialAccountAdmin(admin.ModelAdmin):
     search_fields = ('user__username', )
     raw_id_fields = ('user',)
@@ -26,9 +25,7 @@ class SocialTokenAdmin(admin.ModelAdmin):
         if len(ret) > max_chars:
             ret = ret[0:max_chars] + '...(truncated)'
         return ret
-
     truncated_token.short_description = 'Token'
-
 
 admin.site.register(SocialApp, SocialAppAdmin)
 admin.site.register(SocialToken, SocialTokenAdmin)

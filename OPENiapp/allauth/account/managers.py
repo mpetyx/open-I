@@ -8,6 +8,7 @@ from . import app_settings
 
 
 class EmailAddressManager(models.Manager):
+
     def add_email(self, request, user, email, **kwargs):
         confirm = kwargs.pop("confirm", False)
         signup = kwargs.pop("signup", False)
@@ -35,6 +36,7 @@ class EmailAddressManager(models.Manager):
 
 
 class EmailConfirmationManager(models.Manager):
+
     def all_expired(self):
         return self.filter(self.expired_q())
 
@@ -43,7 +45,7 @@ class EmailConfirmationManager(models.Manager):
 
     def expired_q(self):
         sent_threshold = timezone.now() \
-                         - timedelta(days=app_settings.EMAIL_CONFIRMATION_EXPIRE_DAYS)
+            - timedelta(days=app_settings.EMAIL_CONFIRMATION_EXPIRE_DAYS)
         return Q(sent__lt=sent_threshold)
 
     def delete_expired_confirmations(self):

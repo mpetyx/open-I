@@ -6,17 +6,13 @@ from django.contrib.auth import authenticate
 from django.contrib.sites.models import Site
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.crypto import get_random_string
-
 try:
     from django.utils.encoding import force_text
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
 import allauth.app_settings
-from allauth.account.models import EmailAddress
 from allauth.account.utils import get_next_redirect_url, setup_user_email
-from allauth.utils import (get_user_model, serialize_instance,
-                           deserialize_instance)
 
 from . import providers
 from .fields import JSONField
@@ -43,7 +39,7 @@ class SocialApp(models.Model):
                            help_text='Key (Stack Exchange only)')
     secret = models.CharField(max_length=100,
                               help_text='API secret, client secret, or'
-                                        ' consumer secret')
+                              ' consumer secret')
     # Most apps can be used across multiple domains, therefore we use
     # a ManyToManyField. Note that Facebook requires an app per domain
     # (unless the domains share a common base name).
@@ -110,7 +106,7 @@ class SocialToken(models.Model):
         .CharField(max_length=200,
                    blank=True,
                    help_text='"oauth_token_secret" (OAuth1) or refresh'
-                             ' token (OAuth2)')
+                   ' token (OAuth2)')
     expires_at = models.DateTimeField(blank=True, null=True)
 
     class Meta:
@@ -146,7 +142,7 @@ class SocialLogin(object):
     e-mail addresses retrieved from the provider.
     """
 
-    def __init__(self, account=None, token=None, email_addresses=[]):
+    def __init__(self, account, token=None, email_addresses=[]):
         if token:
             assert token.account is None or token.account == account
             token.account = account
@@ -158,37 +154,6 @@ class SocialLogin(object):
     def connect(self, request, user):
         self.account.user = user
         self.save(request, connect=True)
-
-    def serialize(self):
-        ret = dict(account=serialize_instance(self.account),
-                   user=serialize_instance(self.account.user),
-                   state=self.state,
-                   email_addresses=[serialize_instance(ea)
-                                    for ea in self.email_addresses])
-        if self.token:
-            ret['token'] = serialize_instance(self.token)
-        return ret
-
-    @classmethod
-    def deserialize(cls, data):
-        account = deserialize_instance(SocialAccount, data['account'])
-        user = deserialize_instance(get_user_model(), data['user'])
-        account.user = user
-        if 'token' in data:
-            token = deserialize_instance(SocialToken, data['token'])
-        else:
-            token = None
-        email_addresses = []
-        for ea in data['email_addresses']:
-            email_address = deserialize_instance(EmailAddress, ea)
-            email_addresses.append(email_address)
-        ret = SocialLogin()
-        ret.token = token
-        ret.account = account
-        ret.user = user
-        ret.email_addresses = email_addresses
-        ret.state = data['state']
-        return ret
 
     def save(self, request, connect=False):
         """

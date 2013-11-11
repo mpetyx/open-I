@@ -3,7 +3,6 @@ from django.utils.http import urlencode
 
 from allauth.socialaccount.providers.base import Provider
 
-
 class OAuthProvider(Provider):
     def get_login_url(self, request, **kwargs):
         url = reverse(self.id + "_login")

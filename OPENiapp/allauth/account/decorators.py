@@ -8,7 +8,7 @@ from .utils import send_email_confirmation
 
 
 def verified_email_required(function=None,
-                            login_url=None,
+                            login_url=None, 
                             redirect_field_name=REDIRECT_FIELD_NAME):
     """
     Even when email verification is not mandatory during signup, there
@@ -21,7 +21,6 @@ def verified_email_required(function=None,
     presented with a page informing him he needs to verify his email
     address.
     """
-
     def decorator(view_func):
         @login_required(redirect_field_name=redirect_field_name,
                         login_url=login_url)
@@ -32,9 +31,8 @@ def verified_email_required(function=None,
                 return render(request,
                               'account/verified_email_required.html')
             return view_func(request, *args, **kwargs)
-
         return _wrapped_view
-
+        
     if function:
         return decorator(function)
     return decorator

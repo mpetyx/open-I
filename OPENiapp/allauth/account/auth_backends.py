@@ -8,8 +8,8 @@ from . import app_settings
 
 User = get_user_model()
 
-
 class AuthenticationBackend(ModelBackend):
+    
     def authenticate(self, **credentials):
         ret = None
         if app_settings.AUTHENTICATION_METHOD == AuthenticationMethod.EMAIL:
@@ -24,13 +24,9 @@ class AuthenticationBackend(ModelBackend):
         return ret
 
     def _authenticate_by_username(self, **credentials):
-        username_field = app_settings.USER_MODEL_USERNAME_FIELD
-        if not username_field:
-            return None
         try:
             # Username query is case insensitive
-            query = {username_field + '__iexact': credentials["username"]}
-            user = User.objects.get(**query)
+            user = User.objects.get(username__iexact=credentials["username"])
             if user.check_password(credentials["password"]):
                 return user
         except User.DoesNotExist:
@@ -45,7 +41,8 @@ class AuthenticationBackend(ModelBackend):
         email = credentials.get('email', credentials.get('username'))
         if email:
             users = User.objects.filter(Q(email__iexact=email)
-                                        | Q(emailaddress__email__iexact=email))
+                                        | Q(emailaddress__email__iexact
+                                            =email))
             for user in users:
                 if user.check_password(credentials["password"]):
                     return user

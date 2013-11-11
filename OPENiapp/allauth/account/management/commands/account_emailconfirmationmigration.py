@@ -5,7 +5,6 @@ from django.db import connections
 from allauth.account import app_settings
 from allauth.account.models import EmailAddress, EmailConfirmation
 
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         if False:
@@ -36,16 +35,14 @@ class Command(BaseCommand):
         # Poor man's conflict handling: prefer latest (hence order by)
         for email_address in EmailAddress.objects.raw('SELECT * from emailconfirmation_emailaddress order by id desc'):
             if app_settings.UNIQUE_EMAIL and email_address.email in seen_emails:
-                print('Duplicate e-mail address skipped: %s collides with %s' % (
-                    email_address, seen_emails[email_address.email]))
+                print('Duplicate e-mail address skipped: %s collides with %s' % (email_address, seen_emails[email_address.email]))
                 continue
             seen_emails[email_address.email] = email_address
             email_address.save()
 
     def migrate_email_confirmation(self):
         seen_keys = set()
-        for email_confirmation in EmailConfirmation.objects.raw(
-                'SELECT id, email_address_id, sent, confirmation_key as key from emailconfirmation_emailconfirmation'):
+        for email_confirmation in EmailConfirmation.objects.raw('SELECT id, email_address_id, sent, confirmation_key as key from emailconfirmation_emailconfirmation'):
             email_confirmation.created = email_confirmation.sent
             if EmailAddress.objects.filter(id=email_confirmation.email_address_id).exists():
                 if email_confirmation.key in seen_keys:

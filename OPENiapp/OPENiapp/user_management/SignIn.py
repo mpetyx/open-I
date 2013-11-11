@@ -24,7 +24,9 @@ from OPENiapp.providers.facebook.SignIn import fb_complete_login2
 @csrf_exempt
 def facebook(request):
     """
-    curl -v -X POST -d 'access_token=CAABptKWDIR0BAGzauRlnRvAcFY2lrCyyb15UHRxb45gZA6gKQjMbdqRwIT3BMGfjKWIUmDAHmXgadMv5dbaYL4AzRfVsUOcHZBmVxcnEZBFF0hpWADWrU1u0ZBtvL7uHtjXVAfYyiHtP98rYB2H7Jq9fSCTKNrWNMvfIKEjLZCOnyLKBdVtvLvB329kZAx1PlmlouOhTG0BzAQ4JDHqUXOQ7IkQ3epCoMZD' http://openi.herokuapp.com/person/signin/facebook
+    curl -v -X POST -d 'access_token=CAABptKWDIR0BAGNroFCrirAH7PhVZCpE2ztmUCES9ZAWbjVO3M4VdiHBIZCKcP5j66vGA7znefomEZBuK8UZCOjHKV0aE0A3T1OdInMB0ThEgInASGln0AEaE80AtmCzH8JZAfjnr6g9Tom9xrsZAKsywcChqp88tFzECnydq71FziDhqRccV8SWRzlylYUofpZBjIZA1manAHq03Nm4KGpIwPZC9I5kl3e2QZD' http://openi.herokuapp.com/person/signin/facebook
+    curl -v -X POST -d 'access_token=CAABptKWDIR0BAGNroFCrirAH7PhVZCpE2ztmUCES9ZAWbjVO3M4VdiHBIZCKcP5j66vGA7znefomEZBuK8UZCOjHKV0aE0A3T1OdInMB0ThEgInASGln0AEaE80AtmCzH8JZAfjnr6g9Tom9xrsZAKsywcChqp88tFzECnydq71FziDhqRccV8SWRzlylYUofpZBjIZA1manAHq03Nm4KGpIwPZC9I5kl3e2QZD' http://127.0.0.1:8000/person/signin/facebook
+
     """
     # app = request.app
     # token = request.token
@@ -55,7 +57,7 @@ def facebook(request):
             secret_string = user.username + str(time.time()) + random_string
             consumer.secret = hashlib.sha1(secret_string.encode("UTF-8")).hexdigest()
 
-            person = models.Person.objects.filter(user=user)[0]
+            person = Person.objects.filter(user=user)[0]
 
             response = profileJson(person, person)
             response["authentication"] = {}
@@ -102,7 +104,7 @@ def twitter(request):
             secret_string = user.username + str(time.time()) + random_string
             consumer.secret = hashlib.sha1(secret_string.encode("UTF-8")).hexdigest()
 
-            person = models.Person.objects.filter(user=user)[0]
+            person = Person.objects.filter(user=user)[0]
 
             response = profileJson(person, person)
             response["authentication"] = {}

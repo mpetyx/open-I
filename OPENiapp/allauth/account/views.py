@@ -79,7 +79,6 @@ class LoginView(RedirectAuthenticatedUserMixin, FormView):
                     "redirect_field_value": redirect_field_value})
         return ret
 
-
 login = LoginView.as_view()
 
 
@@ -145,11 +144,11 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin,
                     "redirect_field_value": redirect_field_value})
         return ret
 
-
 signup = SignupView.as_view()
 
 
 class ConfirmEmailView(TemplateResponseMixin, View):
+
     def get_template_names(self):
         if self.request.method == 'POST':
             return ["account/email_confirmed.html"]
@@ -204,7 +203,6 @@ class ConfirmEmailView(TemplateResponseMixin, View):
     def get_redirect_url(self):
         return get_adapter().get_email_confirmation_redirect_url(self.request)
 
-
 confirm_email = ConfirmEmailView.as_view()
 
 
@@ -236,7 +234,6 @@ class EmailView(FormView):
         return super(EmailView, self).form_valid(form)
 
     def post(self, request, *args, **kwargs):
-        res = None
         if "action_add" in request.POST:
             res = super(EmailView, self).post(request, *args, **kwargs)
         elif request.POST.get("email"):
@@ -246,7 +243,10 @@ class EmailView(FormView):
                 res = self._action_remove(request)
             elif "action_primary" in request.POST:
                 res = self._action_primary(request)
-        return res or self.get(request, *args, **kwargs)
+        if res:
+            return res
+        else:
+            return self.get(request, *args, **kwargs)
 
     def _action_send(self, request, *args, **kwargs):
         email = request.POST["email"]
@@ -340,7 +340,6 @@ class EmailView(FormView):
         # (end NOTE)
         return ret
 
-
 email = login_required(EmailView.as_view())
 
 
@@ -377,7 +376,6 @@ class PasswordChangeView(FormView):
         # (end NOTE)
         return ret
 
-
 password_change = login_required(PasswordChangeView.as_view())
 
 
@@ -412,7 +410,6 @@ class PasswordSetView(FormView):
         # (end NOTE)
         return ret
 
-
 password_set = login_required(PasswordSetView.as_view())
 
 
@@ -432,13 +429,11 @@ class PasswordResetView(FormView):
         # (end NOTE)
         return ret
 
-
 password_reset = PasswordResetView.as_view()
 
 
 class PasswordResetDoneView(TemplateView):
     template_name = "account/password_reset_done.html"
-
 
 password_reset_done = PasswordResetDoneView.as_view()
 
@@ -458,11 +453,10 @@ class PasswordResetFromKeyView(FormView):
         return get_object_or_404(User, id=uid_int)
 
     def dispatch(self, request, uidb36, key, **kwargs):
-        self.request = request
         self.uidb36 = uidb36
         self.key = key
-        self.reset_user = self._get_user(uidb36)
-        if not self.token_generator.check_token(self.reset_user, key):
+        self.request.user = self._get_user(uidb36)
+        if not self.token_generator.check_token(self.request.user, key):
             return self._response_bad_token(request, uidb36, key, **kwargs)
         else:
             return super(PasswordResetFromKeyView, self).dispatch(request,
@@ -472,7 +466,7 @@ class PasswordResetFromKeyView(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(PasswordResetFromKeyView, self).get_form_kwargs()
-        kwargs["user"] = self.reset_user
+        kwargs["user"] = self.request.user
         kwargs["temp_key"] = self.key
         return kwargs
 
@@ -481,14 +475,13 @@ class PasswordResetFromKeyView(FormView):
         get_adapter().add_message(self.request,
                                   messages.SUCCESS,
                                   'account/messages/password_changed.txt')
-        signals.password_reset.send(sender=self.reset_user.__class__,
+        signals.password_reset.send(sender=self.request.user.__class__,
                                     request=self.request,
-                                    user=self.reset_user)
+                                    user=self.request.user)
         return super(PasswordResetFromKeyView, self).form_valid(form)
 
     def _response_bad_token(self, request, uidb36, key, **kwargs):
         return self.render_to_response(self.get_context_data(token_fail=True))
-
 
 password_reset_from_key = PasswordResetFromKeyView.as_view()
 
@@ -496,11 +489,11 @@ password_reset_from_key = PasswordResetFromKeyView.as_view()
 class PasswordResetFromKeyDoneView(TemplateView):
     template_name = "account/password_reset_from_key_done.html"
 
-
 password_reset_from_key_done = PasswordResetFromKeyDoneView.as_view()
 
 
 class LogoutView(TemplateResponseMixin, View):
+
     template_name = "account/logout.html"
     redirect_field_name = "next"
 
@@ -537,6 +530,5 @@ class LogoutView(TemplateResponseMixin, View):
         return (get_next_redirect_url(self.request,
                                       self.redirect_field_name)
                 or get_adapter().get_logout_redirect_url(self.request))
-
 
 logout = LogoutView.as_view()

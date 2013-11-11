@@ -5,11 +5,10 @@ from django.core.urlresolvers import reverse
 from django.core.exceptions import ValidationError
 
 from ..utils import (import_attribute,
+                     get_user_model,
                      valid_email_or_none)
 from ..account.utils import user_email, user_username, user_field
 from ..account.models import EmailAddress
-from ..account.adapter import get_adapter as get_account_adapter
-from ..account.app_settings import EmailVerificationMethod
 
 from . import app_settings
 
@@ -30,49 +29,23 @@ class DefaultSocialAccountAdapter(object):
         """
         pass
 
-    def new_user(self, request, sociallogin):
+    def populate_new_user(self,
+                          username=None,
+                          first_name=None,
+                          last_name=None,
+                          email=None,
+                          name=None):
         """
-        Instantiates a new User instance.
-        """
-        return get_account_adapter().new_user(request)
+        Spawns a new User instance, safely and leniently populating
+        several common fields.
 
-    def save_user(self, request, sociallogin, form=None):
+        This method is used to create a suggested User instance that
+        represents the social user that is in the process of being
+        logged in. Validation is not a requirement. For example,
+        verifying whether or not a username already exists, is not a
+        responsibility.
         """
-        Saves a newly signed up social login. In case of auto-signup,
-        the signup form is not available.
-        """
-        u = sociallogin.account.user
-        u.set_unusable_password()
-        if form:
-            get_account_adapter().save_user(request, u, form)
-        else:
-            get_account_adapter().populate_username(request, u)
-        sociallogin.save(request)
-        return u
-
-    def populate_user(self,
-                      request,
-                      sociallogin,
-                      data):
-        """
-        Hook that can be used to further populate the user instance.
-
-        For convenience, we populate several common fields.
-
-        Note that the user instance being populated represents a
-        suggested User instance that represents the social user that is
-        in the process of being logged in.
-
-        The User instance need not be completely valid and conflict
-        free. For example, verifying whether or not the username
-        already exists, is not a responsibility.
-        """
-        username = data.get('username')
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
-        email = data.get('email')
-        name = data.get('name')
-        user = sociallogin.account.user
+        user = get_user_model()()
         user_username(user, username or '')
         user_email(user, valid_email_or_none(email) or '')
         name_parts = (name or '').partition(' ')
@@ -99,22 +72,11 @@ class DefaultSocialAccountAdapter(object):
             if not account.user.has_usable_password():
                 raise ValidationError(_("Your account has no password set"
                                         " up."))
-                # No email address, no password reset
-            if app_settings.EMAIL_VERIFICATION \
-                    == EmailVerificationMethod.MANDATORY:
-                if EmailAddress.objects.filter(user=account.user,
-                                               verified=True).count() == 0:
-                    raise ValidationError(_("Your account has no verified"
-                                            " e-mail address."))
-
-    def is_open_for_signup(self, request, sociallogin):
-        """
-        Checks whether or not the site is open for signups.
-
-        Next to simply returning True/False you can also intervene the
-        regular flow by raising an ImmediateHttpResponse
-        """
-        return get_account_adapter().is_open_for_signup(request)
+            # No email address, no password reset
+            if EmailAddress.objects.filter(user=account.user,
+                                           verified=True).count() == 0:
+                raise ValidationError(_("Your account has no verified e-mail"
+                                        " address."))
 
 
 def get_adapter():

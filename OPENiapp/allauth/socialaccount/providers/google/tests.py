@@ -22,8 +22,9 @@ from .provider import GoogleProvider
 @override_settings(SOCIALACCOUNT_AUTO_SIGNUP=True,
                    ACCOUNT_SIGNUP_FORM_CLASS=None,
                    ACCOUNT_EMAIL_VERIFICATION \
-                       =account_settings.EmailVerificationMethod.MANDATORY)
+                   =account_settings.EmailVerificationMethod.MANDATORY)
 class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
+
     def get_mocked_response(self, verified_email=True):
         return MockedResponse(200, """
 {"family_name": "Penners", "name": "Raymond Penners",
@@ -42,8 +43,8 @@ class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
             .get(email=test_email,
                  verified=True)
         self.assertFalse(EmailConfirmation.objects
-        .filter(email_address__email=test_email)
-        .exists())
+                         .filter(email_address__email=test_email)
+                         .exists())
         account = email_address.user.socialaccount_set.all()[0]
         self.assertEqual(account.extra_data['given_name'], 'Raymond')
 
@@ -69,8 +70,8 @@ class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
             .get(email=test_email)
         self.assertFalse(email_address.verified)
         self.assertTrue(EmailConfirmation.objects
-        .filter(email_address__email=test_email)
-        .exists())
+                        .filter(email_address__email=test_email)
+                        .exists())
         self.assertTemplateUsed(resp,
                                 'account/email/email_confirmation_signup_subject.txt')
 
@@ -92,8 +93,10 @@ class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
             .get(email=test_email)
         self.assertTrue(email_address.verified)
         self.assertFalse(EmailConfirmation.objects \
-            .filter(email_address__email=test_email) \
-            .exists())
+                             .filter(email_address__email=test_email) \
+                             .exists())
+
+
 
 
     def test_account_connect(self):
@@ -117,7 +120,7 @@ class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
         # For now, we do not pick up any new e-mail addresses on connect
         self.assertEqual(EmailAddress.objects.filter(user=user).count(), 1)
         self.assertEqual(EmailAddress.objects.filter(user=user,
-                                                     email=email).count(), 1)
+                                                      email=email).count(), 1)
 
     @override_settings(
         ACCOUNT_EMAIL_VERIFICATION=account_settings.EmailVerificationMethod.MANDATORY,
@@ -130,8 +133,8 @@ class GoogleTests(create_oauth2_tests(registry.by_id(GoogleProvider.id))):
             .get(email=test_email)
         self.assertFalse(email_address.verified)
         self.assertFalse(EmailConfirmation.objects \
-            .filter(email_address__email=test_email) \
-            .exists())
+                            .filter(email_address__email=test_email) \
+                            .exists())
 
     @override_settings(
         ACCOUNT_EMAIL_VERIFICATION=account_settings.EmailVerificationMethod.OPTIONAL,

@@ -2,29 +2,26 @@ import hashlib
 import random
 
 from datetime import timedelta
-
 try:
     from django.utils.timezone import now
 except ImportError:
     from datetime import datetime
-
     now = datetime.now
 
 from django.contrib import messages
 from django.shortcuts import render
 from django.conf import settings
 from django.contrib.auth import login
+from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from django.utils.http import urlencode
 from django.utils.datastructures import SortedDict
-
 try:
     from django.utils.encoding import force_text
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
-from ..utils import (import_callable, valid_email_or_none,
-                     get_user_model)
+from ..utils import import_callable, valid_email_or_none
 
 from . import signals
 
@@ -52,7 +49,6 @@ def get_login_redirect_url(request, url=None, redirect_field_name="next"):
                     or get_adapter().get_login_redirect_url(request))
     return redirect_url
 
-
 _user_display_callable = None
 
 
@@ -79,11 +75,7 @@ def user_field(user, field, *args):
     if field and hasattr(user, field):
         if args:
             # Setter
-            v = args[0]
-            if v:
-                User = get_user_model()
-                v = v[0:User._meta.get_field(field).max_length]
-            setattr(user, field, v)
+            setattr(user, field, args[0])
         else:
             # Getter
             return getattr(user, field)
@@ -125,8 +117,8 @@ def perform_login(request, user, email_verification,
             return render(request,
                           "account/verification_sent.html",
                           {"email": user_email(user)})
-            # HACK: This may not be nice. The proper Django way is to use an
-        # authentication backend, but I fail to see any added benefit
+    # HACK: This may not be nice. The proper Django way is to use an
+    # authentication backend, but I fail to see any added benefit
     # whereas I do see the downsides (having to bother the integrator
     # to set up authentication backends in settings.py
     if not hasattr(user, 'backend'):
@@ -166,7 +158,6 @@ def cleanup_email_addresses(request, addresses):
     exist, the first one encountered will be kept as primary.
     """
     from .models import EmailAddress
-
     adapter = get_adapter()
     # Let's group by `email`
     e2a = SortedDict() # maps email to EmailAddress
@@ -178,7 +169,7 @@ def cleanup_email_addresses(request, addresses):
         email = valid_email_or_none(address.email)
         if not email:
             continue
-            # ... and non-conflicting ones...
+        # ... and non-conflicting ones...
         if (app_settings.UNIQUE_EMAIL
             and EmailAddress.objects.filter(email__iexact=email).exists()):
             continue
@@ -197,7 +188,7 @@ def cleanup_email_addresses(request, addresses):
                 primary_verified_addresses.append(a)
         if a.verified:
             verified_addresses.append(a)
-            # Now that we got things sorted out, let's assign a primary
+    # Now that we got things sorted out, let's assign a primary
     if primary_verified_addresses:
         primary_address = primary_verified_addresses[0]
     elif verified_addresses:
@@ -212,7 +203,7 @@ def cleanup_email_addresses(request, addresses):
     else:
         # Empty
         primary_address = None
-        # There can only be one primary
+    # There can only be one primary
     for a in e2a.values():
         a.primary = primary_address.email.lower() == a.email.lower()
     return list(e2a.values()), primary_address
@@ -293,25 +284,22 @@ def send_email_confirmation(request, user, signup=False):
                                                            signup=signup,
                                                            confirm=True)
             assert email_address
-            # At this point, if we were supposed to send an email we have sent it.
+        # At this point, if we were supposed to send an email we have sent it.
         if send_email:
-            get_adapter().add_message(request,
-                                      messages.INFO,
-                                      'account/messages/'
-                                      'email_confirmation_sent.txt',
-                                      {'email': email})
+            messages.info(request,
+                _(u"Confirmation e-mail sent to %(email)s") % {"email": email}
+            )
 
 
 def sync_user_email_addresses(user):
     """
-    Keep user.email in sync with user.emailaddress_set.
+    Keep user.email in sync with user.emailadress_set.
 
     Under some circumstances the user.email may not have ended up as
     an EmailAddress record, e.g. in the case of manually created admin
     users.
     """
     from .models import EmailAddress
-
     email = user_email(user)
     if email and not EmailAddress.objects.filter(user=user,
                                                  email__iexact=email).exists():

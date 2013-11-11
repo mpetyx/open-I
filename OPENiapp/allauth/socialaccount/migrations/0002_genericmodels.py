@@ -2,9 +2,10 @@
 from south.db import db
 from south.v2 import SchemaMigration
 
-
 class Migration(SchemaMigration):
+
     def forwards(self, orm):
+        
         # Adding model 'SocialToken'
         db.create_table('socialaccount_socialtoken', (
             ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -30,29 +31,23 @@ class Migration(SchemaMigration):
         db.send_create_signal('socialaccount', ['SocialApp'])
 
         # Adding field 'SocialAccount.provider'
-        db.add_column('socialaccount_socialaccount', 'provider',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=30, blank=True),
-                      keep_default=False)
+        db.add_column('socialaccount_socialaccount', 'provider', self.gf('django.db.models.fields.CharField')(default='', max_length=30, blank=True), keep_default=False)
 
         # Adding field 'SocialAccount.uid'
-        db.add_column('socialaccount_socialaccount', 'uid',
-                      self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True),
-                      keep_default=False)
+        db.add_column('socialaccount_socialaccount', 'uid', self.gf('django.db.models.fields.CharField')(default='', max_length=255, blank=True), keep_default=False)
 
         # Adding field 'SocialAccount.extra_data'
-        db.add_column('socialaccount_socialaccount', 'extra_data',
-                      self.gf('allauth.socialaccount.fields.JSONField')(default='{}'), keep_default=False)
+        db.add_column('socialaccount_socialaccount', 'extra_data', self.gf('allauth.socialaccount.fields.JSONField')(default='{}'), keep_default=False)
 
         # Changing field 'SocialAccount.last_login'
-        db.alter_column('socialaccount_socialaccount', 'last_login',
-                        self.gf('django.db.models.fields.DateTimeField')(auto_now=True))
+        db.alter_column('socialaccount_socialaccount', 'last_login', self.gf('django.db.models.fields.DateTimeField')(auto_now=True))
 
         # Changing field 'SocialAccount.date_joined'
-        db.alter_column('socialaccount_socialaccount', 'date_joined',
-                        self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True))
+        db.alter_column('socialaccount_socialaccount', 'date_joined', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True))
 
 
     def backwards(self, orm):
+        
         # Removing unique constraint on 'SocialToken', fields ['app', 'account']
         db.delete_unique('socialaccount_socialtoken', ['app_id', 'account_id'])
 
@@ -75,8 +70,7 @@ class Migration(SchemaMigration):
         db.alter_column('socialaccount_socialaccount', 'last_login', self.gf('django.db.models.fields.DateTimeField')())
 
         # Changing field 'SocialAccount.date_joined'
-        db.alter_column('socialaccount_socialaccount', 'date_joined',
-                        self.gf('django.db.models.fields.DateTimeField')())
+        db.alter_column('socialaccount_socialaccount', 'date_joined', self.gf('django.db.models.fields.DateTimeField')())
 
 
     models = {
@@ -84,15 +78,12 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Group'},
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [],
-                            {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
+            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
         },
         'auth.permission': {
-            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')",
-                     'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
+            'Meta': {'ordering': "('content_type__app_label', 'content_type__model', 'codename')", 'unique_together': "(('content_type', 'codename'),)", 'object_name': 'Permission'},
             'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': (
-                'django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
+            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': "orm['contenttypes.ContentType']"}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
@@ -101,8 +92,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [],
-                       {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -110,13 +100,11 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [],
-                                 {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)",
-                     'object_name': 'ContentType', 'db_table': "'django_content_type'"},
+            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
             'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),

@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.utils import importlib
 
-
 class ProviderRegistry(object):
     def __init__(self):
         self.provider_map = {}
@@ -33,6 +32,5 @@ class ProviderRegistry(object):
                 except ImportError:
                     pass
             self.loaded = True
-
 
 registry = ProviderRegistry()

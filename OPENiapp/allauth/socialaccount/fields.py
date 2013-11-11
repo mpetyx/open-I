@@ -60,7 +60,6 @@ class JSONField(six.with_metaclass(models.SubfieldBase,
 
 try:
     from south.modelsinspector import add_introspection_rules
-
     add_introspection_rules([], ["^allauth\.socialaccount\.fields\.JSONField"])
 except:
     pass

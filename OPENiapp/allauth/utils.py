@@ -1,17 +1,11 @@
 import re
 import unicodedata
-import json
 
 from django.core.exceptions import ImproperlyConfigured
 from django.core.validators import validate_email, ValidationError
 from django.core import urlresolvers
-from django.db.models import FieldDoesNotExist
-from django.db.models.fields import (DateTimeField, DateField,
-                                     EmailField, TimeField)
-from django.utils import importlib, six, dateparse
-from django.utils.datastructures import SortedDict
-from django.core.serializers.json import DjangoJSONEncoder
-
+from django.db.models import EmailField, FieldDoesNotExist
+from django.utils import importlib, six
 try:
     from django.utils.encoding import force_text
 except ImportError:
@@ -81,16 +75,16 @@ def email_address_exists(email, exclude_user=None):
             users = get_user_model().objects
             if exclude_user:
                 users = users.exclude(pk=exclude_user.pk)
-            ret = users.filter(**{email_field + '__iexact': email}).exists()
+            ret = users.filter(**{email_field+'__iexact': email}).exists()
     return ret
+
 
 
 def import_attribute(path):
     assert isinstance(path, six.string_types)
-    pkg, attr = path.rsplit('.', 1)
+    pkg, attr = path.rsplit('.',1)
     ret = getattr(importlib.import_module(pkg), attr)
     return ret
-
 
 def import_callable(path_or_callable):
     if not hasattr(path_or_callable, '__call__'):
@@ -106,15 +100,11 @@ def get_user_model():
     try:
         app_label, model_name = app_settings.USER_MODEL.split('.')
     except ValueError:
-        raise ImproperlyConfigured("AUTH_USER_MODEL must be of the"
-                                   " form 'app_label.model_name'")
+        raise ImproperlyConfigured("AUTH_USER_MODEL must be of the form 'app_label.model_name'")
     user_model = get_model(app_label, model_name)
     if user_model is None:
-        raise ImproperlyConfigured("AUTH_USER_MODEL refers to model"
-                                   " '%s' that has not been installed"
-                                   % app_settings.USER_MODEL)
+        raise ImproperlyConfigured("AUTH_USER_MODEL refers to model '%s' that has not been installed" % app_settings.USER_MODEL)
     return user_model
-
 
 def resolve_url(to):
     """
@@ -126,49 +116,5 @@ def resolve_url(to):
         # If this doesn't "feel" like a URL, re-raise.
         if '/' not in to and '.' not in to:
             raise
-        # Finally, fall back and assume it's a URL
+    # Finally, fall back and assume it's a URL
     return to
-
-
-def serialize_instance(instance):
-    """
-    Since Django 1.6 items added to the session are no longer pickled,
-    but JSON encoded by default. We are storing partially complete models
-    in the session (user, account, token, ...). We cannot use standard
-    Django serialization, as these are models are not "complete" yet.
-    Serialization will start complaining about missing relations et al.
-    """
-    ret = dict([(k, v)
-                for k, v in instance.__dict__.items()
-                if not k.startswith('_')])
-    return json.loads(json.dumps(ret, cls=DjangoJSONEncoder))
-
-
-def deserialize_instance(model, data):
-    ret = model()
-    for k, v in data.items():
-        if v is not None:
-            try:
-                f = model._meta.get_field(k)
-                if isinstance(f, DateTimeField):
-                    v = dateparse.parse_datetime(v)
-                elif isinstance(f, TimeField):
-                    v = dateparse.parse_time(v)
-                elif isinstance(f, DateField):
-                    v = dateparse.parse_date(v)
-            except FieldDoesNotExist:
-                pass
-        setattr(ret, k, v)
-    return ret
-
-
-def set_form_field_order(form, fields_order):
-    if isinstance(form.fields, SortedDict):
-        form.fields.keyOrder = fields_order
-    else:
-        # Python 2.7+
-        from collections import OrderedDict
-
-        assert isinstance(form.fields, OrderedDict)
-        form.fields = OrderedDict((f, form.fields[f])
-                                  for f in fields_order)

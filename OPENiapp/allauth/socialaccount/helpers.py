@@ -48,7 +48,7 @@ def _process_signup(request, sociallogin):
             # Nope, email is required and we don't have it yet...
             auto_signup = False
     if not auto_signup:
-        request.session['socialaccount_sociallogin'] = sociallogin.serialize()
+        request.session['socialaccount_sociallogin'] = sociallogin
         url = reverse('socialaccount_signup')
         ret = HttpResponseRedirect(url)
     else:
@@ -56,13 +56,26 @@ def _process_signup(request, sociallogin):
         # ("closed" rendering, create user, send email, in active
         # etc..)
         try:
-            if not get_adapter().is_open_for_signup(request,
-                                                    sociallogin):
+            if not get_account_adapter().is_open_for_signup(request):
                 return render(request,
                               "account/signup_closed.html")
         except ImmediateHttpResponse as e:
             return e.response
-        get_adapter().save_user(request, sociallogin, form=None)
+        u = sociallogin.account.user
+        if account_settings.USER_MODEL_USERNAME_FIELD:
+            user_username(u,
+                          generate_unique_username(user_username(u)
+                                                   or email
+                                                   or 'user'))
+        for field in ['last_name',
+                      'first_name']:
+            if hasattr(u, field):
+                truncated_value = (user_field(u, field) or '') \
+                    [0:User._meta.get_field(field).max_length]
+                user_field(u, field, truncated_value)
+        user_email(u, email or '')
+        u.set_unusable_password()
+        sociallogin.save(request)
         ret = complete_social_signup(request, sociallogin)
     return ret
 
@@ -92,7 +105,7 @@ def _add_social_account(request, sociallogin):
     if request.user.is_anonymous():
         # This should not happen. Simply redirect to the connections
         # view (which has a login required)
-        return HttpResponseRedirect(reverse('socialaccount_connections'))
+        return reverse('socialaccount_connections')
     level = messages.INFO
     message = 'socialaccount/messages/account_connected.txt'
     if sociallogin.is_existing:
@@ -189,7 +202,6 @@ def _copy_avatar(request, user, account):
     import urllib2
     from django.core.files.base import ContentFile
     from avatar.models import Avatar
-
     url = account.get_avatar_url()
     if url:
         ava = Avatar(user=user)

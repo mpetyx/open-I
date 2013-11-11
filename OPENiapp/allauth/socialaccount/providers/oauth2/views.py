@@ -14,7 +14,6 @@ from allauth.socialaccount.helpers import complete_social_login
 from allauth.socialaccount.models import SocialToken, SocialLogin
 from ..base import AuthAction
 
-
 class OAuth2Adapter(object):
     expires_in_key = 'expires_in'
     supports_state = True
@@ -36,7 +35,6 @@ class OAuth2Adapter(object):
             token.expires_at = timezone.now() + timedelta(seconds=int(expires_in))
         return token
 
-
 class OAuth2View(object):
     @classmethod
     def adapter_view(cls, adapter):
@@ -45,7 +43,6 @@ class OAuth2View(object):
             self.request = request
             self.adapter = adapter()
             return self.dispatch(request, *args, **kwargs)
-
         return view
 
     def get_client(self, request, app):
@@ -69,7 +66,7 @@ class OAuth2LoginView(OAuth2View):
         auth_params = provider.get_auth_params(request, action)
         client.state = SocialLogin.stash_state(request)
         try:
-            return HttpResponseRedirect(client.get_redirect_url(auth_url,
+            return HttpResponseRedirect(client.get_redirect_url(auth_url, 
                                                                 auth_params))
         except OAuth2Error:
             return render_authentication_error(request)
@@ -95,8 +92,8 @@ class OAuth2CallbackView(OAuth2View):
             if self.adapter.supports_state:
                 login.state = SocialLogin \
                     .verify_and_unstash_state(
-                    request,
-                    request.REQUEST.get('state'))
+                        request,
+                        request.REQUEST.get('state'))
             else:
                 login.state = SocialLogin.unstash_state(request)
             return complete_social_login(request, login)

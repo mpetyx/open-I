@@ -1,10 +1,10 @@
 class AppSettings(object):
+
     def __init__(self, prefix):
         self.prefix = prefix
 
     def _setting(self, name, dflt):
         from django.conf import settings
-
         return getattr(settings, self.prefix + name, dflt)
 
     @property
@@ -14,8 +14,7 @@ class AppSettings(object):
         E.g. using OpenID AX
         """
         from allauth.account import app_settings as account_settings
-
-        return self._setting("QUERY_EMAIL",
+        return self._setting("QUERY_EMAIL", 
                              account_settings.EMAIL_REQUIRED)
 
     @property
@@ -37,7 +36,6 @@ class AppSettings(object):
         Deprecated
         """
         from django.conf import settings
-
         return self._setting("AVATAR_SUPPORT",
                              'avatar' in settings.INSTALLED_APPS)
 
@@ -54,7 +52,6 @@ class AppSettings(object):
         The user is required to hand over an e-mail address when signing up
         """
         from allauth.account import app_settings as account_settings
-
         return self._setting("EMAIL_REQUIRED", account_settings.EMAIL_REQUIRED)
 
     @property
@@ -63,20 +60,18 @@ class AppSettings(object):
         See e-mail verification method
         """
         from allauth.account import app_settings as account_settings
-
-        return self._setting("EMAIL_VERIFICATION",
+        return self._setting("EMAIL_VERIFICATION", 
                              account_settings.EMAIL_VERIFICATION)
 
     @property
     def ADAPTER(self):
         return self._setting \
-                ('ADAPTER',
-                 'allauth.socialaccount.adapter.DefaultSocialAccountAdapter')
+            ('ADAPTER', 
+             'allauth.socialaccount.adapter.DefaultSocialAccountAdapter')
 
 # Ugly? Guido recommends this himself ...
 # http://mail.python.org/pipermail/python-ideas/2012-May/014969.html
 import sys
-
 app_settings = AppSettings('SOCIALACCOUNT_')
 app_settings.__name__ = __name__
 sys.modules[__name__] = app_settings

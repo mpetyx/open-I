@@ -22,6 +22,7 @@ from . import app_settings
 
 
 class DefaultAccountAdapter(object):
+
     def stash_verified_email(self, request, email):
         request.session['account_verified_email'] = email
 
@@ -116,7 +117,7 @@ class DefaultAccountAdapter(object):
         """
         if request.user.is_authenticated():
             if app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL:
-                return \
+                return  \
                     app_settings.EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL
             else:
                 return self.get_login_redirect_url(request)
@@ -132,57 +133,28 @@ class DefaultAccountAdapter(object):
         """
         return True
 
-    def new_user(self, request):
+    def new_user(self,
+                 username=None,
+                 first_name=None,
+                 last_name=None,
+                 email=None):
         """
-        Instantiates a new User instance.
+        Spawns a new User instance, populating several common fields.
+        Note that this method assumes that the data is properly
+        validated. For example, if a username is given it must be
+        unique.
         """
+        from .utils import user_username, user_email
+
         user = get_user_model()()
-        return user
-
-    def populate_username(self, request, user):
-        """
-        Fills in a valid username, if required and missing.  If the
-        username is already present it is assumed to be valid
-        (unique).
-        """
-        from .utils import user_username, user_email, user_field
-
-        first_name = user_field(user, 'first_name')
-        last_name = user_field(user, 'last_name')
-        email = user_email(user)
-        username = user_username(user)
         if app_settings.USER_MODEL_USERNAME_FIELD:
             user_username(user,
                           username or generate_unique_username(first_name or
                                                                last_name or
-                                                               email or
-                                                               'user'))
-
-    def save_user(self, request, user, form, commit=True):
-        """
-        Saves a new `User` instance using information provided in the
-        signup form.
-        """
-        from .utils import user_username, user_email, user_field
-
-        data = form.cleaned_data
-        first_name = data.get('first_name')
-        last_name = data.get('last_name')
-        email = data.get('email')
-        username = data.get('username')
+                                                               email))
         user_email(user, email)
-        user_username(user, username)
-        user_field(user, 'first_name', first_name or '')
-        user_field(user, 'last_name', last_name or '')
-        if 'password1' in data:
-            user.set_password(data["password1"])
-        else:
-            user.set_unusable_password()
-        self.populate_username(request, user)
-        if commit:
-            # Ability not to commit makes it easier to derive from
-            # this adapter by adding
-            user.save()
+        user.first_name = first_name
+        user.last_name = last_name
         return user
 
     def clean_username(self, username):
@@ -191,7 +163,6 @@ class DefaultAccountAdapter(object):
         (dynamically) restrict what usernames can be chosen.
         """
         from django.contrib.auth.forms import UserCreationForm
-
         USERNAME_REGEX = UserCreationForm().fields['username'].regex
         if not USERNAME_REGEX.match(username):
             raise forms.ValidationError(_("Usernames can only contain "
