@@ -5,7 +5,7 @@ from Objects.Photo.facebook import provider
 from django.http import HttpResponse
 
 # Romanos' implementation
-from allauth.socialaccount.models import SocialToken, SocialAccount
+from allauth.socialaccount.models import SocialToken
 from django.shortcuts import render_to_response
 
 
@@ -18,7 +18,7 @@ from django.shortcuts import render_to_response
 #    return HttpResponse(photos,status=201)
 
 
-def facebook_get_photos(request):
+def facebook_get_photos(request, strDigit):
 
     #from facepy import GraphAPI
 
@@ -26,5 +26,11 @@ def facebook_get_photos(request):
     #result = graph.get('me/photos', limit=10)
     #access_token = request.GET.get("access_token","")
     connector = provider(access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='facebook'))
-    photos = connector.get_photos()
-    return render_to_response('fb-photos.html', {"result": photos})
+    if strDigit == "/" or strDigit == None :
+        photos = connector.get_photos()
+    else :
+        digit = int(strDigit.split("/")[1])
+        photos = connector.get_photos(digit)
+    previous = '/' + photos['paging']['previous'].split('&since=')[1].split('&')[0]
+    next = '/' + photos['paging']['next'].split('&until=')[1]
+    return render_to_response('fb-photos.html', {"result": photos, 'previous': previous, 'next': next})

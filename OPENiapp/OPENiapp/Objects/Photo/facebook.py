@@ -2,6 +2,7 @@ __author__ = 'mpetyx'
 
 #from facepy import utils
 from facepy import GraphAPI
+from allauth.socialaccount.models import SocialApp
 
 # Get the access_token somehow
 # For testing purposes go to https://developers.facebook.com/tools/explorer/ and play
@@ -56,8 +57,8 @@ class provider:
         # Get height
         result['data'][0]['height']
 
-    def get_photos(self):
-        result = self.graph.get('me/photos', limit=1)
+    def get_photos(self, till = "now"):
+        result = self.graph.get('me/photos', limit=1, until = till)
 
         return result
 

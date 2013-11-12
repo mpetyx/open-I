@@ -32,6 +32,6 @@ urlpatterns = patterns('',
                        
                        url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html')),
 
-                       url(r'^facebook/photos$', facebook_get_photos, name='facebook_get_photos')
+                       url(r'^facebook/photos(/\d*)?$', facebook_get_photos, name='facebook_get_photos')
 
 )
