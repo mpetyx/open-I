@@ -1,5 +1,11 @@
 __author__ = 'mpetyx'
 
+
+import os
+module_dir = os.path.dirname(__file__)  # get current directory
+file_path = os.path.join(module_dir, '../../photos')
+
+
 #from facepy import utils
 from facepy import GraphAPI
 from allauth.socialaccount.models import SocialApp
@@ -10,6 +16,7 @@ from allauth.socialaccount.models import SocialApp
 class provider:
     def __init__(self, access_token):
         self.graph = GraphAPI(access_token)
+        self.find_album_openi = self.graph.fql('SELECT object_id  FROM album WHERE owner=me() AND name="OPENi photos"')
 
     def examples(self):
         # Profile pic
@@ -69,22 +76,29 @@ class provider:
         result = self.graph.get('me/photos', limit=1, until = until)
         return result
 
+    def post_photo(self):
+        self.graph.post(path = 'me/photos', source = open(file_path+'/parrot2.jpg', 'rb'))
 
-# OLD TRY! DOESN'T WORK
-#from facepy import utils
-#from facepy import GraphAPI
+    def get_album_photos(self):
+        if not self.find_album_openi['data']:
+            return []
+        else:
+            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1)
+            return result
 
-#application_id = '116224591864093'
-#application_secret_key = '9e5c5993a5d70f7ceecf96be0be74a5b'
-#short_lived_access_token = utils.get_application_access_token(application_id, application_secret_key)
-##long_lived_access_token, expires_at = utils.get_extended_access_token(short_lived_access_token, application_id, application_secret_key)
-#try:
-#    long_lived_access_token, expires_at = utils.get_extended_access_token(short_lived_access_token, application_id, application_secret_key)
-#except OAuthError as error:
-#    print error.message
+    def get_album_photos_before(self, before):
+        if not self.find_album_openi['data']:
+            return []
+        else:
+            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1, before = before)
+            return result
 
-#graph = GraphAPI(long_lived_access_token)
-#graph.get('/me')
+    def get_album_photos_after(self, after):
+        if not self.find_album_openi['data']:
+            return []
+        else:
+            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1, after = after)
+            return result
 
 class Connector:
     def Get_comments(self):

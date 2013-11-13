@@ -6,7 +6,7 @@ from django.views.generic.base import TemplateView
 
 from user_management.SignIn import facebook, twitter
 
-from views import facebook_get_photos, facebook_get_photos_since, facebook_get_photos_until
+from views import facebook_get_photos, facebook_get_photos_since, facebook_get_photos_until, facebook_post_photos, facebook_get_album_photos, facebook_get_photos_before, facebook_get_photos_after
 
 admin.autodiscover()
 
@@ -35,6 +35,15 @@ urlpatterns = patterns('',
 
                        url(r'^facebook/photos/(since=\d+)$', facebook_get_photos_since, name='facebook_get_photos_since'),
 
-                       url(r'^facebook/photos/(until=\d+)$', facebook_get_photos_until, name='facebook_get_photos_until')
+                       url(r'^facebook/photos/(until=\d+)$', facebook_get_photos_until, name='facebook_get_photos_until'),
+
+
+                       url(r'^facebook/album/Openi/post/$', facebook_post_photos, name='facebook_post_photos'),
+
+                       url(r'^facebook/album/Openi/photos/$', facebook_get_album_photos, name='facebook_get_album_photos'),
+
+                       url(r'^facebook/album/Openi/photos/before=(.+)$', facebook_get_photos_before, name='facebook_get_photos_before'),
+
+                       url(r'^facebook/album/Openi/photos/after=(.+)$', facebook_get_photos_after, name='facebook_get_photos_after')
 
 )
