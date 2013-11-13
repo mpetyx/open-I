@@ -1,10 +1,5 @@
 __author__ = 'mpetyx'
 
-import os
-
-module_dir = os.path.dirname(__file__)  # get current directory
-file_path = os.path.join(module_dir, '../../photos')
-
 
 #from facepy import utils
 from facepy import GraphAPI
@@ -76,8 +71,8 @@ class provider:
         result = self.graph.get('me/photos', limit=1, until=until)
         return result
 
-    def post_photo(self):
-        self.graph.post(path='me/photos', source=open(file_path + '/parrot2.jpg', 'rb'))
+    def post_photo(self, path):
+        self.graph.post(path = 'me/photos', source = open(path, 'rb'))
 
     def get_album_photos(self):
         if not self.find_album_openi['data']:

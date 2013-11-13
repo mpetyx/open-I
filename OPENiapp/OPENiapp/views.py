@@ -1,10 +1,11 @@
 __author__ = 'mpetyx'
 
 from Objects.Photo.facebook import provider
+from Objects.Photo.photo_form import PhotoForm
 
 # Romanos' implementation
 from allauth.socialaccount.models import SocialToken
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, render, redirect
 
 
 # me/photos Implementation
@@ -69,12 +70,20 @@ def get_after(photos):
 
 
 def facebook_post_photos(request):
-    connector = make_connection(request)
-    connector.post_photo()
-    photos = connector.get_album_photos()
+    if request.method == 'POST': # If the form has been submitted...
+        form = PhotoForm(request.POST) # A form bound to the POST data
+        if form.is_valid():
+            connector = make_connection(request)
+            connector.post_photo(form.cleaned_data['path'])
+            photos = connector.get_album_photos()
 
-    return render_to_response('fb-album.html',
-                              {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+            return redirect('facebook_get_album_photos')
+            #return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+    else:
+        form = PhotoForm()
+        return render(request, 'post-photo.html', {
+            'form': form,
+        })
 
 
 def facebook_get_album_photos(request):
