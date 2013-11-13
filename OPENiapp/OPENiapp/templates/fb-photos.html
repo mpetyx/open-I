@@ -23,8 +23,6 @@
     </tr>
     {% endfor %}
 </table>
-<a href="{% url 'facebook_get_photos' previous %}">Previous</a>
-<a href="{% url 'facebook_get_photos' next %}">Next</a>
-<p>{{ result }}</p>
-<p>{{ result.paging.next }}</p>
+<a href="{% url 'facebook_get_photos_since' previous %}">Previous</a>
+<a href="{% url 'facebook_get_photos_until' next %}">Next</a>
 {% endblock %}

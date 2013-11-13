@@ -57,9 +57,16 @@ class provider:
         # Get height
         result['data'][0]['height']
 
-    def get_photos(self, till = "now"):
-        result = self.graph.get('me/photos', limit=1, until = till)
+    def get_photos(self):
+        result = self.graph.get('me/photos', limit=1)
+        return result
 
+    def get_photos_since(self, since= "now"):
+        result = self.graph.get('me/photos', limit=1, since = since)
+        return result
+
+    def get_photos_until(self, until= "now"):
+        result = self.graph.get('me/photos', limit=1, until = until)
         return result
 
 
