@@ -36,16 +36,16 @@ def facebook(request):
     if access_token is '':
         return "wrong credentials"
     else:
-        # try:
-            user = fb_complete_login2(None, access_token)
-            if type(user) == allauth.socialaccount.models.SocialLogin:
-                user = User.objects.get(username=user.account.user.username)
-            elif list(user) != []:
-                user = user[0]
-            else:
-                user = None
-        # except:
-        #     user = None
+    # try:
+        user = fb_complete_login2(None, access_token)
+        if type(user) == allauth.socialaccount.models.SocialLogin:
+            user = User.objects.get(username=user.account.user.username)
+        elif list(user) != []:
+            user = user[0]
+        else:
+            user = None
+            # except:
+            #     user = None
 
     if user is not None:
         if user.is_active:

@@ -10,7 +10,3 @@ OPENiapp/.idea
 .idea/testrunner.xml
 .idea/*
 
-
-OPENiapp/uiTest.db
-
-*.db

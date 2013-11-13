@@ -1,7 +1,7 @@
 __author__ = 'mpetyx'
 
-
 import os
+
 module_dir = os.path.dirname(__file__)  # get current directory
 file_path = os.path.join(module_dir, '../../photos')
 
@@ -68,37 +68,40 @@ class provider:
         result = self.graph.get('me/photos', limit=1)
         return result
 
-    def get_photos_since(self, since= "now"):
-        result = self.graph.get('me/photos', limit=1, since = since)
+    def get_photos_since(self, since="now"):
+        result = self.graph.get('me/photos', limit=1, since=since)
         return result
 
-    def get_photos_until(self, until= "now"):
-        result = self.graph.get('me/photos', limit=1, until = until)
+    def get_photos_until(self, until="now"):
+        result = self.graph.get('me/photos', limit=1, until=until)
         return result
 
     def post_photo(self):
-        self.graph.post(path = 'me/photos', source = open(file_path+'/parrot2.jpg', 'rb'))
+        self.graph.post(path='me/photos', source=open(file_path + '/parrot2.jpg', 'rb'))
 
     def get_album_photos(self):
         if not self.find_album_openi['data']:
             return []
         else:
-            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1)
+            result = self.graph.get('/' + self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1)
             return result
 
     def get_album_photos_before(self, before):
         if not self.find_album_openi['data']:
             return []
         else:
-            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1, before = before)
+            result = self.graph.get('/' + self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1,
+                                    before=before)
             return result
 
     def get_album_photos_after(self, after):
         if not self.find_album_openi['data']:
             return []
         else:
-            result = self.graph.get('/'+ self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1, after = after)
+            result = self.graph.get('/' + self.find_album_openi['data'][0]['object_id'] + '/photos', limit=1,
+                                    after=after)
             return result
+
 
 class Connector:
     def Get_comments(self):

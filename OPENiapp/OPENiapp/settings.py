@@ -188,9 +188,9 @@ LOGGING = {
 }
 
 SOCIALACCOUNT_PROVIDERS = \
-    { 'facebook':
-        { 'SCOPE': ['email', 'publish_stream', 'user_photos'],
-          'AUTH_PARAMS': { 'auth_type': 'reauthenticate' },
+    {'facebook':
+         {'SCOPE': ['email', 'publish_stream', 'user_photos'],
+          'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
           'METHOD': 'oauth2'
-        }
-     }
+         }
+    }

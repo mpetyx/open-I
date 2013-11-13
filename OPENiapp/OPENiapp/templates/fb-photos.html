@@ -19,7 +19,7 @@
         <td>{{ data.height }}</td>
         <td>{{ data.width }}</td>
         <td><a href="{{ data.link }}" target="_blank">Photo Link</a></td>
-        <td>{% for likes in data.likes.data %}id: {{likes.id}} | name: {{likes.name}}<br />{% endfor %}</td>
+        <td>{% for likes in data.likes.data %}id: {{likes.id}} | name: {{likes.name}}<br/>{% endfor %}</td>
     </tr>
     {% endfor %}
 </table>

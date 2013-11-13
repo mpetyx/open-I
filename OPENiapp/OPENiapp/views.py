@@ -1,7 +1,6 @@
 __author__ = 'mpetyx'
 
 from Objects.Photo.facebook import provider
-from django.http import HttpResponse
 
 # Romanos' implementation
 from allauth.socialaccount.models import SocialToken
@@ -10,20 +9,28 @@ from django.shortcuts import render_to_response
 
 # me/photos Implementation
 def make_connection(request):
-    return provider(access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='facebook'))
+    return provider(
+        access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='facebook'))
+
 
 def get_previous(photos):
     return 'since=' + photos['paging']['previous'].split('&since=')[1].split('&')[0]
-    
+
+
 def get_next(photos):
     return 'until=' + photos['paging']['next'].split('&until=')[1]
+
+
+def photo_choose_media(request):
+    return 1
 
 
 def facebook_get_photos(request):
     connector = make_connection(request)
     photos = connector.get_photos()
 
-    return render_to_response('fb-photos.html', {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
+    return render_to_response('fb-photos.html',
+                              {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
 
 
 def facebook_get_photos_since(request, strDigit):
@@ -35,7 +42,8 @@ def facebook_get_photos_since(request, strDigit):
     if (photos['data'] == []):
         return render_to_response('no-photo.html')
     else:
-        return render_to_response('fb-photos.html', {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
+        return render_to_response('fb-photos.html',
+                                  {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
 
 
 def facebook_get_photos_until(request, strDigit):
@@ -47,14 +55,15 @@ def facebook_get_photos_until(request, strDigit):
     if (photos['data'] == []):
         return render_to_response('no-photo.html')
     else:
-        return render_to_response('fb-photos.html', {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
-
+        return render_to_response('fb-photos.html',
+                                  {"result": photos, 'previous': get_previous(photos), 'next': get_next(photos)})
 
 
 # Album Implementation
 def get_before(photos):
     return photos['paging']['cursors']['before']
-    
+
+
 def get_after(photos):
     return photos['paging']['cursors']['after']
 
@@ -64,7 +73,9 @@ def facebook_post_photos(request):
     connector.post_photo()
     photos = connector.get_album_photos()
 
-    return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+    return render_to_response('fb-album.html',
+                              {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+
 
 def facebook_get_album_photos(request):
     connector = make_connection(request)
@@ -76,11 +87,12 @@ def facebook_get_album_photos(request):
         previous = get_before(photos)
         next = get_after(photos)
 
-        return render_to_response('fb-album.html', {"result": photos, 'previous': previous , 'next': next})
+        return render_to_response('fb-album.html', {"result": photos, 'previous': previous, 'next': next})
+
 
 def facebook_get_photos_before(request, str):
     connector = make_connection(request)
-    
+
     if not "before=" in str:
         return render_to_response('no-photo.html')
     else:
@@ -90,7 +102,9 @@ def facebook_get_photos_before(request, str):
         if (photos['data'] == []):
             return render_to_response('no-photo.html')
         else:
-            return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+            return render_to_response('fb-album.html',
+                                      {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+
 
 def facebook_get_photos_after(request, str):
     connector = make_connection(request)
@@ -104,4 +118,5 @@ def facebook_get_photos_after(request, str):
         if (photos['data'] == []):
             return render_to_response('no-photo.html')
         else:
-            return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+            return render_to_response('fb-album.html',
+                                      {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})

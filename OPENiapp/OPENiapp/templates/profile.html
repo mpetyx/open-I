@@ -6,12 +6,12 @@
 <p>Your profile</p>
 
 {% if user.is_authenticated %}
-    <p>You're logged in with {{ user.get_provider }} as {{ user }}.</p>
+<p>You're logged in with {{ user.get_provider }} as {{ user }}.</p>
 
-    {{ user }} <br />
-    {{ verified }} <br />
+{{ user }} <br/>
+{{ verified }} <br/>
 
-    <p>Go to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a></p>
+<p>Go to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a></p>
 {% endif %}
 
 {% endblock %}
