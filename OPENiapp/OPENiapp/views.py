@@ -137,8 +137,15 @@ def photo_choose_media(request):
                 fbconnector = make_connection(request)
                 fbconnector.post_photo(form.cleaned_data['path'])
 
-            if twitter:
-                post_on_twitter
+            # if twitter:
+            #     access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='twitter')
+            #     if access_token is []:
+            #
+            #     else:
+            #         token = access_token[0].token
+            #         token_secret = access_token[0].token_secret
+            #         # access_token=SocialToken.objects.filter(account__user=2, account__provider='twitter')
+            #         post_on_twitter
 
             return redirect('facebook_get_album_photos')
             #return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
