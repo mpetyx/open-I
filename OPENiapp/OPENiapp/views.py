@@ -1,6 +1,7 @@
 __author__ = 'mpetyx'
 
 from Objects.Photo.facebook import provider as FBprovider
+from Objects.Photo.twitter import TWprovider as TWprovider
 from Objects.Photo.photo_form import PhotoForm
 
 # Romanos' implementation
@@ -9,9 +10,13 @@ from django.shortcuts import render_to_response, render, redirect
 
 
 # me/photos Implementation
-def make_connection(request):
+def make_fb_connection(request):
     return FBprovider(
         access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='facebook'))
+
+def make_tw_connection(request, app):
+    return TWprovider(
+        app, request.user)
 
 
 def get_previous(photos):
@@ -23,7 +28,7 @@ def get_next(photos):
 
 
 def facebook_get_photos(request):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
     photos = connector.get_photos()
 
     return render_to_response('fb-photos.html',
@@ -31,7 +36,7 @@ def facebook_get_photos(request):
 
 
 def facebook_get_photos_since(request, strDigit):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
 
     digit = int(strDigit.split("since=")[1])
     photos = connector.get_photos_since(digit)
@@ -44,7 +49,7 @@ def facebook_get_photos_since(request, strDigit):
 
 
 def facebook_get_photos_until(request, strDigit):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
 
     digit = int(strDigit.split("until=")[1])
     photos = connector.get_photos_until(digit)
@@ -69,7 +74,7 @@ def facebook_post_photos(request):
     if request.method == 'POST': # If the form has been submitted...
         form = PhotoForm(request.POST) # A form bound to the POST data
         if form.is_valid():
-            connector = make_connection(request)
+            connector = make_fb_connection(request)
             connector.post_photo(form.cleaned_data['path'])
             photos = connector.get_album_photos()
 
@@ -83,7 +88,7 @@ def facebook_post_photos(request):
 
 
 def facebook_get_album_photos(request):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
     photos = connector.get_album_photos()
 
     if not photos:
@@ -96,7 +101,7 @@ def facebook_get_album_photos(request):
 
 
 def facebook_get_photos_before(request, str):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
 
     if not "before=" in str:
         return render_to_response('no-photo.html')
@@ -112,7 +117,7 @@ def facebook_get_photos_before(request, str):
 
 
 def facebook_get_photos_after(request, str):
-    connector = make_connection(request)
+    connector = make_fb_connection(request)
 
     if not "after=" in str:
         return render_to_response('no-photo.html')
@@ -131,13 +136,16 @@ def photo_choose_media(request):
     if request.method == 'POST': # If the form has been submitted...
         form = PhotoForm(request.POST) # A form bound to the POST data
 
-        facebook = request.GET.get("")
+        facebook = request.GET.get("facebook")
         if form.is_valid():
-            if facebook:
-                fbconnector = make_connection(request)
+            if form.cleaned_data['facebook']:
+                fbconnector = make_fb_connection(request)
                 fbconnector.post_photo(form.cleaned_data['path'])
 
-            # if twitter:
+            if form.cleaned_data['twitter']:
+                twconnector = make_tw_connection(request, 'Twitter')
+                twconnector.post_photo(form.cleaned_data['path'])
+
             #     access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='twitter')
             #     if access_token is []:
             #

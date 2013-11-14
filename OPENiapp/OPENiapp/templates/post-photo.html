@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<form action="/facebook/album/Openi/post/" method="post">{% csrf_token %}
+<form action="/openi/photos/media" method="post">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" value="Submit" />
 </form>

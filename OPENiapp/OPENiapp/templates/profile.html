@@ -8,6 +8,8 @@
 {% if user.is_authenticated %}
 <p>You're logged in with {{ user.get_provider }} as {{ user }}.</p>
 
+{{accounts.twitter}} <br/>
+
 {{ user }} <br/>
 {{ verified }} <br/>
 
