@@ -1,6 +1,6 @@
 __author__ = 'mpetyx'
 
-from Objects.Photo.facebook import provider
+from Objects.Photo.facebook import provider as FBprovider
 from Objects.Photo.photo_form import PhotoForm
 
 # Romanos' implementation
@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response, render, redirect
 
 # me/photos Implementation
 def make_connection(request):
-    return provider(
+    return FBprovider(
         access_token=SocialToken.objects.filter(account__user=request.user.id, account__provider='facebook'))
 
 
@@ -20,10 +20,6 @@ def get_previous(photos):
 
 def get_next(photos):
     return 'until=' + photos['paging']['next'].split('&until=')[1]
-
-
-def photo_choose_media(request):
-    return 1
 
 
 def facebook_get_photos(request):
@@ -129,3 +125,25 @@ def facebook_get_photos_after(request, str):
         else:
             return render_to_response('fb-album.html',
                                       {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+
+
+def photo_choose_media(request):
+    if request.method == 'POST': # If the form has been submitted...
+        form = PhotoForm(request.POST) # A form bound to the POST data
+
+        facebook = request.GET.get("")
+        if form.is_valid():
+            if facebook:
+                fbconnector = make_connection(request)
+                fbconnector.post_photo(form.cleaned_data['path'])
+
+            if twitter:
+                post_on_twitter
+
+            return redirect('facebook_get_album_photos')
+            #return render_to_response('fb-album.html', {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+    else:
+        form = PhotoForm()
+        return render(request, 'post-photo.html', {
+            'form': form,
+        })

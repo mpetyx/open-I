@@ -103,8 +103,8 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'OPENiapp.urls'
 
-TWITTER_CONSUMER_KEY = ''
-TWITTER_CONSUMER_SECRET = ''
+TWITTER_CONSUMER_KEY = 'Uifi6oR2hXaDaUGtTT61hw'
+TWITTER_CONSUMER_SECRET = 'UyCcdRcYO4Ls084dGZ5FaQVG1Il3FL1EnQI7doMs'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'OPENiapp.wsgi.application'
