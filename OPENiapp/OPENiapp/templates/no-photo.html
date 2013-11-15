@@ -1,9 +1,14 @@
 {% extends "base.html" %}
 
+{% block head_title %}No Photos Here{% endblock %}
+
+{% block body_title %}These are not the photos you are looking for!{% endblock %}
+
 {% block content %}
 
 <p>There are no Photos to display here.</p>
-<p>Please go back to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a> or to the <a
-        href="{% url 'profile' %}">Profile Page</a></p>
+<p>Please go back to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a>, 
+<a href="{% url 'facebook_get_album_photos' %}">My Facebook OPENi Album</a>
+or to the <a href="{% url 'profile' %}">Profile Page</a></p>
 
 {% endblock %}

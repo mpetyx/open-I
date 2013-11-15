@@ -28,6 +28,11 @@
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+
+        {% include "navbar.html" %}
+
+        <h1>{% block body_title %}{% endblock %}</h1>
+
         {% block body %}
 
         {% if messages %}
@@ -41,7 +46,7 @@
         </div>
         {% endif %}
 
-        <div class="user">
+        <!-- <div class="user">
             <strong>Menu:</strong>
             <ul>
                 {% if user.is_authenticated %}
@@ -53,6 +58,7 @@
                 {% endif %}
             </ul>
         </div>
+        -->
         {% block content %}
         {% endblock %}
         {% endblock %}

@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
+{% block head_title %}My Facebook Photos{% endblock %}
+
+{% block body_title %}My Facebook Photos{% endblock %}
+
 {% block content %}
 <hr/>
 <table class="table">
@@ -28,10 +32,33 @@
         {% endfor %}
     </tbody>
 </table>
+<pre class="well" id="json"></pre>
 <br />
 <br />
 <p class="text-center">
     <a href="{% url 'facebook_get_photos_since' previous %}" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-left"></span>&nbsp;Previous</a>
     <a href="{% url 'facebook_get_photos_until' next %}" class="btn btn-primary">Next&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></a>
 </p>
+
+<script>
+    var photoJson = {
+        "objectType": "photo",
+        "service":"openi",
+        "id":"{{ result.data.0.id }}",
+        "url": "{{ result.data.0.source }}",
+        "profile":{
+            "title": "{{ result.data.0.name }}",
+            "description": "Doesn't Exist",
+            "format": "Doesn't Exist",
+            "size": "Doesn't Exist - Various Sizes"
+        },
+        "properties":{
+            "width": {{ result.data.0.width }},
+            "height": {{ result.data.0.height }},
+            "tags" : "{{ result.data.0.place }}"
+        }
+    };
+
+    document.getElementById("json").innerHTML = JSON.stringify(photoJson, undefined, 4);        
+</script>
 {% endblock %}

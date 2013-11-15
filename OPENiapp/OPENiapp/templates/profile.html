@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
+{% block head_title %}Profile{% endblock %}
+
+{% block body_title %}Profile{% endblock %}
+
 {% block content %}
-<h1>Profile</h1>
 
 <p>Your profile</p>
 
@@ -13,7 +16,9 @@
 {{ user }} <br/>
 {{ verified }} <br/>
 
-<p>Go to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a></p>
+<p>Go to <a href="{% url 'facebook_get_photos' %}">My Facebook Photos</a>
+ | <a href="{% url 'facebook_get_album_photos' %}">My Facebook OPENi Album</a>
+ | <a href="{% url 'photo_choose_media' %}">Post Photos to Social Accounts</a></p>
 {% endif %}
 
 {% endblock %}

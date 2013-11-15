@@ -12,14 +12,15 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
                        # Examples:
-                       # url(r'^$', 'OPENiapp.views.home', name='home'),
                        # url(r'^OPENiapp/', include('OPENiapp.foo.urls')),
+
+                       url(r'^$', home, name='home'),
 
                        url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-                       url(r'^admin/', include(admin.site.urls)),
+                       url(r'^admin/', include(admin.site.urls), name='admin'),
 
-                       url(r'^accounts/', include('allauth.urls')),
+                       url(r'^accounts/', include('allauth.urls'), name='accounts'),
 
                        # url(r'^media/', include('OPENIapp.APIS.Media.urls')),
 

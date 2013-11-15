@@ -1,10 +1,16 @@
 {% extends "base.html" %}
 
+{% block head_title %}Post Photos{% endblock %}
+
+{% block body_title %}Post your photos to your favorite Social Service{% endblock %}
+
 {% block content %}
+
+<p>Type the path to your photo below and choose the Social Service you wish to posat your photo to.<p>
 
 <form action="/openi/photos/media" method="post">{% csrf_token %}
 {{ form.as_p }}
-<input type="submit" value="Submit" />
+<input type="submit" class="btn btn-primary" value="Submit" />
 </form>
 
 {% endblock %}
