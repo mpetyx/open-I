@@ -22,6 +22,7 @@ class TWprovider:
             self.connector = Twython(application[0].client_id, application[0].secret, access_token[0].token,
                                      access_token[0].token_secret)
 
+
     def home_timeline(self):
 
         return json.dumps(self.connector.get_home_timeline(), sort_keys=True, indent=4)
@@ -33,3 +34,4 @@ class TWprovider:
 # from OPENiapp.Objects.Photo.twitter import TWprovider
 # lol = TWprovider('Twitter', 3)
 # print json.dumps(lol.connector.verify_credentials(), sort_keys=True, indent=4)
+# access_token = SocialToken.objects.filter(account__user=4, account__provider='twitter')

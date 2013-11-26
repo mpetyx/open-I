@@ -137,6 +137,9 @@ def photo_choose_media(request):
     if request.method == 'POST': # If the form has been submitted...
         form = PhotoForm(request.POST) # A form bound to the POST data
 
+        fb_post = None
+        tw_post = None
+
         facebook = request.GET.get("facebook")
         if form.is_valid():
             if form.cleaned_data['facebook']:
