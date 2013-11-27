@@ -12,13 +12,13 @@ import simplejson
 
 import allauth
 
-from OPENiapp.providers import Login
+from OPENiapp.Providers import Login
 from django.contrib.auth.models import User
 # from OPENiapp.api.Responses import *
 from OPENiapp.models import *
 from LoggedUserResponse import profileJson
 
-from OPENiapp.providers.facebook.SignIn import fb_complete_login2
+from OPENiapp.Providers.Facebook.SignIn import fb_complete_login2
 
 
 @csrf_exempt

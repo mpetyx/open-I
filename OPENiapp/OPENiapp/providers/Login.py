@@ -6,7 +6,7 @@ from django.test import RequestFactory
 
 from allauth.account.utils import send_email_confirmation
 import allauth
-from twitter.SignIn import openiTwitterAdapter
+from Twitter.SignIn import openiTwitterAdapter
 
 
 

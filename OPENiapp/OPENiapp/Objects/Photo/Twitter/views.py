@@ -1,6 +1,6 @@
 __author__ = 'romdim'
 
-from twitter import TWprovider as TWprovider
+from OPENiapp.Providers.Twitter.connector import TWprovider as TWprovider
 
 
 def make_tw_connection(request, app):
