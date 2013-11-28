@@ -2,6 +2,7 @@ from django.conf.urls import patterns, url
 
 from views import *
 
+
 urlpatterns = patterns('',
 
                        url(r'^openi/photos/media', photo_choose_media, name='photo_choose_media'),

@@ -159,6 +159,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.weibo',
 
     'OPENiapp',
+    'OPENiapp.APIS.Media.Photo',
 
 )
 
