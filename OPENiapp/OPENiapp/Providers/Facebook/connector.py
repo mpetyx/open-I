@@ -62,6 +62,12 @@ class provider:
                                     after=after)
             return result
 
+    def delete_album_photo(self, id):
+        """ Delete an Album Photo by its facebook id. Unfortunately not allowed. """
+        # NOT ALLOWED
+        #print self.graph.fql('SELECT can_delete FROM photo WHERE object_id='+id)
+        #self.graph.fql('DELETE FROM photo WHERE object_id='+id)
+        #self.graph.delete()
 
 class Connector:
     def Get_comments(self):

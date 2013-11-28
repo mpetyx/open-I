@@ -3,6 +3,7 @@ __author__ = 'romdim'
 from OPENiapp.Providers.Facebook.connector import provider as FBprovider
 from allauth.socialaccount.models import SocialToken
 from django.shortcuts import render_to_response, render, redirect
+from django.contrib import messages
 
 
 # me/photos Implementation
@@ -133,3 +134,10 @@ def facebook_get_photos_after(request, str):
         else:
             return render_to_response('fb-album.html',
                                       {"result": photos, 'previous': get_before(photos), 'next': get_after(photos)})
+
+def facebook_delete_photo(request, id):
+    """ Delete an OPENi Album Photo by its id """
+    #connector = make_fb_connection(request)
+    #connector.delete_album_photo(id)
+    return "This function is not allowed."
+    #return facebook_get_album_photos(request)

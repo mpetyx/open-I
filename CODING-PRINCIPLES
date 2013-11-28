@@ -1,0 +1,9 @@
+All Folders follow the PascalCase rule
+	Except the ones containing html/css/js code like static and templates folders
+	OPENi folders are also an exception
+
+All files follow the camelCase rule
+
+# Examples here: http://msdn.microsoft.com/en-us/library/x2dbyw72(v=vs.71).aspx
+
+Everyone should comment code before uploading

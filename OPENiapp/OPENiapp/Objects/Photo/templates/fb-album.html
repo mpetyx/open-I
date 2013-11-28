@@ -39,6 +39,9 @@
     <a href="{% url 'facebook_get_photos_before' previous %}" class="btn btn-primary"><span class="glyphicon glyphicon-chevron-left"></span>&nbsp;Previous</a>
     <a href="{% url 'facebook_get_photos_after' next %}" class="btn btn-primary">Next&nbsp;<span class="glyphicon glyphicon-chevron-right"></span></a>
 </p>
+<p class="text-center">
+    <a href="{% url 'facebook_delete_photo' result.data.0.id %}" class="btn btn-danger"><span class="glyphicon glyphicon-remove"></span>&nbsp;Delete</a>
+</p>
 
 <script>
     var photoJson = {

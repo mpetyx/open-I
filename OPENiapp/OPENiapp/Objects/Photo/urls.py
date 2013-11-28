@@ -24,5 +24,7 @@ urlpatterns = patterns('',
                            name='facebook_get_photos_before'),
 
                        url(r'^facebook/album/Openi/photos/after=(.+)$', facebook_get_photos_after,
-                           name='facebook_get_photos_after')
+                           name='facebook_get_photos_after'),
+                       
+                       url(r'^facebook/album/Openi/delete/(.+)$', facebook_delete_photo, name='facebook_delete_photo')
 )

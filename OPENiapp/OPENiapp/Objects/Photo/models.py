@@ -23,12 +23,20 @@ height
         """
 
         self.id = None
+        self.url = None
         self.object_type = None
-
+        self.service = None
+        self.from_ = None
+        self.profile = None
+        self.location = None
+        self.time = None
+        self.tags = None
+        self.width = None
+        self.height = None
         return 1
 
     def get(self):
-        return 1
+        return self
 
     def delete(self):
         return 1
