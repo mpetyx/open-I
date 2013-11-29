@@ -9,6 +9,18 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class GenericResource(ModelResource):
 
+    def applications_asked(self, bundle):
+
+        return 1
+
+    def http_headers_in_request(self, bundle):
+
+        return 1
+
+    def request_method(self, bundle):
+
+        return bundle.request.method()
+
     def dehydrate(self, bundle):
         """
         A hook to allow a final manipulation of data once all fields/methods
