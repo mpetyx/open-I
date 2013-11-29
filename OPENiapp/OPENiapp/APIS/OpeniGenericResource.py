@@ -1,14 +1,9 @@
 __author__ = 'mpetyx'
 
 from tastypie.resources import ModelResource
-from tastypie.bundle import Bundle
-from django.core.exceptions import ObjectDoesNotExist
-
-
 
 
 class GenericResource(ModelResource):
-
     def applications_asked(self, bundle):
 
         return 1
@@ -32,20 +27,19 @@ class GenericResource(ModelResource):
         Must return the modified bundle.
         """
 
-        smConnectors  = ['facebook','twitter']
+        smConnectors = ['facebook', 'twitter']
 
-        apps = ['app1','app2']
+        apps = ['app1', 'app2']
 
         for connector in smConnectors:
 
             res = {}
 
             for app in apps:
-
-                res[app] = { 'test':True}
+                res[app] = {'test': True}
 
             bundle.data[connector] = res
 
-        bundle.data["koukli"] = {"lol":1}
+        bundle.data["koukli"] = {"lol": 1}
 
         return bundle

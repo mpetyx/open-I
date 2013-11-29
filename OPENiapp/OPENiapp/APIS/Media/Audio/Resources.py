@@ -1,17 +1,17 @@
 __author__ = 'mpetyx'
 
 from tastypie.authorization import DjangoAuthorization
-from .models import OpeniPhoto
+from .models import OpeniAudio
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
 
 
-class PhotoResource(GenericResource):
+class AudioResource(GenericResource):
     class Meta:
-        queryset = OpeniPhoto.objects.all()
+        queryset = OpeniAudio.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'photo'
+        resource_name = 'audio'
         authorization = DjangoAuthorization()
         # filtering = {
         #     'slug': ALL,

@@ -3,7 +3,7 @@ __author__ = 'mpetyx'
 from django.db import models
 
 
-class OpeniPhoto(models.Model):
+class OpeniVideo(models.Model):
     # id is missing because it is the default
     url = models.TextField()
     object_type = models.TextField()

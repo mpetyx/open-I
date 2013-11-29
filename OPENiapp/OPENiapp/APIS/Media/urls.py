@@ -1,18 +1,15 @@
 __author__ = 'mpetyx'
 
-from django.conf.urls import patterns, include, url
-
-from django.contrib import admin
-
-from django.views.generic.base import TemplateView
-
 from tastypie.api import Api
-from Photo.urls import urlpatterns as photo_urls
 
-urlpatterns = patterns('',
-  # ...more URLconf bits here...
-  # Then add:
-  # (r'^Photo/', include(v1_api.urls)),
-)
+from .Audio.Resources import AudioResource
+from .Photo.Resources import PhotoResource
+from .Video.Resources import VideoResource
 
-urlpatterns = urlpatterns + photo_urls
+
+api = Api(api_name='media')
+api.register(AudioResource())
+api.register(PhotoResource())
+api.register(VideoResource())
+
+urlpatterns = api.urls
