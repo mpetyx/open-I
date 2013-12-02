@@ -12,10 +12,11 @@ class provider:
         3. Get OPENi album Photos
         4. Post Photos to OPENi album
     """
-    def __init__(self, access_token):
+    def __init__(self, access_token, data):
         """ Initiate the graph and find the OPENi album """
         self.graph = GraphAPI(access_token)
         self.find_album_openi = self.graph.fql('SELECT object_id  FROM album WHERE owner=me() AND name="OPENi photos"')
+        self.data = data
 
     def get_photos(self):
         """ Return user's photos """
@@ -34,7 +35,7 @@ class provider:
 
     def post_photo(self, path):
         """ Post a photo to OPENi album """
-        self.graph.post(path = 'me/photos', source = open(path, 'rb'))
+        return self.graph.post(path = 'me/photos', source = open(path, 'rb'))
 
     def get_album_photos(self):
         """ If there is an OPENi album return its first photo, else return nada """
@@ -69,6 +70,77 @@ class provider:
         #self.graph.fql('DELETE FROM photo WHERE object_id='+id)
         #self.graph.delete()
 
-class Connector:
-    def Get_comments(self):
-        """"""""
+
+
+    # This should be just right!
+
+    # PHOTO API
+    def get_photo(self):
+        """ Get a photo by its id """
+        return self.graph.get(self.data.photo_id)
+    
+    def get_all_photos_for_account(self):
+        """ Get all photos for an account """
+        return self.graph.get(self.data.user_id+'/photos')
+
+    def post_photo_to_account(self):
+        """ Post a photo to a simple account """
+        return self.graph.post(path = self.data.user_id+'/photos', source = open(self.data.path_string, 'rb'))
+
+    def post_photo_to_account(self):
+        """ Post a photo to an album """
+        return self.graph.post(path = self.data.album_id+'/photos', source = open(self.data.path_string, 'rb'))
+
+    def share_photo(self):
+        """ Share a photo """
+        return {'result': 'Not applicable'}
+
+    def edit_photo_object(self):
+        """ Edit a photo object """
+        return {'result': 'Not applicable'}
+
+    def delete_photo_object(self):
+        """ Delete a photo object """
+        return self.graph.delete(self.data.photo_id)
+
+    
+    def get_comments(self):
+        """ Get comments for a photo by its id """
+        return self.graph.get(self.data.photo_id+'/comments')
+    
+    def post_comment(self):
+        """ Post a comment to a photo by its id """
+        return self.graph.post(path = self.data.photo_id+'/comments', data = self.data.comment)
+    
+    def delete_comment(self):
+        """ Delete a comment by its id """
+        return self.graph.delete(self.data.comment_id)
+    
+    def edit_comment(self):
+        """ Edit a comment by its id """
+        # This would be possible only by deleting the comment and creating a new one.
+        return {'result': 'Not applicable'}
+    
+    def like_photo(self):
+        """ Like a photo by its id """
+        return self.graph.post(self.data.photo_id + '/likes')
+    
+    def get_likes_for_photo(self):
+        """ Get like for a photo by its id """
+        return self.graph.get(self.data.photo_id + '/likes')
+    
+    def unlike_photo(self):
+        """ Unlike a photo by its id """
+        return self.graph.delete(self.data.photo_id + '/likes')
+    
+    def dislike_photo(self):
+        """ Dislike a photo by its id """
+        return {'result': 'Not applicable'}
+    
+    def get_dislikes_for_article(self):
+        """ Get dislikes for an article """
+        return {'result': 'Not applicable'}
+    
+    def delete_photo_from_article(self):
+        """ Delete a photo from an article """
+        return {'result': 'Not applicable'}
