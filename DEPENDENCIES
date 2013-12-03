@@ -1,0 +1,40 @@
+List of Dependencies and how to install
+
+
+1. setuptools
+https://pypi.python.org/pypi/setuptools#installation-instructions
+Securely download ez_setup.py (https://bitbucket.org/pypa/setuptools/raw/bootstrap/ez_setup.py)
+python ez_setup.py
+
+2. pip
+http://www.pip-installer.org/en/latest/installing.html
+Securely download get-pip.py (https://raw.github.com/pypa/pip/master/contrib/get-pip.py)
+python get-pip.py
+
+
+3. facepy
+https://github.com/jgorset/facepy
+pip install facepy
+
+4. twython
+https://github.com/ryanmcgrath/twython
+pip install twython
+
+5. tastypie
+https://github.com/toastdriven/django-tastypie
+pip install django-tastypie
+
+	5.1 mimeparse
+	https://pypi.python.org/pypi/mimeparse/0.1.3
+	pip install mimeparse
+
+
+
+List of commands
+
+python ez_setup.py
+python get-pip.py
+pip install facepy
+pip install twython
+pip install django-tastypie
+pip install mimeparse
