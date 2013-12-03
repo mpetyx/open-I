@@ -166,6 +166,8 @@ INSTALLED_APPS = (
     'OPENiapp.APIS.Media.Audio',
     'OPENiapp.APIS.Media.Video',
 
+    'tastypie'
+
 )
 
 # https://github.com/pennersr/django-allauth#when-i-sign-up-i-run-into-connectivity-errors-connection-refused-et-al
