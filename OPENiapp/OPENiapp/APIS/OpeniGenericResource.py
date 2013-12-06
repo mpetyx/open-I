@@ -1,6 +1,7 @@
 __author__ = 'mpetyx'
 
 from tastypie.resources import ModelResource
+from tastypie.bundle import Bundle
 
 
 class GenericResource(ModelResource):
