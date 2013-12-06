@@ -105,6 +105,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'OPENiapp.urls'
+TASTYPIE_SWAGGER_API_MODULE = 'OPENiapp.APIS.Media.urls.api'
 
 TWITTER_CONSUMER_KEY = 'Uifi6oR2hXaDaUGtTT61hw'
 TWITTER_CONSUMER_SECRET = 'UyCcdRcYO4Ls084dGZ5FaQVG1Il3FL1EnQI7doMs'
@@ -166,7 +167,9 @@ INSTALLED_APPS = (
     'OPENiapp.APIS.Media.Audio',
     'OPENiapp.APIS.Media.Video',
 
-    'tastypie'
+    'tastypie',
+    'tastypie_swagger',
+
 
 )
 

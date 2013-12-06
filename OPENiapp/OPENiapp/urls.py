@@ -32,6 +32,8 @@ urlpatterns = patterns('',
                        # url(r'^person/signin/twitter$', twitter, name='twitter'),
 
                        url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html'), name='profile'),
+
+                       url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
 )
 
 urlpatterns = urlpatterns + Media_Urls
