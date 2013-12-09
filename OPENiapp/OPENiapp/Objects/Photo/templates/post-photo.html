@@ -8,7 +8,7 @@
 
 <p>Type the path to your photo below and choose the Social Service you wish to posat your photo to.<p>
 
-<form action="/openi/photos/media" method="post">{% csrf_token %}
+<form action="/post" method="post">{% csrf_token %}
 {{ form.as_p }}
 <input type="submit" class="btn btn-primary" value="Submit" />
 </form>

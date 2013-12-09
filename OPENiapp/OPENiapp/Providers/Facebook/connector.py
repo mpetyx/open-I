@@ -12,15 +12,15 @@ class provider:
         3. Get OPENi album Photos
         4. Post Photos to OPENi album
     """
-    def __init__(self, access_token, data):
+    def __init__(self, access_token):#, data):
         """ Initiate the graph and find the OPENi album """
         self.graph = GraphAPI(access_token)
         self.find_album_openi = self.graph.fql('SELECT object_id  FROM album WHERE owner=me() AND name="OPENi photos"')
-        self.data = data
+        # self.data = data
 
-    def get_photos(self):
+    def get_photos(self, limit = 1):
         """ Return user's photos """
-        result = self.graph.get('me/photos', limit=1)
+        result = self.graph.get('me/photos', limit=limit)
         return result
 
     def get_photos_since(self, since="now"):

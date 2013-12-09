@@ -3,7 +3,6 @@ __author__ = 'romdim'
 from OPENiapp.Providers.Facebook.connector import provider as FBprovider
 from allauth.socialaccount.models import SocialToken
 from django.shortcuts import render_to_response, render, redirect
-from django.contrib import messages
 
 
 # me/photos Implementation

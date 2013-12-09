@@ -2,10 +2,9 @@ from django.conf.urls import patterns, url
 
 from views import *
 
-
 urlpatterns = patterns('',
 
-                       url(r'^openi/photos/media', photo_choose_media, name='photo_choose_media'),
+                       url(r'^post', photo_choose_media, name='photo_choose_media'),
 
                        url(r'^facebook/photos/$', facebook_get_photos, name='facebook_get_photos'),
 

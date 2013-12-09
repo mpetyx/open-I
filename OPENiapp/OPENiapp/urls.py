@@ -4,6 +4,7 @@ from django.contrib import admin
 
 from django.views.generic.base import TemplateView
 from APIS.Media.urls import urlpatterns as Media_Urls
+from Objects.Photo.urls import urlpatterns as Old_Urls
 # from user_management.SignIn import facebook, twitter
 
 from views import *
@@ -33,7 +34,8 @@ urlpatterns = patterns('',
 
                        url(r'^accounts/profile/$', TemplateView.as_view(template_name='profile.html'), name='profile'),
 
-                       url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger')),
+                       url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger'))
 )
 
 urlpatterns = urlpatterns + Media_Urls
+urlpatterns = urlpatterns + Old_Urls
