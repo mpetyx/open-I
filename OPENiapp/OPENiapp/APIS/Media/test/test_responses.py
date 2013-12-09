@@ -17,9 +17,12 @@ class PhotoResourceTest(ResourceTestCase):
         # Fetch the ``OPENiPhoto`` object we'll use in testing.
         # Note that we aren't using PKs because they can change depending
         # on what other tests are running.
-        photo = OpeniPhoto(1, 1, "1", "1", "1", "1", "2", "2", "3", "4")
-        photo.save()
-        self.entry_1 = OpeniPhoto.objects.get(id=1)
+        photo1 = OpeniPhoto(1, 1, "1", "1", "1", "1", "2", "2", "3", "4")
+        photo1.save()
+        photo2 = OpeniPhoto(2, 12, "12", "12", "12", "12", "23", "23", "34", "45")
+        photo2.save()
+        self.entry_1 = OpeniPhoto.objects.get(id=photo1.id)
+        self.entry_2 = OpeniPhoto.objects.get(id=photo2.id)
 
         self.maxDiff = None
 
@@ -33,19 +36,20 @@ class PhotoResourceTest(ResourceTestCase):
     def test_get_list_unauthorzied(self):
         self.assertHttpUnauthorized(self.api_client.get('/media/photo/', format='json'))
 
-    def test_get_list_json(self):
-        resp = self.api_client.get('/media/photo/', format='json', authentication=self.get_credentials())
+    #def test_get_list_json(self):
+    #    pass
+
+    def test_get_first_photo_openi(self):
+        resp = self.api_client.get('/media/photo/1/', format='json', authentication=self.get_credentials())
         self.assertValidJSONResponse(resp)
 
         # Scope out the data for correctness.
-        self.assertEqual(len(self.deserialize(resp)['objects']), 1)
+        self.assertEqual(len(self.deserialize(resp)), 12)
         # Here, we're checking an entire structure for the expected data.
-        self.assertEqual(self.deserialize(resp)['objects'][0], {
+        self.assertEqual(self.deserialize(resp), {
             u'From': self.entry_1.From,
-            u'facebook': {u'app1': {u'test': True}, u'app2': {u'test': True}},
             u'height': self.entry_1.height,
             u'id': self.user.pk,
-            u'koukli': {'lol': 1},
             u'location': self.entry_1.location,
             u'object_type': self.entry_1.object_type,
             u'profile': self.entry_1.profile,
@@ -53,9 +57,44 @@ class PhotoResourceTest(ResourceTestCase):
             u'service': self.entry_1.service,
             u'tags': self.entry_1.tags,
             u'time': self.entry_1.time,
-            u'twitter': {u'app1': {u'test': True}, u'app2': {u'test': True}},
             u'url': self.entry_1.url,
             u'width': self.entry_1.width,
+        })
+
+    def test_get_photos_openi(self):
+        resp = self.api_client.get('/media/photo/', format='json', authentication=self.get_credentials())
+        self.assertValidJSONResponse(resp)
+
+        # Scope out the data for correctness.
+        self.assertEqual(len(self.deserialize(resp)['objects']), 2)
+        # Here, we're checking an entire structure for the expected data.
+        self.assertEqual(self.deserialize(resp)['objects'][0], {
+            u'From': self.entry_1.From,
+            u'height': self.entry_1.height,
+            u'id': self.entry_1.pk,
+            u'location': self.entry_1.location,
+            u'object_type': self.entry_1.object_type,
+            u'profile': self.entry_1.profile,
+            u'resource_uri': "/media/photo/1/",
+            u'service': self.entry_1.service,
+            u'tags': self.entry_1.tags,
+            u'time': self.entry_1.time,
+            u'url': self.entry_1.url,
+            u'width': self.entry_1.width,
+        })
+        self.assertEqual(self.deserialize(resp)['objects'][1], {
+            u'From': self.entry_2.From,
+            u'height': self.entry_2.height,
+            u'id': self.entry_2.pk,
+            u'location': self.entry_2.location,
+            u'object_type': self.entry_2.object_type,
+            u'profile': self.entry_2.profile,
+            u'resource_uri': "/media/photo/2/",
+            u'service': self.entry_2.service,
+            u'tags': self.entry_2.tags,
+            u'time': self.entry_2.time,
+            u'url': self.entry_2.url,
+            u'width': self.entry_2.width,
         })
 
 
