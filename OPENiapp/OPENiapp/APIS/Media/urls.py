@@ -7,7 +7,7 @@ from .Photo.Resources import PhotoResource
 from .Video.Resources import VideoResource
 
 
-api = Api(api_name='media')
+api = Api(api_name='')
 api.register(AudioResource())
 api.register(PhotoResource())
 api.register(VideoResource())
