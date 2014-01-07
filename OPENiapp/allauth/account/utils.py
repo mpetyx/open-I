@@ -9,10 +9,10 @@ except ImportError:
     now = datetime.now
 
 from django.contrib import messages
+from django.core.urlresolvers import reverse
 from django.shortcuts import render
 from django.conf import settings
 from django.contrib.auth import login
-from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from django.utils.http import urlencode
 from django.utils.datastructures import SortedDict
@@ -21,7 +21,8 @@ try:
 except ImportError:
     from django.utils.encoding import force_unicode as force_text
 
-from ..utils import import_callable, valid_email_or_none
+from ..utils import (import_callable, valid_email_or_none,
+                     get_user_model)
 
 from . import signals
 
@@ -43,10 +44,11 @@ def get_next_redirect_url(request, redirect_field_name="next"):
 
 
 def get_login_redirect_url(request, url=None, redirect_field_name="next"):
-    redirect_url = (url
-                    or get_next_redirect_url(request,
-                                             redirect_field_name=redirect_field_name)
-                    or get_adapter().get_login_redirect_url(request))
+    redirect_url \
+        = (url
+           or get_next_redirect_url(request,
+                                    redirect_field_name=redirect_field_name)
+           or get_adapter().get_login_redirect_url(request))
     return redirect_url
 
 _user_display_callable = None
@@ -75,7 +77,11 @@ def user_field(user, field, *args):
     if field and hasattr(user, field):
         if args:
             # Setter
-            setattr(user, field, args[0])
+            v = args[0]
+            if v:
+                User = get_user_model()
+                v = v[0:User._meta.get_field(field).max_length]
+            setattr(user, field, v)
         else:
             # Getter
             return getattr(user, field)
@@ -100,9 +106,6 @@ def perform_login(request, user, email_verification,
     case email verification is optional and we are only logging in).
     """
     from .models import EmailAddress
-    # not is_active: social users are redirected to a template
-    # local users are stopped due to form validation checking is_active
-    assert user.is_active
     has_verified_email = EmailAddress.objects.filter(user=user,
                                                      verified=True).exists()
     if email_verification == EmailVerificationMethod.NONE:
@@ -114,15 +117,20 @@ def perform_login(request, user, email_verification,
     elif email_verification == EmailVerificationMethod.MANDATORY:
         if not has_verified_email:
             send_email_confirmation(request, user, signup=signup)
-            return render(request,
-                          "account/verification_sent.html",
-                          {"email": user_email(user)})
+            return HttpResponseRedirect(
+                reverse('account_email_verification_sent'))
+    # Local users are stopped due to form validation checking
+    # is_active, yet, adapter methods could toy with is_active in a
+    # `user_signed_up` signal. Furthermore, social users should be
+    # stopped anyway.
+    if not user.is_active:
+        return HttpResponseRedirect(reverse('account_inactive'))
     # HACK: This may not be nice. The proper Django way is to use an
     # authentication backend, but I fail to see any added benefit
     # whereas I do see the downsides (having to bother the integrator
     # to set up authentication backends in settings.py
     if not hasattr(user, 'backend'):
-        user.backend = "django.contrib.auth.backends.ModelBackend"
+        user.backend = "allauth.account.auth_backends.AuthenticationBackend"
     signals.user_logged_in.send(sender=user.__class__,
                                 request=request,
                                 user=user,
@@ -160,7 +168,7 @@ def cleanup_email_addresses(request, addresses):
     from .models import EmailAddress
     adapter = get_adapter()
     # Let's group by `email`
-    e2a = SortedDict() # maps email to EmailAddress
+    e2a = SortedDict()  # maps email to EmailAddress
     primary_addresses = []
     verified_addresses = []
     primary_verified_addresses = []
@@ -171,7 +179,9 @@ def cleanup_email_addresses(request, addresses):
             continue
         # ... and non-conflicting ones...
         if (app_settings.UNIQUE_EMAIL
-            and EmailAddress.objects.filter(email__iexact=email).exists()):
+                and EmailAddress.objects
+                .filter(email__iexact=email)
+                .exists()):
             continue
         a = e2a.get(email.lower())
         if a:
@@ -239,9 +249,10 @@ def setup_user_email(request, user, addresses):
     for a in addresses:
         a.user = user
         a.save()
+    EmailAddress.objects.fill_cache_for_user(user, addresses)
     if (primary
-        and email
-        and email.lower() != primary.email.lower()):
+            and email
+            and email.lower() != primary.email.lower()):
         user_email(user, primary.email)
         user.save()
     return primary
@@ -264,8 +275,7 @@ def send_email_confirmation(request, user, signup=False):
     email = user_email(user)
     if email:
         try:
-            email_address = EmailAddress.objects.get(user=user,
-                                                     email__iexact=email)
+            email_address = EmailAddress.objects.get_for_user(user, email)
             if not email_address.verified:
                 send_email = not EmailConfirmation.objects \
                     .filter(sent__gt=now() - COOLDOWN_PERIOD,
@@ -286,14 +296,18 @@ def send_email_confirmation(request, user, signup=False):
             assert email_address
         # At this point, if we were supposed to send an email we have sent it.
         if send_email:
-            messages.info(request,
-                _(u"Confirmation e-mail sent to %(email)s") % {"email": email}
-            )
+            get_adapter().add_message(request,
+                                      messages.INFO,
+                                      'account/messages/'
+                                      'email_confirmation_sent.txt',
+                                      {'email': email})
+    if signup:
+        request.session['account_user'] = user.pk
 
 
 def sync_user_email_addresses(user):
     """
-    Keep user.email in sync with user.emailadress_set.
+    Keep user.email in sync with user.emailaddress_set.
 
     Under some circumstances the user.email may not have ended up as
     an EmailAddress record, e.g. in the case of manually created admin
@@ -303,7 +317,8 @@ def sync_user_email_addresses(user):
     email = user_email(user)
     if email and not EmailAddress.objects.filter(user=user,
                                                  email__iexact=email).exists():
-        if app_settings.UNIQUE_EMAIL and EmailAddress.objects.filter(email__iexact=email).exists():
+        if app_settings.UNIQUE_EMAIL \
+                and EmailAddress.objects.filter(email__iexact=email).exists():
             # Bail out
             return
         EmailAddress.objects.create(user=user,

@@ -3,14 +3,12 @@ from django.contrib.auth import logout
 from django.shortcuts import render_to_response, render
 from django.http import HttpResponseRedirect
 from django.template import RequestContext
+from django.forms import ValidationError
 from django.core.urlresolvers import reverse
-from django.template.defaultfilters import slugify
 
-from allauth.utils import (generate_unique_username, email_address_exists,
-                           get_user_model)
+from allauth.utils import get_user_model
 from allauth.account.utils import (perform_login, complete_signup,
-                                   user_field,
-                                   user_email, user_username)
+                                   user_username)
 from allauth.account import app_settings as account_settings
 from allauth.account.adapter import get_adapter as get_account_adapter
 from allauth.exceptions import ImmediateHttpResponse
@@ -24,75 +22,42 @@ User = get_user_model()
 
 
 def _process_signup(request, sociallogin):
-    # If email is specified, check for duplicate and if so, no auto signup.
-    auto_signup = app_settings.AUTO_SIGNUP
-    email = user_email(sociallogin.account.user)
-    if auto_signup:
-        # Let's check if auto_signup is really possible...
-        if email:
-            if account_settings.UNIQUE_EMAIL:
-                if email_address_exists(email):
-                    # Oops, another user already has this address.  We
-                    # cannot simply connect this social account to the
-                    # existing user. Reason is that the email adress may
-                    # not be verified, meaning, the user may be a hacker
-                    # that has added your email address to his account in
-                    # the hope that you fall in his trap.  We cannot check
-                    # on 'email_address.verified' either, because
-                    # 'email_address' is not guaranteed to be verified.
-                    auto_signup = False
-                    # FIXME: We redirect to signup form -- user will
-                    # see email address conflict only after posting
-                    # whereas we detected it here already.
-        elif app_settings.EMAIL_REQUIRED:
-            # Nope, email is required and we don't have it yet...
-            auto_signup = False
+    auto_signup = get_adapter().is_auto_signup_allowed(request,
+                                                       sociallogin)
     if not auto_signup:
-        request.session['socialaccount_sociallogin'] = sociallogin
+        request.session['socialaccount_sociallogin'] = sociallogin.serialize()
         url = reverse('socialaccount_signup')
         ret = HttpResponseRedirect(url)
     else:
+        # Ok, auto signup it is, at least the e-mail address is ok.
+        # We still need to check the username though...
+        if account_settings.USER_MODEL_USERNAME_FIELD:
+            username = user_username(sociallogin.account.user)
+            try:
+                get_account_adapter().clean_username(username)
+            except ValidationError:
+                # This username is no good ...
+                user_username(sociallogin.account.user, '')
         # FIXME: This part contains a lot of duplication of logic
         # ("closed" rendering, create user, send email, in active
         # etc..)
         try:
-            if not get_account_adapter().is_open_for_signup(request):
+            if not get_adapter().is_open_for_signup(request,
+                                                    sociallogin):
                 return render(request,
                               "account/signup_closed.html")
         except ImmediateHttpResponse as e:
             return e.response
-        u = sociallogin.account.user
-        if account_settings.USER_MODEL_USERNAME_FIELD:
-            user_username(u,
-                          generate_unique_username(user_username(u)
-                                                   or email
-                                                   or 'user'))
-        for field in ['last_name',
-                      'first_name']:
-            if hasattr(u, field):
-                truncated_value = (user_field(u, field) or '') \
-                    [0:User._meta.get_field(field).max_length]
-                user_field(u, field, truncated_value)
-        user_email(u, email or '')
-        u.set_unusable_password()
-        sociallogin.save(request)
+        get_adapter().save_user(request, sociallogin, form=None)
         ret = complete_social_signup(request, sociallogin)
     return ret
 
 
 def _login_social_account(request, sociallogin):
-    user = sociallogin.account.user
-    if not user.is_active:
-        ret = render_to_response(
-            'socialaccount/account_inactive.html',
-            {},
-            context_instance=RequestContext(request))
-    else:
-        ret = perform_login(request, user,
-                            email_verification=app_settings.EMAIL_VERIFICATION,
-                            redirect_url=sociallogin.get_redirect_url(request),
-                            signal_kwargs={"sociallogin": sociallogin})
-    return ret
+    return perform_login(request, sociallogin.account.user,
+                         email_verification=app_settings.EMAIL_VERIFICATION,
+                         redirect_url=sociallogin.get_redirect_url(request),
+                         signal_kwargs={"sociallogin": sociallogin})
 
 
 def render_authentication_error(request, extra_context={}):
@@ -105,7 +70,7 @@ def _add_social_account(request, sociallogin):
     if request.user.is_anonymous():
         # This should not happen. Simply redirect to the connections
         # view (which has a login required)
-        return reverse('socialaccount_connections')
+        return HttpResponseRedirect(reverse('socialaccount_connections'))
     level = messages.INFO
     message = 'socialaccount/messages/account_connected.txt'
     if sociallogin.is_existing:
@@ -166,58 +131,7 @@ def _complete_social_login(request, sociallogin):
     return ret
 
 
-def _name_from_url(url):
-    """
-    >>> _name_from_url('http://google.com/dir/file.ext')
-    u'file.ext'
-    >>> _name_from_url('http://google.com/dir/')
-    u'dir'
-    >>> _name_from_url('http://google.com/dir')
-    u'dir'
-    >>> _name_from_url('http://google.com/dir/..')
-    u'dir'
-    >>> _name_from_url('http://google.com/dir/../')
-    u'dir'
-    >>> _name_from_url('http://google.com')
-    u'google.com'
-    >>> _name_from_url('http://google.com/dir/subdir/file..ext')
-    u'file.ext'
-    """
-    try:
-        from urllib.parse import urlparse
-    except ImportError:
-        from urlparse import urlparse
-
-    p = urlparse(url)
-    for base in (p.path.split('/')[-1],
-                 p.path,
-                 p.netloc):
-        name = ".".join(filter(lambda s: s,
-                               map(slugify, base.split("."))))
-        if name:
-            return name
-
-
-def _copy_avatar(request, user, account):
-    import urllib2
-    from django.core.files.base import ContentFile
-    from avatar.models import Avatar
-    url = account.get_avatar_url()
-    if url:
-        ava = Avatar(user=user)
-        ava.primary = Avatar.objects.filter(user=user).count() == 0
-        try:
-            content = urllib2.urlopen(url).read()
-            name = _name_from_url(url)
-            ava.avatar.save(name, ContentFile(content))
-        except IOError:
-            # Let's nog make a big deal out of this...
-            pass
-
-
 def complete_social_signup(request, sociallogin):
-    if app_settings.AVATAR_SUPPORT:
-        _copy_avatar(request, sociallogin.account.user, sociallogin.account)
     return complete_signup(request,
                            sociallogin.account.user,
                            app_settings.EMAIL_VERIFICATION,

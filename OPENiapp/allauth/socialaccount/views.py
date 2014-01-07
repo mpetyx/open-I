@@ -9,7 +9,8 @@ from django.views.generic.edit import FormView
 from ..account.views import (CloseableSignupMixin,
                              RedirectAuthenticatedUserMixin)
 from ..account.adapter import get_adapter as get_account_adapter
-
+from .adapter import get_adapter
+from .models import SocialLogin
 from .forms import DisconnectForm, SignupForm
 from . import helpers
 
@@ -20,10 +21,17 @@ class SignupView(RedirectAuthenticatedUserMixin, CloseableSignupMixin,
     template_name = 'socialaccount/signup.html'
 
     def dispatch(self, request, *args, **kwargs):
-        self.sociallogin = request.session.get('socialaccount_sociallogin')
+        self.sociallogin = None
+        data = request.session.get('socialaccount_sociallogin')
+        if data:
+            self.sociallogin = SocialLogin.deserialize(data)
         if not self.sociallogin:
             return HttpResponseRedirect(reverse('account_login'))
         return super(SignupView, self).dispatch(request, *args, **kwargs)
+
+    def is_open(self):
+        return get_adapter().is_open_for_signup(self.request,
+                                                self.sociallogin)
 
     def get_form_kwargs(self):
         ret = super(SignupView, self).get_form_kwargs()

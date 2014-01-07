@@ -7,6 +7,7 @@ from django.template import RequestContext
 from django.utils.html import mark_safe
 
 from allauth.utils import import_callable
+from allauth.account.models import EmailAddress
 from allauth.socialaccount import providers
 from allauth.socialaccount.providers.base import (ProviderAccount,
                                                   AuthProcess,
@@ -99,13 +100,35 @@ class FacebookProvider(OAuth2Provider):
                                        " add a SocialApp using the Django"
                                        " admin")
         fb_login_options = self.get_fb_login_options(request)
-        ctx =  {'facebook_app': app,
-                'facebook_channel_url':
-                request.build_absolute_uri(reverse('facebook_channel')),
-                'fb_login_options': mark_safe(json.dumps(fb_login_options)),
-                'facebook_jssdk_locale': locale}
+        ctx = {'facebook_app': app,
+               'facebook_channel_url':
+               request.build_absolute_uri(reverse('facebook_channel')),
+               'fb_login_options': mark_safe(json.dumps(fb_login_options)),
+               'facebook_jssdk_locale': locale}
         return render_to_string('facebook/fbconnect.html',
                                 ctx,
                                 RequestContext(request))
+
+    def extract_uid(self, data):
+        return data['id']
+
+    def extract_common_fields(self, data):
+        return dict(email=data.get('email'),
+                    username=data.get('username'),
+                    first_name=data.get('first_name'),
+                    last_name=data.get('last_name'))
+
+    def extract_email_addresses(self, data):
+        ret = []
+        email = data.get('email')
+        if email:
+            settings = self.get_settings()
+            # data['verified'] does not imply the email address is
+            # verified.
+            verified_email = settings.get('VERIFIED_EMAIL', False)
+            ret.append(EmailAddress(email=email,
+                                    verified=verified_email,
+                                    primary=True))
+        return ret
 
 providers.registry.register(FacebookProvider)

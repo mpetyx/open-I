@@ -1,6 +1,8 @@
 import warnings
+import json
 
 from django.conf import settings
+from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.template import TemplateDoesNotExist
 from django.contrib.sites.models import Site
@@ -50,9 +52,9 @@ class DefaultAccountAdapter(object):
             prefix = u"[{name}] ".format(name=site.name)
         return prefix + force_text(subject)
 
-    def send_mail(self, template_prefix, email, context):
+    def render_mail(self, template_prefix, email, context):
         """
-        Sends an e-mail to `email`.  `template_prefix` identifies the
+        Renders an e-mail to `email`.  `template_prefix` identifies the
         e-mail that is to be sent, e.g. "account/email/email_confirmation"
         """
         subject = render_to_string('{0}_subject.txt'.format(template_prefix),
@@ -84,6 +86,10 @@ class DefaultAccountAdapter(object):
                                settings.DEFAULT_FROM_EMAIL,
                                [email])
             msg.content_subtype = 'html'  # Main content is now text/html
+        return msg
+
+    def send_mail(self, template_prefix, email, context):
+        msg = self.render_mail(template_prefix, email, context)
         msg.send()
 
     def get_login_redirect_url(self, request):
@@ -133,28 +139,57 @@ class DefaultAccountAdapter(object):
         """
         return True
 
-    def new_user(self,
-                 username=None,
-                 first_name=None,
-                 last_name=None,
-                 email=None):
+    def new_user(self, request):
         """
-        Spawns a new User instance, populating several common fields.
-        Note that this method assumes that the data is properly
-        validated. For example, if a username is given it must be
-        unique.
+        Instantiates a new User instance.
         """
-        from .utils import user_username, user_email
-
         user = get_user_model()()
+        return user
+
+    def populate_username(self, request, user):
+        """
+        Fills in a valid username, if required and missing.  If the
+        username is already present it is assumed to be valid
+        (unique).
+        """
+        from .utils import user_username, user_email, user_field
+        first_name = user_field(user, 'first_name')
+        last_name = user_field(user, 'last_name')
+        email = user_email(user)
+        username = user_username(user)
         if app_settings.USER_MODEL_USERNAME_FIELD:
             user_username(user,
-                          username or generate_unique_username(first_name or
-                                                               last_name or
-                                                               email))
+                          username
+                          or generate_unique_username([first_name,
+                                                       last_name,
+                                                       email,
+                                                       'user']))
+
+    def save_user(self, request, user, form, commit=True):
+        """
+        Saves a new `User` instance using information provided in the
+        signup form.
+        """
+        from .utils import user_username, user_email, user_field
+
+        data = form.cleaned_data
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        email = data.get('email')
+        username = data.get('username')
         user_email(user, email)
-        user.first_name = first_name
-        user.last_name = last_name
+        user_username(user, username)
+        user_field(user, 'first_name', first_name or '')
+        user_field(user, 'last_name', last_name or '')
+        if 'password1' in data:
+            user.set_password(data["password1"])
+        else:
+            user.set_unusable_password()
+        self.populate_username(request, user)
+        if commit:
+            # Ability not to commit makes it easier to derive from
+            # this adapter by adding
+            user.save()
         return user
 
     def clean_username(self, username):
@@ -172,7 +207,16 @@ class DefaultAccountAdapter(object):
         if username in app_settings.USERNAME_BLACKLIST:
             raise forms.ValidationError(_("Username can not be used. "
                                           "Please use other username."))
-        return username
+        username_field = app_settings.USER_MODEL_USERNAME_FIELD
+        assert username_field
+        user_model = get_user_model()
+        try:
+            query = {username_field + '__iexact': username}
+            user_model.objects.get(**query)
+        except user_model.DoesNotExist:
+            return username
+        raise forms.ValidationError(_("This username is already taken. Please "
+                                      "choose another."))
 
     def clean_email(self, email):
         """
@@ -196,6 +240,24 @@ class DefaultAccountAdapter(object):
                                          extra_tags=extra_tags)
             except TemplateDoesNotExist:
                 pass
+
+    def ajax_response(self, request, response, redirect_to=None, form=None):
+        data = {}
+        if redirect_to:
+            status = 200
+            data['location'] = redirect_to
+        if form:
+            if form.is_valid():
+                status = 200
+            else:
+                status = 400
+                data['form_errors'] = form._errors
+            if hasattr(response, 'render'):
+                response.render()
+            data['html'] = response.content.decode('utf8')
+        return HttpResponse(json.dumps(data),
+                            status=status,
+                            content_type='application/json')
 
 
 def get_adapter():
