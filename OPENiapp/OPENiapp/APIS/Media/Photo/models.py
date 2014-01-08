@@ -2,7 +2,6 @@ __author__ = 'mpetyx'
 
 from django.db import models
 
-
 class OpeniPhoto(models.Model):
     # id is missing because it is the default
     url = models.TextField()

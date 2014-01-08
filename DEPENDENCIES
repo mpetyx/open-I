@@ -43,7 +43,9 @@ List of commands
 
 python ez_setup.py
 python get-pip.py
-pip install facepy
-pip install twython
 pip install django-tastypie
 pip install mimeparse
+
+pip install facepy
+pip install twython
+pip install python-instagram

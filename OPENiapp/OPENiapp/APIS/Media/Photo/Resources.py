@@ -6,7 +6,7 @@ from tastypie.serializers import Serializer
 from .models import OpeniPhoto
 
 from OPENiapp.Providers.Facebook.connector import provider as FBprovider
-from OPENiapp.Providers.Twitter.connector import TWprovider
+from OPENiapp.Providers.Twitter.connector import provider as TWprovider
 from allauth.socialaccount.models import SocialToken
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
@@ -54,6 +54,7 @@ class PhotoResource(GenericResource):
             json_return_fb_photo_post = fbconnector.post_photo(bundle.data["path"])
             bundle.data["facebook_result"] = json_return_fb_photo_post
             
+        #   Post to Twitter
         json_return_tw_photo_post = None
         if ("twitter" in bundle.data) and (bundle.data["twitter"] == 'on'):
             app_name = "Twitter"

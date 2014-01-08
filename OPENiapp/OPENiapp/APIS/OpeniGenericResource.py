@@ -9,6 +9,8 @@ from django.shortcuts import render
 from OPENiapp.Providers.Facebook.connector import provider as FBprovider
 from allauth.socialaccount.models import SocialToken
 
+from OPENiapp.Providers.generic import execution
+
 
 class GenericResource(ModelResource):
     def applications_asked(self, bundle):
@@ -110,6 +112,12 @@ class GenericResource(ModelResource):
 
         Should return a HttpResponse (200 OK).
         """
+
+        if (request.GET.get("newway") == "on"):
+            executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_a_photo", {"media_id": "628147512937366504_917877895"})
+            result = executable.make_all_connections()
+            return self.create_response(request, result)
+
         # TODO: Uncached for now. Invalidation that works for everyone may be
         #       impossible.
         if (request.GET.get("facebook") == 'on'):
