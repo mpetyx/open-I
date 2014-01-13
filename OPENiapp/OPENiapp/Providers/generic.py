@@ -29,7 +29,7 @@ class execution:
             application = SocialApp.objects.filter(name=app_name, provider=cbs)
             provider = TWprovider(application, access_token)
         elif (cbs == "instagram"):
-            provider = INprovider("", access_token)
+            provider = INprovider("", access_token[0])
 
         return provider
 
@@ -47,7 +47,8 @@ class execution:
             provider = self.make_connection(app['cbs'], app['app_name'])
             result = self.do_method(provider)
             json_result.append({
-                                'cbs': app.cbs,
-                                'app_name': app.app_name,
+                                'cbs': app['cbs'],
+                                'app_name': app['app_name'],
                                 'result': result
                                })
+        return json_result

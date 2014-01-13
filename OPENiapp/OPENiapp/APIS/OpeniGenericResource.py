@@ -115,6 +115,7 @@ class GenericResource(ModelResource):
 
         if (request.GET.get("newway") == "on"):
             executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_a_photo", {"media_id": "628147512937366504_917877895"})
+            #executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_all_photos_for_account", {"account_id": "917877895"})
             result = executable.make_all_connections()
             return self.create_response(request, result)
 

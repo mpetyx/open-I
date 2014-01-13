@@ -11,4 +11,5 @@ simplejson
 facepy
 twython
 django-tastypie
+python-instagram
 mimeparse

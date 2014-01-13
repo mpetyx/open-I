@@ -19,10 +19,17 @@ class basicProvider:
     #   region Photo Object
     #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Photo_Mapping
 
-    def add_extra_parameters(response, extra):
+    def add_extra_parameters(self, response, extra):
         response["extra"] = extra
 
-    def format_photo_response(id, obj_type, service, url, from_id, from_username, from_url, prof_title, prof_icon, prof_format, location, time_created, time_edited, tags, width, height):
+    def check_if_exists(self, data, check, otherwise):
+        if hasattr(data, check):
+            data.check
+            return data.check
+        else:
+            return otherwise
+
+    def format_photo_response(self, id, obj_type, service, url, from_id, from_username, from_url, prof_title, prof_icon, prof_format, location, time_created, time_edited, tags, width, height):
         response = {
                         "id": id,
                         "objectType": obj_type,
@@ -128,7 +135,7 @@ class basicProvider:
 
     
 
-    def format_comment_response(id, obj_type, service, url, from_id, from_username, from_url, time_created, time_edited, title, text, target_id):
+    def format_comment_response(self, id, obj_type, service, url, from_id, from_username, from_url, time_created, time_edited, title, text, target_id):
         response = {
                         "id": id,
                         "objectType": obj_type,
@@ -149,7 +156,7 @@ class basicProvider:
                    }
         return response
 
-    def format_likes_response(id, obj_type, service, url, from_id, from_username, from_url, time_created, time_edited, target_id):
+    def format_likes_response(self, id, obj_type, service, url, from_id, from_username, from_url, time_created, time_edited, target_id):
         response = {
                         "id": id,
                         "objectType": obj_type,

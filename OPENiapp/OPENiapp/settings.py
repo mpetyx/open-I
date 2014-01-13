@@ -216,5 +216,10 @@ SOCIALACCOUNT_PROVIDERS = \
          {'SCOPE': ['email', 'publish_stream', 'user_photos'],
           'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
           'METHOD': 'oauth2'
-         }
+         },
+     'instagram':
+        {'SCOPE': ['comments', 'relationships', 'likes'],
+          'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+          'METHOD': 'oauth2'
+        }
     }
