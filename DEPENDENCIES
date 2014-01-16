@@ -28,6 +28,17 @@ pip install django-tastypie
 	https://pypi.python.org/pypi/mimeparse/0.1.3
 	pip install mimeparse
 
+6. instagram
+https://github.com/Instagram/python-instagram
+pip install python-instagram
+
+7. google-api-python-client
+https://code.google.com/p/google-api-python-client/
+pip install google-api-python-client
+
+8. foursquare
+https://github.com/mLewisLogic/foursquare
+pip install foursquare
 
 
 Optional

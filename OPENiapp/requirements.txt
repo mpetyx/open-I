@@ -12,4 +12,6 @@ facepy
 twython
 django-tastypie
 python-instagram
+google-api-python-client
+foursquare
 mimeparse
