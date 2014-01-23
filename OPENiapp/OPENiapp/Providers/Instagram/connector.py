@@ -38,13 +38,13 @@ class provider(basicProvider):
                                         raw_data.user.website,
                                         raw_data.caption.text,
                                         raw_data.link,
-                                        self.defaultJsonResponse,
-                                        self.check_if_exists(raw_data, 'location', self.defaultJsonResponse),
+                                        self.defJsonRes,
+                                        self.check_if_exists(raw_data, 'location', self.defJsonRes),
                                         raw_data.created_time,
-                                        self.defaultJsonResponse,
-                                        self.check_if_exists(raw_data, 'tags', self.defaultJsonResponse),
-                                        self.defaultJsonResponse,
-                                        self.defaultJsonResponse
+                                        self.defJsonRes,
+                                        self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                        self.defJsonRes,
+                                        self.defJsonRes
                                         )]
                     }
         return { 'response': response }
@@ -71,13 +71,13 @@ class provider(basicProvider):
                                          raw_data.user.website,
                                          raw_data.caption.text,
                                          raw_data.link,
-                                         self.defaultJsonResponse,
-                                         self.check_if_exists(raw_data, 'location', self.defaultJsonResponse),
+                                         self.defJsonRes,
+                                         self.check_if_exists(raw_data, 'location', self.defJsonRes),
                                          raw_data.created_time,
-                                         self.defaultJsonResponse,
-                                         self.check_if_exists(raw_data, 'tags', self.defaultJsonResponse),
-                                         self.defaultJsonResponse,
-                                         self.defaultJsonResponse
+                                         self.defJsonRes,
+                                         self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                         self.defJsonRes,
+                                         self.defJsonRes
                                          ))
         return { 'response': response }
 
@@ -98,15 +98,15 @@ class provider(basicProvider):
                                          raw_data['id'],
                                          'Photo Comment',
                                          'openi',
-                                         defaultJsonResponse,
+                                         defJsonRes,
                                          raw_data['from']['id'],
                                          raw_data['from']['username'],
-                                         defaultJsonResponse,
+                                         defJsonRes,
                                          raw_data['created_time'],
-                                         defaultJsonResponse,
-                                         defaultJsonResponse,
+                                         defJsonRes,
+                                         defJsonRes,
                                          raw_data['text'],
-                                         defaultJsonResponse
+                                         defJsonRes
                                          ))
         return { 'response': response }
 
@@ -140,16 +140,16 @@ class provider(basicProvider):
                     'data' : [] }
         for raw_data in raw_datas['data']:
             response['data'].append(self.format_comment_response(
-                                         defaultJsonResponse,#id
+                                         defJsonRes,#id
                                          'Photo Like',#obj_type
                                          'openi',#service
-                                         defaultJsonResponse,#url
+                                         defJsonRes,#url
                                          raw_data['id'],#from:id
                                          raw_data['username'],#from:username
-                                         defaultJsonResponse,#from:url
-                                         defaultJsonResponse,#time:created_time
-                                         defaultJsonResponse,#time:edited_time
-                                         defaultJsonResponse#target_id
+                                         defJsonRes,#from:url
+                                         defJsonRes,#time:created_time
+                                         defJsonRes,#time:edited_time
+                                         defJsonRes#target_id
                                          ))
         return 'Not supported by this service'
 
