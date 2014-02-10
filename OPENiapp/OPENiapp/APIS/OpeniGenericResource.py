@@ -2,7 +2,6 @@ __author__ = 'mpetyx'
 
 from tastypie.resources import ModelResource
 
-from OPENiapp.Objects.Photo.post_form import PhotoForm
 from django.http import HttpResponse
 from django.shortcuts import render
 
