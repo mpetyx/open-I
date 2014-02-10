@@ -3,10 +3,11 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from django.views.generic.base import TemplateView
-from APIS.Media.urls import urlpatterns as Media_Urls
-from APIS.Location.urls import urlpatterns as Location_Urls
+# from APIS.Media.urls import urlpatterns as Media_Urls
+# from APIS.Location.urls import urlpatterns as Location_Urls
 # from Objects.Photo.urls import urlpatterns as Old_Urls
 # from user_management.SignIn import facebook, twitter
+from APIS.urls import urlpatterns as Object_Urls
 
 from views import *
 
@@ -38,5 +39,6 @@ urlpatterns = patterns('',
                        url(r'api/doc/', include('tastypie_swagger.urls', namespace='tastypie_swagger'))
 )
 
-urlpatterns = urlpatterns + Media_Urls + Location_Urls
+# urlpatterns = urlpatterns + Media_Urls + Location_Urls
+urlpatterns = urlpatterns + Object_Urls
 # urlpatterns = urlpatterns + Old_Urls

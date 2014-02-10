@@ -6,7 +6,6 @@ from OPENiapp.Objects.Photo.post_form import PhotoForm
 from django.http import HttpResponse
 from django.shortcuts import render
 
-from OPENiapp.Providers.Facebook.connector import provider as FBprovider
 from allauth.socialaccount.models import SocialToken
 
 from OPENiapp.Providers.generic import execution
@@ -97,11 +96,7 @@ class GenericResource(ModelResource):
     #        bundle.data["koukli"] = {"lol": 1}
 
         return bundle
-        
-    def make_fb_connection(self, user):
-        """ Use facepy to make a Graph API call """
-        return FBprovider(
-            access_token=SocialToken.objects.filter(account__user=user.id, account__provider='facebook'))
+
     
     def get_list(self, request, **kwargs):
         """
