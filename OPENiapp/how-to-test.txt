@@ -1,1 +1,3 @@
 python manage.py test OPENiapp.PhotoResourceTest > test_results.txt 2>&1 & test_results.txt
+
+tests for correct answer (status_code = 200)

@@ -168,3 +168,86 @@ class provider(basicProvider):
     #   endregion Photo Object
 
     #   endregion Media API
+
+    
+
+    #   region Location API
+    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Location_API
+    
+    #   region Event Object
+    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Event_Mapping
+        
+    def get_an_event(self, data):
+        """ GET API_PATH/[EVENT_ID] """
+        response = self.connector.Events(data['event_id'])
+        return defaultMethodResponse
+
+    def get_all_events_for_account(self, data):
+        """ GET API_PATH/[VENUE_ID]/events """
+        response = self.connector.venues.events(data['venue_id'])
+        return defaultMethodResponse
+
+    def post_event_to_account(self, data):
+        """ POST API_PATH/[ACCOUNT_ID]/events """
+        return defaultMethodResponse
+        
+    def post_event_to_aggregation(self, data):
+        """ POST API_PATH/[AGGREGATION_ID]/events """
+        return defaultMethodResponse
+
+    def edit_an_event(self, data):
+        """ PUT API_PATH/[EVENT_ID] """
+        return defaultMethodResponse
+
+    def delete_an_event(self, data):
+        """ DELETE API_PATH/[EVENT_ID] """
+        return defaultMethodResponse
+    
+    #   region Connections
+
+    def get_event_comments(self, data):
+        """ GET API_PATH/[EVENT_ID]/comments """
+        return defaultMethodResponse
+
+    def post_event_comment(self, data):
+        """ POST API_PATH/[EVENT_ID]/comments """
+        return defaultMethodResponse
+
+    def delete_event_comment(self, data):
+        """ DELETE API_PATH/[COMMENT_ID] """
+        return defaultMethodResponse
+
+    def edit_event_comment(self, data):
+        """ PUT API_PATH/[COMMENT_ID] """
+        return defaultMethodResponse
+
+    def like_an_event(self, data):
+        """ POST API_PATH/[EVENT_ID]/likes """
+        return defaultMethodResponse
+
+    def get_event_likes(self, data):
+        """ GET API_PATH/[EVENT_ID]/likes """
+        return defaultMethodResponse
+
+    def unlike_event(self, data):
+        """ DELETE API_PATH/[EVENT_ID]/likes """
+        return defaultMethodResponse
+
+    def dislike_event(self, data):
+        """ POST API_PATH/[EVENT_ID]/dislikes """
+        return defaultMethodResponse
+
+    def get_event_dislikes(self, data):
+        """ GET API_PATH/[EVENT_ID]/dislikes """
+        return defaultMethodResponse
+
+    def delete_event_dislikes(self, data):
+        """ DELETE API_PATH/[EVENT_ID]/dislikes """
+        return defaultMethodResponse
+
+
+    #   endregion Connections
+
+    #   endregion Event Object
+
+    #   endregion Location API

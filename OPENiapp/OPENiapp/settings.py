@@ -167,6 +167,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.weibo',
 
     'OPENiapp',
+    'OPENiapp.Providers.Facebook',
 
     # Media API implementation
     'OPENiapp.APIS.Media',
