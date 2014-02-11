@@ -22,22 +22,9 @@ class EventResource(GenericResource):
 
 
         extra_actions = [
-            {
-                "name": "search",
-                "http_method": "GET",
-                "resource_type": "list",
-                "description": "Seach endpoint",
-                "fields": {
-                    "q": {
-                        "type": "string",
-                        "required": True,
-                        "description": "Search query terms"
-                    }
-                }
-            },
 
             {
-                "name": "get fb event",
+                "name": "get_fb_event",
                 "http_method": "GET",
                 "resource_type": "list",
                 "description": "facebook event",
@@ -46,6 +33,20 @@ class EventResource(GenericResource):
                         "type": "string",
                         "required": True,
                         "description": "retrieve fb event"
+                    }
+                }
+            },
+
+            {
+                "name": "search",
+                "http_method": "POST",
+                "resource_type": "list",
+                "description": "Seach endpoint",
+                "fields": {
+                    "q": {
+                        "type": "string",
+                        "required": True,
+                        "description": "Search query terms"
                     }
                 }
             }
