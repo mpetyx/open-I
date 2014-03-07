@@ -1,19 +1,21 @@
 __author__ = 'mpetyx'
 
 
-from tastypie.authorization import DjangoAuthorization
-from .models import OpeniEvent
+from .models import OpeniBadge
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
+from OPENiapp.APIS.Authorization import Authorization
+from OPENiapp.APIS.Authentication import Authentication
 
 
 class EventResource(GenericResource):
     class Meta:
-        queryset = OpeniEvent.objects.all()
+        queryset = OpeniBadge.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'event'
-        authorization = DjangoAuthorization()
+        authentication = Authentication()
+        authorization = Authorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,
