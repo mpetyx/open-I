@@ -24,29 +24,43 @@ class EventResource(GenericResource):
         extra_actions = [
 
             {
-                "name": "get_fb_event",
+                "name": "comments",
                 "http_method": "GET",
                 "resource_type": "list",
-                "description": "facebook event",
+                "description": "comments from CBS",
                 "fields": {
-                    "q": {
+                    "cbs": {
                         "type": "string",
                         "required": True,
-                        "description": "retrieve fb event"
+                        "description": "list of selected CBS"
                     }
                 }
             },
 
             {
-                "name": "search",
-                "http_method": "POST",
+                "name": "likes",
+                "http_method": "GET",
                 "resource_type": "list",
-                "description": "Seach endpoint",
+                "description": "likes from CBS",
                 "fields": {
-                    "q": {
+                    "cbs": {
                         "type": "string",
                         "required": True,
-                        "description": "Search query terms"
+                        "description": "list of selected CBS"
+                    }
+                }
+            },
+
+            {
+                "name": "dislikes",
+                "http_method": "GET",
+                "resource_type": "list",
+                "description": "dislikes from CBS",
+                "fields": {
+                    "cbs": {
+                        "type": "string",
+                        "required": True,
+                        "description": "list of selected CBS"
                     }
                 }
             }
