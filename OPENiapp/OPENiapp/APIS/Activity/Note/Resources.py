@@ -2,18 +2,21 @@ __author__ = 'mpetyx'
 
 
 from tastypie.authorization import DjangoAuthorization
-from .models import OpeniEvent
+from .models import OpeniNote
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 
-class EventResource(GenericResource):
+class NoteResource(GenericResource):
     class Meta:
-        queryset = OpeniEvent.objects.all()
+        queryset = OpeniNote.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'event'
-        authorization = DjangoAuthorization()
+        resource_name = 'note'
+        authentication = Authentication()
+        authorization = Authorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,

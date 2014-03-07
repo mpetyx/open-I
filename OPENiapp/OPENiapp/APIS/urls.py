@@ -32,14 +32,14 @@ api.register(RouteResource())
 # Activity
 from .Activity.Badge.Resources import BadgeResource
 from .Activity.Checkin.Resources import CheckinResource
-from .Activity.Event.Resources import EventResource
+from .Activity.Event.Resources import ActivityEventResource
 from .Activity.Game.Resources import GameResource
 from .Activity.Measurement.Resources import MeasurementResource
 from .Activity.Note.Resources import NoteResource
 from .Activity.Nutrition.Resources import NutritionResource
 from .Activity.Question.Resources import QuestionResource
 from .Activity.Sleep.Resources import SleepResource
-from .Activity.Status.Resources import CheckinResource
+from .Activity.Status.Resources import StatusResource
 from .Activity.Workout.Resources import WorkoutResource
 
 
@@ -53,7 +53,7 @@ api.register(NoteResource())
 api.register(NutritionResource())
 api.register(QuestionResource())
 api.register(SleepResource())
-api.register(CheckinResource())
+api.register(StatusResource())
 api.register(WorkoutResource())
 
 
@@ -84,8 +84,10 @@ api.register(ContactResource())
 api.register(DeviceResource())
 api.register(UserResource())
 
+# Builder
+from .Builder.Application.Resources import CBSResource
 
-
+api.register(CBSResource())
 
 
 

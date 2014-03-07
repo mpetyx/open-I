@@ -4,16 +4,16 @@ __author__ = 'mpetyx'
 from .models import OpeniBadge
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
-from OPENiapp.APIS.Authorization import Authorization
-from OPENiapp.APIS.Authentication import Authentication
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 
-class EventResource(GenericResource):
+class BadgeResource(GenericResource):
     class Meta:
         queryset = OpeniBadge.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'event'
+        resource_name = 'badge'
         authentication = Authentication()
         authorization = Authorization()
         # filtering = {

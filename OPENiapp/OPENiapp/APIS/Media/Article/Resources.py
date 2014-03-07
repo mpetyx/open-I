@@ -2,18 +2,18 @@ __author__ = 'mpetyx'
 
 
 from tastypie.authorization import DjangoAuthorization
-from .models import OpeniSleep
+from .models import OpeniArticle
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
 from OPENiapp.APIS.OPENiAuthorization import Authorization
 from OPENiapp.APIS.OPENiAuthentication import Authentication
 
-class SleepResource(GenericResource):
+class ArticleResource(GenericResource):
     class Meta:
-        queryset = OpeniSleep.objects.all()
+        queryset = OpeniArticle.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'sleep'
+        resource_name = 'article'
         authentication = Authentication()
         authorization = Authorization()
         # filtering = {

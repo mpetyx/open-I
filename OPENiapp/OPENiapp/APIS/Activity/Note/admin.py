@@ -1,11 +1,11 @@
 __author__ = 'mpetyx'
 
 from django.contrib import admin
-from .models import OpeniEvent
+from .models import OpeniNote
 
 
-class EventAdmin(admin.ModelAdmin):
+class NoteAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(OpeniEvent, EventAdmin)
+admin.site.register(OpeniNote, NoteAdmin)

@@ -1,8 +1,5 @@
 __author__ = 'mpetyx'
 
-from tastypie.authentication import BasicAuthentication
-from tastypie.authorization import DjangoAuthorization, Authorization
-from tastypie.serializers import Serializer
 from .models import OpeniPhoto
 
 from OPENiapp.Providers.Facebook.connector import provider as FBprovider
@@ -10,7 +7,8 @@ from OPENiapp.Providers.Twitter.connector import provider as TWprovider
 from allauth.socialaccount.models import SocialToken
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
-
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class PhotoResource(GenericResource):
     class Meta:
@@ -18,8 +16,7 @@ class PhotoResource(GenericResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'photo'
-        authentication = BasicAuthentication()
-        #authorization = DjangoAuthorization()
+        authentication = Authentication()
         authorization = Authorization()
         always_return_data = True
 

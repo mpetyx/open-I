@@ -1,11 +1,11 @@
 __author__ = 'mpetyx'
 
 from django.contrib import admin
-from .models import OpeniEvent
+from .models import OpeniWorkout
 
 
-class EventAdmin(admin.ModelAdmin):
+class WorkoutAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(OpeniEvent, EventAdmin)
+admin.site.register(OpeniWorkout, WorkoutAdmin)

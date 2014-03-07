@@ -5,7 +5,8 @@ from tastypie.authorization import DjangoAuthorization
 from .models import OpeniEvent
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
-
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class EventResource(GenericResource):
     class Meta:
@@ -13,7 +14,8 @@ class EventResource(GenericResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'event'
-        authorization = DjangoAuthorization()
+        authentication = Authentication()
+        authorization = Authorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,

@@ -2,18 +2,20 @@ __author__ = 'mpetyx'
 
 
 from tastypie.authorization import DjangoAuthorization
-from .models import OpeniEvent
+from .models import OpeniShop
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
-
-class EventResource(GenericResource):
+class ShopResource(GenericResource):
     class Meta:
-        queryset = OpeniEvent.objects.all()
+        queryset = OpeniShop.objects.all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
-        resource_name = 'event'
-        authorization = DjangoAuthorization()
+        resource_name = 'shop'
+        authentication = Authentication()
+        authorization = Authorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,

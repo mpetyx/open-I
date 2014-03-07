@@ -1,11 +1,8 @@
 __author__ = 'mpetyx'
 
-from tastypie.authorization import DjangoAuthorization
-from .models import OpeniAudio
-
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
-from OPENiapp.APIS.Authorization import Authorization
-from OPENiapp.APIS.Authentication import Authentication
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 from allauth.socialaccount.models import SocialApp
 
