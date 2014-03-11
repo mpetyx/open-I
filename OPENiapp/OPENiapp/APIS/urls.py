@@ -89,6 +89,9 @@ from .Builder.Application.Resources import CBSResource
 
 api.register(CBSResource())
 
+from .Context.Resources import ContextResource
+api.register(ContextResource())
+
 
 
 urlpatterns = api.urls

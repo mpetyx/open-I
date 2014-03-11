@@ -176,7 +176,7 @@ INSTALLED_APPS = (
     'OPENiapp.APIS.Media.Video',
     'OPENiapp.APIS.Location.Event',
     'OPENiapp.APIS.Location.Place',
-
+    'OPENiapp.APIS.Context',
 
     'tastypie',
     'tastypie_swagger',
