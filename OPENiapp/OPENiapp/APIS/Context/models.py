@@ -2,6 +2,9 @@ __author__ = 'amertis'
 from django.db import models
 
 
+
+
+
 class OpeniContext(models.Model):
     # id is missing because it is the default
     time_created = models.DateTimeField(null=True)
@@ -139,3 +142,28 @@ class OpeniContext(models.Model):
     personalization_customer_tag = models.TextField(null=True)
 #     #Greek,English iso code
     personalization_users_language = models.TextField(null=True)
+
+
+class Group(models.Model):
+    group_id = models.TextField(null=True)
+    group_name = models.TextField(null=True)
+    group_type = models.TextField(null=True)
+    context = models.ForeignKey(OpeniContext)
+
+class Person(models.Model):
+    person_id = models.TextField(null=True)
+    person_object_type = models.TextField(null=True)
+    person_url = models.TextField(null=True)
+    person_service = models.TextField(null=True)
+    person_to_id = models.TextField(null=True)
+    person_time_person_added = models.DateTimeField(null=True)
+    person_target_id = models.TextField(null=True)
+    group = models.ForeignKey(Group)
+
+class LocationVisit(models.Model):
+    location_visits_latitude = models.FloatField(null=True)
+    location_visits_longitude = models.FloatField(null=True)
+    location_visits_height = models.FloatField(null=True)
+    location_visits_visit = models.IntegerField(null=True)
+    location_visits_comment = models.TextField(null=True)
+    context = models.ForeignKey(OpeniContext)
