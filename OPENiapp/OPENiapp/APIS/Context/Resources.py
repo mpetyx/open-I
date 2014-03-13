@@ -1,5 +1,6 @@
 from django.conf.urls import url
 from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from tastypie import fields
 from tastypie.http import HttpGone, HttpMultipleChoices
 from tastypie.resources import Resource
 from tastypie.utils import trailing_slash
@@ -11,15 +12,43 @@ def ValuesQuerySetToDict(vqs):
     return [item for item in vqs]
 from django.forms.models import model_to_dict
 class LocationResource(Resource):
-    pass
 
+    def get_list(self,request, **kwargs):
+        base_bundle = self.build_bundle(request=request)
+        locations = OpeniContext.objects.all().values('location_latitude','location_longitude','location_height')
+        if len(locations) > 0:
+            base_bundle.data['location'] = locations[0]
+        return self.create_response(request, base_bundle)
 
 class ContextResource(GenericResource):
 
     class Meta:
         queryset = OpeniContext.objects.all().prefetch_related("group_set","locationvisit_set")
+        location = fields.DictField()
+        extra_actions = [
+            {
+                "name": "location",
+                "http_method": "GET",
+                "description": "Get context location of an object",
+                "fields": {
+                }
+            }
+        ]
 
+    def prepend_urls(self):
+        print("hello")
+        return [
+              url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/location%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_location'), name="api_get_location"),
+        ]
     def dehydrate(self,bundle):
+        bundle.data['location'] = {
+            'location_longitude': bundle.data['location_longitude'],
+            'location_latitude':bundle.data['location_latitude'],
+            'location_height':bundle.data['location_height']
+        }
+        del bundle.data['location_longitude']
+        del bundle.data['location_latitude']
+        del bundle.data['location_height']
         location_visits = bundle.obj.locationvisit_set.values()
         location_visits_list = ValuesQuerySetToDict(location_visits)
         groups = bundle.obj.group_set.values()
@@ -38,20 +67,9 @@ class ContextResource(GenericResource):
         bundle.data['groups'] = groups_list
         bundle.data['location_visits'] = location_visits_list
         return bundle
-    # def prepend_urls(self):
-    #     print("hello")
-    #     return [
-    #         url(r"^(?P<resource_name>%s)/(?P<pk>\w[\w/-]*)/location%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_location'), name="api_get_location"),
-    #     ]
-    #
-    # def get_location(self, request, **kwargs):
-    #     print("hello 2")
-    #     try:
-    #         bundle = self.build_bundle(data={'pk': kwargs['pk']}, request=request)
-    #         obj = self.cached_obj_get(bundle=bundle, **self.remove_api_resource_names(kwargs))
-    #         return self.create_response()
-    #         return {}
-    #     except ObjectDoesNotExist:
-    #         return HttpGone()
-    #     except MultipleObjectsReturned:
-    #         return HttpMultipleChoices("More than one resource is found at this URI.")
+
+    def get_location(self, request, **kwargs):
+        child_resource = LocationResource()
+        return child_resource.get_list(request)
+
+
