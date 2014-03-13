@@ -20,6 +20,17 @@ class LocationResource(Resource):
             base_bundle.data['location'] = locations[0]
         return self.create_response(request, base_bundle)
 
+    def update(self,request,args):
+        context = OpeniContext()
+        context.id = int(args['pk'])
+        context.location_longitude = request.GET['longitude']
+        context.location_latitude = request.GET['latitude']
+        context.location_height = request.GET['height']
+        context.save(update_fields=["location_longitude","location_latitude","location_height"])
+        return self.create_response(request, {})
+
+
+
 class ContextResource(GenericResource):
 
     class Meta:
@@ -32,11 +43,32 @@ class ContextResource(GenericResource):
                 "description": "Get context location of an object",
                 "fields": {
                 }
+            },
+            {
+                "name": "location",
+                "http_method": "PUT",
+                "description": "Update a context location",
+                "fields": {
+                    "latitude": {
+                        "type": "string",
+                        "required": False,
+                        "description": "latitude of the location"
+                    },
+                     "longitude": {
+                        "type": "string",
+                        "required": False,
+                        "description": "longitude of the location"
+                    },
+                      "height": {
+                        "type": "string",
+                        "required": False,
+                        "description": "height of the location"
+                    },
+                }
             }
         ]
 
     def prepend_urls(self):
-        print("hello")
         return [
               url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/location%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_location'), name="api_get_location"),
         ]
@@ -70,6 +102,9 @@ class ContextResource(GenericResource):
 
     def get_location(self, request, **kwargs):
         child_resource = LocationResource()
-        return child_resource.get_list(request)
+        if request.method == 'GET':
+            return child_resource.get_list(request)
+        elif request.method == 'PUT':
+            return child_resource.update(request,kwargs)
 
 
