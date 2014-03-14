@@ -7,16 +7,16 @@ from django.db import models
 
 class OpeniContext(models.Model):
     # id is missing because it is the default
-    time_created = models.DateTimeField(null=True)
-    time_edited = models.DateTimeField(null=True)
-    time_deleted = models.DateTimeField(null=True)
-    duration_time_started = models.DateTimeField(null=True)
-    duration_time_ended = models.DateTimeField(null=True)
+    time_created = models.TextField(null=True)
+    time_edited = models.TextField(null=True)
+    time_deleted = models.TextField(null=True)
+    duration_time_started = models.TextField(null=True)
+    duration_time_ended = models.TextField(null=True)
 #     #use floats?
 #     #the docs say location includes: coordinates,physical address, free-form location name
-    location_latitude = models.FloatField(null=True)
-    location_longitude = models.FloatField(null=True)
-    location_height = models.FloatField(null=True)
+    location_latitude = models.TextField(null=True)
+    location_longitude = models.TextField(null=True)
+    location_height = models.TextField(null=True)
 #
     address_street = models.TextField(null=True)
     address_number = models.TextField(null=True)
@@ -37,12 +37,12 @@ class OpeniContext(models.Model):
 #     location_visits_comment = models.CharField(max_length=500,null=True)
 #
 #     #use floats?
-    current_location_latitude = models.FloatField(null=True)
-    current_location_longitude = models.FloatField(null=True)
-    current_location_height = models.FloatField(null=True)
+    current_location_latitude = models.TextField(null=True)
+    current_location_longitude = models.TextField(null=True)
+    current_location_height = models.TextField(null=True)
 #     #use date
-    current_location_time = models.DateTimeField(null=True)
-    rating = models.FloatField(null=True)
+    current_location_time = models.TextField(null=True)
+    rating_value = models.TextField(null=True)
 #     #privacy
 #     #examples
 #     # list of friend lists with list of friends....
@@ -62,7 +62,7 @@ class OpeniContext(models.Model):
 #     # type of strings....
 #     friend_target_id = models.CharField(max_length=100,null=True)
 #     #happy,sad
-    mood = models.TextField(null=True)
+    mood_value = models.TextField(null=True)
 #     #3G,LTE
     device_wireless_network_type = models.TextField(null=True)
 #     #good,bad,excellent
@@ -105,10 +105,6 @@ class OpeniContext(models.Model):
     personalization_postal_code = models.TextField(null=True)
     personalization_region = models.TextField(null=True)
     personalization_town = models.TextField(null=True)
-#     #remove
-    personalization_geofencing = models.TextField(null=True)
-#     #to remove....
-    personalization_bearer = models.TextField(null=True)
 #     #string...two values
     personalization_roaming = models.TextField(null=True)
 #     #string... two values
