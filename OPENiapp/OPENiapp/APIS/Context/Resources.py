@@ -127,6 +127,8 @@ class ContextResource(GenericResource):
     class Meta:
         queryset = OpeniContext.objects.all().prefetch_related("group_set","locationvisit_set")
         location = fields.DictField()
+        list_allowed_methods = ['get']
+
         extra_actions = [
             {
                 "name": "location",
@@ -584,14 +586,17 @@ class ContextResource(GenericResource):
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/personalization%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="personalization"),
         ]
     def dehydrate(self,bundle):
-        bundle.data['location'] = {
-            'location_longitude': bundle.data['location_longitude'],
-            'location_latitude':bundle.data['location_latitude'],
-            'location_height':bundle.data['location_height']
-        }
-        del bundle.data['location_longitude']
-        del bundle.data['location_latitude']
-        del bundle.data['location_height']
+
+        def groupify(bundle):
+            for property in properties:
+                bundle.data[property] = {}
+                for val in properties[property]:
+                    field = get_db_field(property,val)
+                    bundle.data[property][val] = bundle.data[field]
+                    del bundle.data[field]
+            return bundle
+
+        bundle = groupify(bundle)
         location_visits = bundle.obj.locationvisit_set.values()
         location_visits_list = ValuesQuerySetToDict(location_visits)
         groups = bundle.obj.group_set.values()
@@ -610,6 +615,9 @@ class ContextResource(GenericResource):
         bundle.data['groups'] = groups_list
         bundle.data['location_visits'] = location_visits_list
         return bundle
+
+    # def obj_create(self, bundle,request = None,**kwargs):
+    #     return bundle
 
     def get_property(self, request, **kwargs):
         api_method = request.path.split("/")[-2]
