@@ -5,7 +5,7 @@ from tastypie import fields
 from tastypie.http import HttpGone, HttpMultipleChoices
 from tastypie.resources import Resource
 from tastypie.utils import trailing_slash
-from .models import OpeniContext, Person
+from .models import OpeniContext, Person, LocationVisit
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
 
 __author__ = 'amertis'
@@ -102,25 +102,34 @@ class ContextPropertyResource(Resource):
         context.save(update_fields=db_fields)
         return self.create_response(request, {})
 
-
-
-class LocationResource(Resource):
-
-    def get_list(self,request, **kwargs):
+class LocationVisitResource(Resource):
+    def get_item(self,request,**kwargs):
+        fields = ["location_visits_latitude","location_visits_longitude","location_visits_height","location_visits_visit","location_visits_comment"]
         base_bundle = self.build_bundle(request=request)
-        locations = OpeniContext.objects.all().values('location_latitude','location_longitude','location_height')
-        if len(locations) > 0:
-            base_bundle.data['location'] = locations[0]
-        return self.create_response(request, base_bundle)
+        objects = LocationVisit.objects.filter(context_id=1).values(*fields)
+        if len(objects) > 0:
+            base_bundle.data["location_visits"] = ValuesQuerySetToDict(objects)
+        return self.create_response(request,base_bundle)
 
-    def update(self,request,args):
-        context = OpeniContext()
-        context.id = int(args['pk'])
-        context.location_longitude = request.GET['longitude']
-        context.location_latitude = request.GET['latitude']
-        context.location_height = request.GET['height']
-        context.save(update_fields=["location_longitude","location_latitude","location_height"])
-        return self.create_response(request, {})
+    def update(self, request, **kwargs):
+        import json
+        data = json.loads(request.GET['data'])
+        # update
+        for d in data:
+            if 'id' in d:
+                pass
+                # for update
+            else:
+                pass
+                # for create
+        return self.create_response(request,{})
+
+class GroupResource(Resource):
+    def get_item(self,request,**kwargs):
+        pass
+
+    def update(self, request, **kwargs):
+        pass
 
 class ContextResource(GenericResource):
 
@@ -570,6 +579,25 @@ class ContextResource(GenericResource):
                     },
                 }
             },
+            {
+                "name": "location_visits",
+                "http_method": "GET",
+                "summary": "Retrieve context location visits object",
+                "fields": {
+                }
+            },
+            {
+                "name": "location_visits",
+                "http_method": "PUT",
+                "summary": "Update Context visit location",
+                "fields": {
+                    "data": {
+                        "type": "array",
+                        "required": True,
+                        "description": "data value"
+                    },
+                }
+            },
         ]
 
     def prepend_urls(self):
@@ -584,6 +612,8 @@ class ContextResource(GenericResource):
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/device%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="device"),
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/application%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="application"),
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/personalization%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="personalization"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/location_visits%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="location_visits"),
+
         ]
     def dehydrate(self,bundle):
 
@@ -622,7 +652,14 @@ class ContextResource(GenericResource):
     def get_property(self, request, **kwargs):
         api_method = request.path.split("/")[-2]
         if api_method not in properties:
-            return
+            if api_method == "location_visits":
+                locationVisitResource = LocationVisitResource()
+                if request.method == 'GET':
+                    return locationVisitResource.get_item(request,**kwargs)
+                elif request.method == 'PUT':
+                    return locationVisitResource.update(request,**kwargs)
+            else:
+                return
         kwargs["api_method"] = api_method
         child_resource = ContextPropertyResource()
         if request.method == 'GET':
