@@ -180,6 +180,7 @@ INSTALLED_APPS = (
 
     'tastypie',
     'tastypie_swagger',
+    'south',
 
 
 )

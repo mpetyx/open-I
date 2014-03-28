@@ -1,3 +1,5 @@
+from OPENiapp.APIS.Context import NoAuthorization
+
 __author__ = 'mpetyx'
 
 
@@ -10,12 +12,12 @@ from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class ArticleResource(GenericResource):
     class Meta:
-        queryset = OpeniArticle.objects.all()
+        queryset = OpeniArticle.objects.select_related("context").all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'article'
-        authentication = Authentication()
-        authorization = Authorization()
+        # authentication = Authentication()
+        authorization = NoAuthorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,
@@ -24,7 +26,6 @@ class ArticleResource(GenericResource):
 
 
         extra_actions = [
-
             {
                 "name": "comments",
                 "http_method": "GET",

@@ -1,10 +1,12 @@
+from OPENiapp.APIS.Context.models import OpeniContextAwareModel
+
 __author__ = 'mpetyx'
 
 
 from django.db import models
 
 
-class OpeniBadge(models.Model):
+class OpeniBadge(OpeniContextAwareModel):
     # id is missing because it is the default
     url = models.TextField()
     object_type = models.TextField()
@@ -15,3 +17,5 @@ class OpeniBadge(models.Model):
     title = models.TextField()
     description = models.TextField()
     picture = models.TextField()
+    class Meta:
+        app_label = "OPENIapp"

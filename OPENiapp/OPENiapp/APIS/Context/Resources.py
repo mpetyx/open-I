@@ -1,18 +1,38 @@
+import json
+
 from django.conf.urls import url
-from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.db import transaction
 from django.utils.datastructures import MultiValueDictKeyError
 from tastypie import fields
-from tastypie.http import HttpGone, HttpMultipleChoices
-from tastypie.resources import Resource
+from tastypie.exceptions import BadRequest
+from tastypie.resources import Resource, ModelResource
 from tastypie.utils import trailing_slash
-from .models import OpeniContext, Person, LocationVisit
-from OPENiapp.APIS.OpeniGenericResource import GenericResource
+import re
+from .models import OpeniContext, LocationVisit, GroupFriend, Group
 
 __author__ = 'amertis'
 def ValuesQuerySetToDict(vqs):
     return [item for item in vqs]
 from django.forms.models import model_to_dict
 
+def get_fields(clz):
+    fields = clz._meta.get_all_field_names()
+    fields.remove("context")
+    fields.remove("id")
+    return fields
+
+def convert_to_dbfields(clz,data):
+    prefix = re.sub('(?!^)([A-Z]+)', r'_\1',clz.__name__).lower() + 's_'
+    return dict(map(lambda (key, value): (prefix+str(key), value), data.items()))
+
+def convert_to_simplefields(clz,data):
+    prefix = re.sub('(?!^)([A-Z]+)', r'_\1',clz.__name__).lower() + 's_'
+    def get_field_key(prefix,key):
+        if prefix in  key:
+            return key[len(prefix):]
+        return key
+
+    return dict(map(lambda (key, value): (get_field_key(prefix,key), value), data.items()))
 
 properties = {
     "location": ["latitude", "longitude", "height"],
@@ -30,47 +50,7 @@ properties = {
                         "handset", "user_ids", "device_id", "application_id", "device_type", "device_os", "gender",
                         "has_children","ethnicity", "income", "household_size", "education", "interests", "customer_tag",
                         "users_language"]
-
 }
-    # {
-    #     property : "time",
-    #     fields: ["created","edited","deleted"]
-    # },
-    # {
-    #     property : "duration",
-    #     fields :["time_started","time_ended"]
-    # },
-    # {
-    #     property : "address",
-    #     fields :["street","number","apartment","city","locality","country","zip"]
-    # },
-    # {
-    #     property: "current_location",
-    #     fields : ["latitude","longitude","height"]
-    # },
-    # {
-    #     property: "rating",
-    #     fields: ["value"]
-    # },
-    # {
-    #     property: "mood",
-    #     fields : ["value"]
-    # },
-    # {
-    #     property: "device",
-    #     fields : ["wireless_network_type","wireless_channel_quality","accelerometers","cell_log","sms_log","call_log",
-    #               "running_applications","installed_applications","screen_state","battery_status"]
-    # },
-    # {
-    #     property: "application",
-    #     fields :["background_color","format","font","color","background","text","box","classification","text_copy"]
-    # },
-    # {
-    #     property: "personalization",
-    #     fields : ["age_range","country","postal_code","region","town","roaming","opt_out","carrier","handset","user_ids",
-    #               "device_id","application_id","device_type","device_os","gender","has_children","ethnicity","income",
-    #               "household_size","education","interests","customer_tag","users_language"]
-    # }
 
 def get_db_field(method,param):
     return method +"_"+param
@@ -80,7 +60,7 @@ class ContextPropertyResource(Resource):
     def get_list(self,request, **kwargs):
         base_bundle = self.build_bundle(request=request)
         db_fields = [get_db_field(kwargs['api_method'],x) for x in properties[kwargs['api_method']]]
-        property_value = OpeniContext.objects.all().values(*db_fields)
+        property_value = OpeniContext.objects.filter(objectid=kwargs['pk']).values(*db_fields)
         if len(property_value) > 0:
             base_bundle.data[kwargs['api_method']] = property_value[0]
         return self.create_response(request, base_bundle)
@@ -103,35 +83,130 @@ class ContextPropertyResource(Resource):
         return self.create_response(request, {})
 
 class LocationVisitResource(Resource):
+
+    def save_item(self,request,**kwargs):
+        new_location_visit = json.loads(request.GET['data'])
+        db_fields = convert_to_dbfields(LocationVisit,new_location_visit)
+        try:
+            lv = LocationVisit(**db_fields)
+        except:
+            raise BadRequest("invalid fields in json request")
+        lv.context_id = int(kwargs['pk'])
+        lv.save()
+        return self.create_response(request,{})
+
+    def update_item(self,request,**kwargs):
+        if 'location_visits_id' not in request.GET:
+            raise BadRequest("location_visits_id missing")
+        updated_location_visit = json.loads(request.GET['data'])
+        updated_db_fields = convert_to_dbfields(LocationVisit,updated_location_visit)
+        location_visits = LocationVisit.objects.filter(id=int(request.GET['location_visits_id']))
+        if len(location_visits) > 0:
+            db_fields = get_fields(LocationVisit)
+            for db_field in db_fields:
+                if db_field in updated_db_fields:
+                    location_visits[0].__dict__[db_field] = updated_db_fields[db_field]
+            location_visits[0].save()
+        else:
+            raise BadRequest("location visit not found")
+        return self.create_response(request,{})
+
+    def delete_item(self,request,**kwargs):
+        LocationVisit.objects.filter(id=(request.GET['location_visits_id'])).delete()
+        return self.create_response(request,{})
+
     def get_item(self,request,**kwargs):
-        fields = ["location_visits_latitude","location_visits_longitude","location_visits_height","location_visits_visit","location_visits_comment"]
+        if 'location_visits_id' not in request.GET:
+            raise BadRequest("location_visits_id missing")
         base_bundle = self.build_bundle(request=request)
-        objects = LocationVisit.objects.filter(context_id=1).values(*fields)
+        db_fields = get_fields(LocationVisit)
+        objects = LocationVisit.objects.filter(context_id=1).values(*db_fields)
         if len(objects) > 0:
-            base_bundle.data["location_visits"] = ValuesQuerySetToDict(objects)
+            lv_dict = convert_to_simplefields(LocationVisit,objects[0])
+            base_bundle.data["location_visit"] = lv_dict
         return self.create_response(request,base_bundle)
 
-    def update(self, request, **kwargs):
-        import json
-        data = json.loads(request.GET['data'])
-        # update
-        for d in data:
-            if 'id' in d:
-                pass
-                # for update
-            else:
-                pass
-                # for create
-        return self.create_response(request,{})
+    def get_list(self,request,**kwargs):
+        db_fields = get_fields(LocationVisit)
+        base_bundle = self.build_bundle(request=request)
+        objects = LocationVisit.objects.filter(context_id=kwargs['pk']).values(*db_fields)
+        json_list = []
+        if len(objects) > 0:
+            for o in objects:
+                lv_dict = convert_to_simplefields(LocationVisit,o)
+                json_list.append(lv_dict)
+            base_bundle.data["location_visits"] = json_list
+        return self.create_response(request,base_bundle)
+
 
 class GroupResource(Resource):
     def get_item(self,request,**kwargs):
-        pass
+        fields = ["id","group_name","group_type"]
+        base_bundle = self.build_bundle(request=request)
+        groups = Group.objects.filter(context_id=int(kwargs['pk'])).prefetch_related("groupfriend_set")
+        group_dicts = []
+        for group in groups:
+            group_dict = model_to_dict(group)
+            group_dict = convert_to_simplefields(Group,group_dict)
+            group_dict['group_friends'] = ValuesQuerySetToDict(group.groupfriend_set.values())
+            group_dicts.append(group_dict)
+        base_bundle.data['groups'] = group_dicts
+        return self.create_response(request,base_bundle)
 
-    def update(self, request, **kwargs):
-        pass
+    def get_group_item(self,request,**kwargs):
+        base_bundle = self.build_bundle(request=request)
+        groups = Group.objects.filter(id=int(request.GET['group_id'])).prefetch_related("groupfriend_set")
+        if len(groups) > 0:
+            group_dict = model_to_dict(groups[0])
+            group_dict['group_friends'] = ValuesQuerySetToDict(groups[0].groupfriend_set.values())
+            base_bundle.data['group'] = group_dict
+        return self.create_response(request,base_bundle)
 
-class ContextResource(GenericResource):
+    def update_item(self,request,**kwargs):
+        groups = Group.objects.filter(id=int(request.GET['group_id'])).prefetch_related("groupfriend_set")
+        base_bundle = self.build_bundle(request=request)
+        if len(groups) > 0:
+            group_update = json.loads(request.GET['data'])
+            group = groups[0]
+            if 'group_name' in group_update:
+                group.group_name = group_update['group_name']
+            if 'group_type' in group_update:
+                group.group_type = group_update['group_type']
+            group.save()
+            GroupFriend.objects.filter(group_id=int(request.GET['group_id'])).delete()
+            group_friends =[]
+            for group_friend_updated in group_update['group_friends']:
+                group_friend = GroupFriend(**group_friend_updated)
+                group_friend.group_id = group.id
+                group_friends.append(group_friend)
+            if len(group_friends):
+                GroupFriend.objects.bulk_create(group_friends)
+        return self.create_response(request,base_bundle)
+
+
+    def save_item(self, request, **kwargs):
+        new_group = json.loads(request.GET['data'])
+        new_group_friends = new_group['group_friends']
+        del new_group['group_friends']
+        group = Group(**new_group)
+        group.context_id = int(kwargs['pk'])
+        group.save()
+        group_friends = []
+        for new_group_friend in new_group_friends:
+            group_friend = GroupFriend(**new_group_friend)
+            group_friend.group_id = group.id
+            group_friends.append(group_friend)
+        GroupFriend.objects.bulk_create(group_friends)
+        return self.create_response(request,{})
+
+
+    def delete_item(self,request,**kwargs):
+        Group.objects.filter(id=int(request.GET['group_id'])).delete()
+        GroupFriend.objects.filter(group_id=request.GET['group_id']).delete()
+        return self.create_response(request,{})
+
+
+class ContextResource(ModelResource):
 
     class Meta:
         queryset = OpeniContext.objects.all().prefetch_related("group_set","locationvisit_set")
@@ -455,6 +530,7 @@ class ContextResource(GenericResource):
                 "http_method": "GET",
                 "summary": "Retrieve context object personalization",
                 "fields": {
+
                 }
             },
             {
@@ -582,20 +658,126 @@ class ContextResource(GenericResource):
             {
                 "name": "location_visits",
                 "http_method": "GET",
-                "summary": "Retrieve context location visits object",
+                "summary": "Retrieve context location visits",
                 "fields": {
                 }
             },
             {
-                "name": "location_visits",
+                "name": "location_visits_item",
+                "http_method": "GET",
+                "summary": "Retrieve context location visits object",
+                "fields": {
+                    "location_visits_id":{
+                        "type":"string",
+                        "required":True,
+                        "description":"context location visits id"
+                    },
+                }
+            },
+            {
+                "name": "location_visits_item",
                 "http_method": "PUT",
                 "summary": "Update Context visit location",
+                "fields": {
+                    "location_visits_id":{
+                        "type":"string",
+                        "required":True,
+                        "description":"context location visits id"
+                    },
+                    "data": {
+                        "type": "array",
+                        "required": True,
+                        "description": "data value"
+                    },
+                }
+            },
+            {
+                "name": "location_visits_item",
+                "http_method": "POST",
+                "summary": "create Context visit location",
                 "fields": {
                     "data": {
                         "type": "array",
                         "required": True,
                         "description": "data value"
                     },
+                }
+            },
+            {
+                "name": "location_visits_item",
+                "http_method": "DELETE",
+                "summary": "delete context location visits object",
+                "fields": {
+                    "location_visits_id":{
+                        "type":"string",
+                        "required":True,
+                        "description":"context location visits id"
+                    },
+                }
+            },
+            {
+                "name":"groups",
+                "http_method":"GET",
+                "summary":"Retrieve context groups",
+                "fields":{}
+            },
+            {
+                "name":"groups",
+                "http_method":"PUT",
+                "summary":"Update context groups",
+                "fields":{}
+            },
+            {
+                "name":"groups_item",
+                "http_method":"GET",
+                "summary":"Retrieve a group",
+                "fields":{
+                    "group_id":{
+                        "type":"string",
+                        "requred":True,
+                        "description":"group id"
+                    }
+                }
+            },
+            {
+                "name":"groups_item",
+                "http_method":"POST",
+                "summary":"Create a group",
+                "fields":{
+                    "data": {
+                        "type": "array",
+                        "required": True,
+                        "description": "data value"
+                    },
+                }
+            },
+            {
+                "name":"groups_item",
+                "http_method":"PUT",
+                "summary":"Update a group",
+                "fields":{
+                    "group_id":{
+                        "type":"string",
+                        "requred":True,
+                        "description":"group id"
+                    },
+                    "data": {
+                        "type": "array",
+                        "required": True,
+                        "description": "data value"
+                    },
+                }
+            },
+            {
+                "name":"groups_item",
+                "http_method":"DELETE",
+                "summary":"delete a group",
+                "fields":{
+                    "group_id":{
+                        "type":"string",
+                        "requred":True,
+                        "description":"group id"
+                    }
                 }
             },
         ]
@@ -613,8 +795,26 @@ class ContextResource(GenericResource):
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/application%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="application"),
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/personalization%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="personalization"),
             url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/location_visits%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="location_visits"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/location_visits_item%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="location_visits_item"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/groups%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="groups"),
+            url(r"^(?P<resource_name>%s)/(?P<pk>\d+)/groups_item%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_property'), name="groups_item")
 
         ]
+
+    def hydrate(self,bundle):
+        def ungroupify(bundle):
+            for property in properties:
+                if property in bundle.data:
+                    for val in properties[property]:
+                        if val in bundle.data[property]:
+                            db_field = get_db_field(property,val)
+                            bundle.data[db_field] = bundle.data[property][val]
+                            del bundle.data[property][val]
+                    del bundle.data[property]
+            return bundle
+        bundle = ungroupify(bundle)
+        return bundle
+
     def dehydrate(self,bundle):
 
         def groupify(bundle):
@@ -629,21 +829,26 @@ class ContextResource(GenericResource):
         bundle = groupify(bundle)
         location_visits = bundle.obj.locationvisit_set.values()
         location_visits_list = ValuesQuerySetToDict(location_visits)
+        lv_dic_list = []
+        for location_visit in location_visits:
+            lv_dict = convert_to_simplefields(LocationVisit,location_visit)
+            lv_dic_list.append(lv_dict)
+
         groups = bundle.obj.group_set.values()
         groups_list = ValuesQuerySetToDict(groups)
         group_ids = []
         for group in groups_list:
-            group['persons'] = []
+            group['group_friends'] = []
             group_ids.append(group['id'])
         if len(group_ids) > 0:
-            persons = Person.objects.filter(group__in = group_ids).order_by("group").values()
+            persons = GroupFriend.objects.filter(group__in = group_ids).order_by("group").values()
             persons_list = ValuesQuerySetToDict(persons)
             for group in groups_list:
                 for person in persons_list:
                     if group['id'] == person['group_id']:
-                        group['persons'].append(person)
+                        group['group_friends'].append(person)
         bundle.data['groups'] = groups_list
-        bundle.data['location_visits'] = location_visits_list
+        bundle.data['location_visits'] = lv_dic_list
         return bundle
 
     # def obj_create(self, bundle,request = None,**kwargs):
@@ -653,18 +858,44 @@ class ContextResource(GenericResource):
         api_method = request.path.split("/")[-2]
         if api_method not in properties:
             if api_method == "location_visits":
-                locationVisitResource = LocationVisitResource()
+                location_visit_resource = LocationVisitResource()
+                return location_visit_resource.get_list(request, **kwargs)
+            elif api_method == "location_visits_item":
+                location_visit_resource = LocationVisitResource()
                 if request.method == 'GET':
-                    return locationVisitResource.get_item(request,**kwargs)
+                    return location_visit_resource.get_item(request,**kwargs)
+                elif request.method == 'POST':
+                    return location_visit_resource.save_item(request,**kwargs)
                 elif request.method == 'PUT':
-                    return locationVisitResource.update(request,**kwargs)
-            else:
-                return
+                    return location_visit_resource.update_item(request,**kwargs)
+                elif request.method == 'DELETE':
+                    return location_visit_resource.delete_item(request,**kwargs)
+            elif api_method == "groups":
+                groups_resource = GroupResource()
+                if request.method == 'GET':
+                    return groups_resource.get_item(request, **kwargs)
+                elif request.method == 'PUT':
+                    return groups_resource.update(request, **kwargs)
+            elif api_method=="groups_item":
+                groups_resource = GroupResource()
+                if request.method == 'GET':
+                    return groups_resource.get_group_item(request,**kwargs)
+                elif request.method == 'POST':
+                    return groups_resource.save_item(request,**kwargs)
+                elif request.method == 'DELETE':
+                    return groups_resource.delete_item(request,**kwargs)
+                elif request.method == 'PUT':
+                    return groups_resource.update_item(request,**kwargs)
+
         kwargs["api_method"] = api_method
         child_resource = ContextPropertyResource()
         if request.method == 'GET':
             return child_resource.get_list(request,**kwargs)
         elif request.method == 'PUT':
             return child_resource.update(request,**kwargs)
+
+
+
+
 
 

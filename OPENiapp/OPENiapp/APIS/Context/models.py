@@ -3,16 +3,17 @@ from django.db import models
 
 
 
-
+__all__ = ["OpeniContext","Group","GroupFriend","LocationVisit","OpeniContextAwareModel",]
 
 class OpeniContext(models.Model):
+    objectid = models.TextField()
     # id is missing because it is the default
     time_created = models.TextField(null=True)
     time_edited = models.TextField(null=True)
     time_deleted = models.TextField(null=True)
     duration_time_started = models.TextField(null=True)
     duration_time_ended = models.TextField(null=True)
-#     #use floats?
+
 #     #the docs say location includes: coordinates,physical address, free-form location name
     location_latitude = models.TextField(null=True)
     location_longitude = models.TextField(null=True)
@@ -25,42 +26,13 @@ class OpeniContext(models.Model):
     address_locality = models.TextField(null=True)
     address_country = models.TextField(null=True)
     address_zip = models.TextField(null=True)
-#
-#     #use floats?
-#     #this is list?
-#     # Location Visits separate table
-#     location_visits_latitude = models.CharField(max_length=10,null=True)
-#     location_visits_longitude = models.CharField(max_length=10,null=True)
-#     location_visits_height = models.CharField(max_length=10,null=True)
-#     #todo:what is this
-#     location_visits_visit = models.IntegerField(null=True)
-#     location_visits_comment = models.CharField(max_length=500,null=True)
-#
-#     #use floats?
+
     current_location_latitude = models.TextField(null=True)
     current_location_longitude = models.TextField(null=True)
     current_location_height = models.TextField(null=True)
 #     #use date
     current_location_time = models.TextField(null=True)
     rating_value = models.TextField(null=True)
-#     #privacy
-#     #examples
-#     # list of friend lists with list of friends....
-#     friends_ids = models.CharField(max_length=1000,null=True)
-#     friends_name = models.CharField(max_length=1000,null=True)
-#     friends_type = models.CharField(max_length=1000,null=True)
-#
-#     friend_id = models.CharField(max_length=100,null=True)
-#     friend_object_type = models.CharField(max_length=100,null=True)
-#     friend_url = models.CharField(max_length=200,null=True)
-#     friend_service = models.CharField(max_length=100,null=True)
-#     friend_to_id = models.CharField(max_length=100,null=True)
-#
-#     friend_time_friend_added = models.DateTimeField(max_length=100,null=True)
-#     #whatisit?
-#     #object id
-#     # type of strings....
-#     friend_target_id = models.CharField(max_length=100,null=True)
 #     #happy,sad
     mood_value = models.TextField(null=True)
 #     #3G,LTE
@@ -138,6 +110,8 @@ class OpeniContext(models.Model):
     personalization_customer_tag = models.TextField(null=True)
 #     #Greek,English iso code
     personalization_users_language = models.TextField(null=True)
+    class Meta:
+        app_label = "OPENiapp"
 
 
 class Group(models.Model):
@@ -145,21 +119,40 @@ class Group(models.Model):
     group_name = models.TextField(null=True)
     group_type = models.TextField(null=True)
     context = models.ForeignKey(OpeniContext)
+    class Meta:
+        app_label = "OPENiapp"
 
-class Person(models.Model):
+
+class GroupFriend(models.Model):
     person_id = models.TextField(null=True)
     person_object_type = models.TextField(null=True)
     person_url = models.TextField(null=True)
     person_service = models.TextField(null=True)
     person_to_id = models.TextField(null=True)
-    person_time_person_added = models.DateTimeField(null=True)
+    person_time_person_added = models.TextField(null=True)
     person_target_id = models.TextField(null=True)
     group = models.ForeignKey(Group)
+    class Meta:
+        app_label = "OPENiapp"
 
 class LocationVisit(models.Model):
-    location_visits_latitude = models.FloatField(null=True)
-    location_visits_longitude = models.FloatField(null=True)
-    location_visits_height = models.FloatField(null=True)
-    location_visits_visit = models.IntegerField(null=True)
+    location_visits_latitude = models.TextField(null=True)
+    location_visits_longitude = models.TextField(null=True)
+    location_visits_height = models.TextField(null=True)
+    location_visits_visit = models.TextField(null=True)
     location_visits_comment = models.TextField(null=True)
     context = models.ForeignKey(OpeniContext)
+    class Meta:
+        app_label = "OPENiapp"
+
+class OpeniContextAwareModel(models.Model):
+    context = models.ForeignKey(OpeniContext,null=True, on_delete=models.DO_NOTHING)
+    class Meta:
+        abstract = True
+        app_label = "OPENiapp"
+    def delete(self):
+        self.context.delete()
+        super(OpeniContextAwareModel, self).delete()
+
+
+
