@@ -1,9 +1,7 @@
-from OPENiapp.APIS.Context import NoAuthorization
 
 __author__ = 'mpetyx'
 
 
-from tastypie.authorization import DjangoAuthorization
 from .models import OpeniArticle
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
@@ -16,8 +14,8 @@ class ArticleResource(GenericResource):
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'article'
-        # authentication = Authentication()
-        authorization = NoAuthorization()
+        authentication = Authentication()
+        authorization = Authorization()
         # filtering = {
         #     'slug': ALL,
         #     'user': ALL_WITH_RELATIONS,
