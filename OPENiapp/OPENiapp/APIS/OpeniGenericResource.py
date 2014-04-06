@@ -1,3 +1,5 @@
+from OPENiapp.APIS.Context.BaseResource import ContextAwareResource
+
 __author__ = 'mpetyx'
 
 from tastypie.resources import ModelResource
@@ -10,7 +12,7 @@ from allauth.socialaccount.models import SocialToken
 from OPENiapp.Providers.generic import execution
 
 
-class GenericResource(ModelResource):
+class GenericResource(ContextAwareResource):
     def applications_asked(self, bundle):
 
         return 1

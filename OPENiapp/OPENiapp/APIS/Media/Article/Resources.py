@@ -1,7 +1,7 @@
+
 __author__ = 'mpetyx'
 
 
-from tastypie.authorization import DjangoAuthorization
 from .models import OpeniArticle
 
 from OPENiapp.APIS.OpeniGenericResource import GenericResource
@@ -10,7 +10,7 @@ from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class ArticleResource(GenericResource):
     class Meta:
-        queryset = OpeniArticle.objects.all()
+        queryset = OpeniArticle.objects.select_related("context").all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'article'
@@ -24,7 +24,6 @@ class ArticleResource(GenericResource):
 
 
         extra_actions = [
-
             {
                 "name": "comments",
                 "http_method": "GET",

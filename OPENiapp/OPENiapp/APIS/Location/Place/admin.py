@@ -8,4 +8,4 @@ class EventAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(OpeniEvent, EventAdmin)
+# admin.site.register(OpeniEvent, EventAdmin)

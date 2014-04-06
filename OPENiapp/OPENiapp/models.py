@@ -7,6 +7,8 @@ Created on Oct 24, 2013
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
+from OPENiapp.APIS.Context.models import OpeniContext
+from OPENiapp.APIS.Media.Article.models import OpeniArticle
 
 
 class Person(models.Model):
