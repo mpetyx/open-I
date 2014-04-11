@@ -1,11 +1,10 @@
-from OPENiapp.APIS.Context.BaseResource import ContextAwareResource
-
 __author__ = 'mpetyx'
 
-from tastypie.resources import ModelResource
+from OPENiapp.APIS.Context.BaseResource import ContextAwareResource
 
 from django.http import HttpResponse
 from django.shortcuts import render
+import ast
 
 from allauth.socialaccount.models import SocialToken
 
@@ -97,7 +96,11 @@ class GenericResource(ContextAwareResource):
     #        bundle.data["koukli"] = {"lol": 1}
 
         return bundle
-
+        
+    def make_fb_connection(self, user):
+        """ Use facepy to make a Graph API call """
+        return FBprovider(
+            access_token=SocialToken.objects.filter(account__user=user.id, account__provider='facebook'))
     
     def get_list(self, request, **kwargs):
         """
@@ -109,7 +112,12 @@ class GenericResource(ContextAwareResource):
         Should return a HttpResponse (200 OK).
         """
 
-        if (request.GET.get("newway") == "on"):
+        user = request.GET.get("user")
+        apps = ast.literal_eval(request.GET.get("apps"))
+        method = request.GET.get("method")
+        data = ast.literal_eval(request.GET.get("data"))
+
+        if (user and apps and method and data):
             #executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_a_photo", {"media_id": "628147512937366504_917877895"})
             #executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_all_photos_for_account", {"account_id": "917877895"})
             #executable = execution(request.user, [{"cbs": "foursquare", "app_name": "OPENi"}], "get_user", {})
@@ -117,7 +125,8 @@ class GenericResource(ContextAwareResource):
             #executable = execution(request.user, [{"cbs": "facebook", "app_name": "OPENi"}], "get_all_events_for_account", {"account_id": "1266965453"})
             #executable = execution(request.user, [{"cbs": "facebook", "app_name": "OPENi"}], "post_event_to_account", {"account_id": "me", 'name': 'kati', 'start_time': '2014-01-24T23:30:00+0200'})
             #executable = execution(request.user, [{"cbs": "facebook", "app_name": "OPENi"}], "edit_an_event", {"event_id": "235785719933823", 'name': 'kati_allo', 'start_time': '2014-01-24T23:30:00+0200'})
-            executable = execution(request.user, [{"cbs": "facebook", "app_name": "OPENi"}], "delete_an_event", {"event_id": "235785719933823"})
+            #executable = execution(request.user, [{"cbs": "facebook", "app_name": "OPENi"}], "delete_an_event", {"event_id": "235785719933823"})
+            executable = execution(request.user, apps, method, data)
             
             result = executable.make_all_connections()
             return self.create_response(request, result)
