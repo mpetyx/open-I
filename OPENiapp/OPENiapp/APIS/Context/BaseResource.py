@@ -17,7 +17,8 @@ class ContextAwareResource(ModelResource):
         bundle.obj.context_id = bundle.obj.context.id
         bundle.obj.save()
         bundle.obj.context.objectid = bundle.obj.id
-        bundle.obj.context.save(update_fields=["objectid"])
+        # bundle.obj.context.save(update_fields=["objectid"])
+        bundle.obj.context.save()
         return bundle
     @transaction.atomic
     def obj_update(self, bundle, **kwargs):

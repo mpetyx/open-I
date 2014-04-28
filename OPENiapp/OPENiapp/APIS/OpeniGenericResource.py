@@ -111,11 +111,13 @@ class GenericResource(ContextAwareResource):
 
         Should return a HttpResponse (200 OK).
         """
-
-        user = request.GET.get("user")
-        apps = ast.literal_eval(request.GET.get("apps"))
-        method = request.GET.get("method")
-        data = ast.literal_eval(request.GET.get("data"))
+        try:
+            user = request.GET.get("user")
+            apps = ast.literal_eval(request.GET.get("apps"))
+            method = request.GET.get("method")
+            data = ast.literal_eval(request.GET.get("data"))
+        except:
+            return 1
 
         if (user and apps and method and data):
             #executable = execution(request.user, [{"cbs": "instagram", "app_name": "OPENi"}], "get_a_photo", {"media_id": "628147512937366504_917877895"})
