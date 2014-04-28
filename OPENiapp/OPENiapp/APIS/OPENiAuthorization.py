@@ -1,10 +1,10 @@
 __author__ = 'mpetyx'
 
 
-from tastypie.authorization import DjangoAuthorization
+from tastypie.authorization import Authorization
 
 
-class Authorization(DjangoAuthorization):
+class Authorization(Authorization):
 
     def __init__(self):
         pass

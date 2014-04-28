@@ -1,9 +1,9 @@
 __author__ = 'mpetyx'
 
 
-from tastypie.authentication import BasicAuthentication
+from tastypie.authentication import Authentication
 
-class Authentication(BasicAuthentication):
+class Authentication(Authentication):
 
     def __init__(self):
         pass
