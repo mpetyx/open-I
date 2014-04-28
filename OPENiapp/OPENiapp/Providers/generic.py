@@ -22,7 +22,7 @@ class execution:
         """ Call each time we want to make a new connection with one cbs """
         # Every cbs needs its access_token
         # account_provider should be called exactly as the cbs we want, ie facebook for facebook!
-        access_token = SocialToken.objects.filter(account__user=self.user.id, account__provider=cbs)
+        access_token = SocialToken.objects.filter(account__user=self.user, account__provider=cbs)
         # Check which cbs we now have and make the connection by returning the provider from the connector
         if (cbs == "facebook"):
             provider = FBprovider("", access_token)
