@@ -12,14 +12,12 @@ from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class PhotoResource(GenericResource):
     class Meta:
-        queryset = OpeniPhoto.objects.all()
+        queryset = OpeniPhoto.objects.select_related("context").all()
         list_allowed_methods = ['get', 'post']
         detail_allowed_methods = ['get', 'post', 'put', 'delete']
         resource_name = 'photo'
         authentication = Authentication()
         authorization = Authorization()
-        always_return_data = True
-
         # serializer = Serializer(formats=['json'])
         # filtering = {
         #     'slug': ALL,
