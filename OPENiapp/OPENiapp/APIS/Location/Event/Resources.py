@@ -1,6 +1,7 @@
 __author__ = 'mpetyx'
 
-
+from django.conf.urls import url
+from tastypie.utils import trailing_slash
 from tastypie.authorization import DjangoAuthorization
 from .models import OpeniEvent
 
@@ -24,6 +25,35 @@ class EventResource(GenericResource):
 
 
         extra_actions = [
+
+            {
+                "name": "get_an_event",
+                "http_method": "GET",
+                "resource_type": "list",
+                "description": "Get an Event",
+                "fields": {
+                    "user": {
+                        "type": "string",
+                        "required": True,
+                        "description": "The user required for this action"
+                    },
+                    "apps": {
+                        "type": "string",
+                        "required": True,
+                        "description": "The CBS along with the App we want to do a request to"
+                    },
+                    "method": {
+                        "type": "string",
+                        "required": True,
+                        "description": "Get an Event"
+                    },
+                    "data": {
+                        "type": "string",
+                        "required": True,
+                        "description": "The required data"
+                    },
+                }
+            },
 
             {
                 "name": "comments",
@@ -67,3 +97,11 @@ class EventResource(GenericResource):
                 }
             }
         ]
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/get_an_event%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_an_event'), name="get_an_event"),
+        ]
+
+    def get_an_event(self, request, **kwargs):
+        return self.get_list(request)
