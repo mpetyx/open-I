@@ -27,10 +27,10 @@ class EventResource(GenericResource):
         extra_actions = [
 
             {
-                "name": "get_an_event",
+                "name": "generic",
                 "http_method": "GET",
                 "resource_type": "list",
-                "description": "Get an Event",
+                "description": "Apply Method",
                 "fields": {
                     "user": {
                         "type": "string",
@@ -45,7 +45,7 @@ class EventResource(GenericResource):
                     "method": {
                         "type": "string",
                         "required": True,
-                        "description": "Get an Event"
+                        "description": "Method needed"
                     },
                     "data": {
                         "type": "string",
@@ -100,8 +100,5 @@ class EventResource(GenericResource):
 
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/get_an_event%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_an_event'), name="get_an_event"),
+            url(r"^(?P<resource_name>%s)/get_an_event%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_list'), name="get_an_event"),
         ]
-
-    def get_an_event(self, request, **kwargs):
-        return self.get_list(request)
