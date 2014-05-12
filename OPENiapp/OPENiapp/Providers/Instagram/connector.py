@@ -1,5 +1,6 @@
 from instagram.client import InstagramAPI
 from OPENiapp.Providers.baseConnector import basicProvider
+import logging
 
 class provider(basicProvider):
     ''' This class is used to:
@@ -22,6 +23,8 @@ class provider(basicProvider):
         ''' GET API_PATH/[PHOTO_ID] '''
         # /media/media-id (ie media/628147512937366504_917877895)
         raw_data = self.connector.media(data['media_id'])
+        logging.error(raw_data)
+        print(raw_data)
         response = {
                     'meta':
                         {
