@@ -100,5 +100,5 @@ class EventResource(GenericResource):
 
     def prepend_urls(self):
         return [
-            url(r"^(?P<resource_name>%s)/get_an_event%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_list'), name="get_an_event"),
+            url(r"^(?P<resource_name>%s)/generic%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_list'), name="get_an_event"),
         ]
