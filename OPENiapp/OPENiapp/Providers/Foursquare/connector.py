@@ -1,9 +1,10 @@
-from foursquare import Foursquare
 from OPENiapp.Providers.baseConnector import basicProvider
+
+from foursquare import Foursquare
 
 class provider(basicProvider):
     ''' This class is used to:
-        1. Make the connection to the Instagram API
+        1. Make the connection to the Foursquare API
         2. Get user's Photos
         3. Get OPENi album Photos
         4. Post Photos to OPENi album
@@ -42,10 +43,10 @@ class provider(basicProvider):
                                         raw_data.caption.text,
                                         raw_data.link,
                                         self.defJsonRes,
-                                        self.check_if_exists(raw_data, 'location', self.defJsonRes),
+                                        self.check_if_exists(raw_data, 'location'),
                                         raw_data.created_time,
                                         self.defJsonRes,
-                                        self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                        self.check_if_exists(raw_data, 'tags'),
                                         self.defJsonRes,
                                         self.defJsonRes
                                         )]
@@ -75,10 +76,10 @@ class provider(basicProvider):
                                          raw_data.caption.text,
                                          raw_data.link,
                                          self.defJsonRes,
-                                         self.check_if_exists(raw_data, 'location', self.defJsonRes),
+                                         self.check_if_exists(raw_data, 'location'),
                                          raw_data.created_time,
                                          self.defJsonRes,
-                                         self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                         self.check_if_exists(raw_data, 'tags'),
                                          self.defJsonRes,
                                          self.defJsonRes
                                          ))

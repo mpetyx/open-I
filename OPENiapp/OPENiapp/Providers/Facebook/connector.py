@@ -4,7 +4,7 @@ from OPENiapp.Providers.baseConnector import basicProvider
 # For testing purposes go to https://developers.facebook.com/tools/explorer/ and play
 class provider(basicProvider):
     """ This class is used to:
-        1. Make the connection to the Graph API
+        1. Make the connection to the Facebook Graph API
         2. Get user's Photos
         3. Get OPENi album Photos
         4. Post Photos to OPENi album

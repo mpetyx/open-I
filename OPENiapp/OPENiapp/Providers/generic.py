@@ -3,6 +3,8 @@ from Facebook.connector import provider as FBprovider
 from Twitter.connector import provider as TWprovider
 from Instagram.connector import provider as INprovider
 from Foursquare.connector import provider as FOprovider
+from Google.connector import GOPprovider
+from Citygrid.connector import provider as CGprovider
 
 class execution:
     def __init__(self, user, apps, method, data):
@@ -33,6 +35,10 @@ class execution:
             provider = INprovider("", access_token[0])
         elif (cbs == "foursquare"):
             provider = FOprovider("", access_token[0])
+        elif (cbs == "google_places"):
+            provider = GOPprovider()
+        elif (cbs == "citygrid"):
+            provider = CGprovider()
 
         return provider
 

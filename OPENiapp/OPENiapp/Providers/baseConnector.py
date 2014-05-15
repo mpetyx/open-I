@@ -15,14 +15,15 @@ class basicProvider:
     def add_extra_parameters(self, response, extra):
         response["extra"] = extra
 
-    def check_if_exists(self, data, check, otherwise):
+    def check_if_exists(self, data, check, otherwise = defJsonRes):
+        """ Loop through the  """
         checkArray = check.split('.')
         ret = data
         for allChecks in checkArray:
-            if allChecks in ret:
+            if hasattr(ret, allChecks):
+                ret = getattr(ret, allChecks)
+            elif isinstance(ret, (list, dict)) and (allChecks in ret):
                 ret = ret[allChecks]
-            elif otherwise == '':
-                return self.defJsonRes
             else:
                 return otherwise
         return ret
@@ -52,10 +53,10 @@ class basicProvider:
         return data_dict
 
     #   region Media API
-    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Media_API
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Media%20API/
     
     #   region Photo Object
-    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Photo_Mapping
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/photo/
 
     def format_photo_response(self, id, obj_type, service, url, from_id, from_username, from_url, prof_title, prof_icon, prof_format, location, time_created, time_edited, tags, width, height):
         response = {
@@ -164,10 +165,10 @@ class basicProvider:
     
 
     #   region Location API
-    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Location_API
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Location%20API/
     
     #   region Event Object
-    #   As described here: http://redmine.openi-ict.eu/projects/openi/wiki/Event_Mapping
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Event%20Mapping/
 
     def format_event_response(self, data):
         response = {
@@ -271,8 +272,180 @@ class basicProvider:
     #   endregion Connections
 
     #   endregion Event Object
+    
+    
+    #   region Place Object
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Place%20Mapping/
+
+    def format_place_response(self, data):
+        response = {
+                        "id": data[0],
+                        "objectType": data[1],
+                        "service": data[2],
+                        "url": data[3],
+                        "from":{
+                               "id": data[4],
+                               "username": data[5],
+                               "url": data[6]
+                               },
+                        "place":{
+                            "text": data[7],
+                            "address":{
+                                "street": data[8],
+                                "number": data[9]
+                                },
+                            "location":{
+                                "latitude": data[10],
+                                "longtitude": data[11]
+                                }
+                        },
+                        "time":{
+                                "created_time": data[12]
+                        },
+                        "text": data[13]
+                   }
+        return response
+    
+    def get_a_place(self, data):
+        """ GET API_PATH/[PLACE_ID] """
+        return defaultMethodResponse
+
+    def get_all_places_for_account(self, data):
+        """ GET API_PATH/[ACCOUNT_ID]/places """
+        return defaultMethodResponse
+
+    def post_place_to_account(self, data):
+        """ POST API_PATH/[ACCOUNT_ID]/places """
+        return defaultMethodResponse
+        
+    def post_place_to_aggregation(self, data):
+        """ POST API_PATH/[AGGREGATION_ID]/places """
+        return defaultMethodResponse
+
+    def edit_a_place(self, data):
+        """ PUT API_PATH/[PLACE_ID] """
+        return defaultMethodResponse
+
+    def delete_a_place(self, data):
+        """ DELETE API_PATH/[PLACE_ID] """
+        return defaultMethodResponse
+    
+    #   region Connections
+
+    def get_place_comments(self, data):
+        """ GET API_PATH/[PLACE_ID]/comments """
+        return defaultMethodResponse
+
+    def post_place_comment(self, data):
+        """ POST API_PATH/[PLACE_ID]/comments """
+        return defaultMethodResponse
+
+    def delete_place_comment(self, data):
+        """ DELETE API_PATH/[COMMENT_ID] """
+        return defaultMethodResponse
+
+    def edit_place_comment(self, data):
+        """ PUT API_PATH/[COMMENT_ID] """
+        return defaultMethodResponse
+
+    def like_a_place(self, data):
+        """ POST API_PATH/[PLACE_ID]/likes """
+        return defaultMethodResponse
+
+    def get_place_likes(self, data):
+        """ GET API_PATH/[PLACE_ID]/likes """
+        return defaultMethodResponse
+
+    def unlike_place(self, data):
+        """ DELETE API_PATH/[PLACE_ID]/likes """
+        return defaultMethodResponse
+
+    def dislike_place(self, data):
+        """ POST API_PATH/[PLACE_ID]/dislikes """
+        return defaultMethodResponse
+
+    def get_place_dislikes(self, data):
+        """ GET API_PATH/[PLACE_ID]/dislikes """
+        return defaultMethodResponse
+
+    def delete_place_dislikes(self, data):
+        """ DELETE API_PATH/[PLACE_ID]/dislikes """
+        return defaultMethodResponse
+
+
+    #   endregion Connections
+
+    #   endregion Place Object
 
     #   endregion Location API
+
+    
+
+    #   region Activity API
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Activity%20API/
+    
+    #   region Badge Object
+    #   As described here: https://opensourceprojects.eu/p/openi/wiki/Badge%20Mapping/
+
+    def format_event_response(self, data):
+        response = {
+                        "id": data[0],
+                        "objectType": data[1],
+                        "service": data[2],
+                        "url": data[3],
+                        "from":{
+                               "id": data[4],
+                               "username": data[5],
+                               "url": data[6]
+                               },
+                        "place":{
+                            "text": data[7],
+                            "address":{
+                                "street": data[8],
+                                "number": data[9]
+                                },
+                            "location":{
+                                "latitude": data[10],
+                                "longtitude": data[11]
+                                }
+                        },
+                        "duration":{
+                                "starts_time": data[12],
+                                "ends_time": data[13]
+                        },
+                        "title": data[14],
+                        "description": data[15],
+                        "picture": data[16]
+                   }
+        return response
+    
+    def get_an_event(self, data):
+        """ GET API_PATH/[EVENT_ID] """
+        return defaultMethodResponse
+
+    def get_all_events_for_account(self, data):
+        """ GET API_PATH/[ACCOUNT_ID]/events """
+        return defaultMethodResponse
+
+    def post_event_to_account(self, data):
+        """ POST API_PATH/[ACCOUNT_ID]/events """
+        return defaultMethodResponse
+        
+    def post_event_to_aggregation(self, data):
+        """ POST API_PATH/[AGGREGATION_ID]/events """
+        return defaultMethodResponse
+
+    def edit_an_event(self, data):
+        """ PUT API_PATH/[EVENT_ID] """
+        return defaultMethodResponse
+
+    def delete_an_event(self, data):
+        """ DELETE API_PATH/[EVENT_ID] """
+        return defaultMethodResponse
+
+    #   endregion Badge Object
+
+    #   endregion Activity API
 
     def format_comment_response(self, id, obj_type, service, url, from_id, from_username, from_url, time_created, time_edited, title, text, target_id):
         response = {

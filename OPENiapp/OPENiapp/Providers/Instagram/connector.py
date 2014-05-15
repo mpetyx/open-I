@@ -1,6 +1,7 @@
 from instagram.client import InstagramAPI
+import httplib2
+import simplejson
 from OPENiapp.Providers.baseConnector import basicProvider
-import logging
 
 class provider(basicProvider):
     ''' This class is used to:
@@ -22,9 +23,9 @@ class provider(basicProvider):
     def get_a_photo(self, data):
         ''' GET API_PATH/[PHOTO_ID] '''
         # /media/media-id (ie media/628147512937366504_917877895)
+        print data['media_id']
         raw_data = self.connector.media(data['media_id'])
-        logging.error(raw_data)
-        print(raw_data)
+        print raw_data
         response = {
                     'meta':
                         {
@@ -42,10 +43,10 @@ class provider(basicProvider):
                                         raw_data.caption.text,
                                         raw_data.link,
                                         self.defJsonRes,
-                                        self.check_if_exists(raw_data, 'location', self.defJsonRes),
+                                        self.check_if_exists(raw_data, 'location'),
                                         raw_data.created_time,
                                         self.defJsonRes,
-                                        self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                        self.check_if_exists(raw_data, 'tags'),
                                         self.defJsonRes,
                                         self.defJsonRes
                                         )]
@@ -56,6 +57,7 @@ class provider(basicProvider):
         ''' GET API_PATH/[ACCOUNT_ID]/photos '''
         # /users/user-id (ie users/917877895)
         raw_datas, next = self.connector.user_recent_media(data['account_id'])
+        print raw_datas
         response = {
                     'meta': 
                         {
@@ -75,10 +77,10 @@ class provider(basicProvider):
                                          raw_data.caption.text,
                                          raw_data.link,
                                          self.defJsonRes,
-                                         self.check_if_exists(raw_data, 'location', self.defJsonRes),
+                                         self.check_if_exists(raw_data, 'location'),
                                          raw_data.created_time,
                                          self.defJsonRes,
-                                         self.check_if_exists(raw_data, 'tags', self.defJsonRes),
+                                         self.check_if_exists(raw_data, 'tags'),
                                          self.defJsonRes,
                                          self.defJsonRes
                                          ))

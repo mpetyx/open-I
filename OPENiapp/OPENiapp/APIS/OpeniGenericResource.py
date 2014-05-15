@@ -12,6 +12,10 @@ from django.contrib.auth.models import User
 
 from OPENiapp.Providers.generic import execution
 
+from django.conf.urls import url
+from tastypie.utils import trailing_slash
+from OPENiapp.APIS.OPENiAuthorization import Authorization
+from OPENiapp.APIS.OPENiAuthentication import Authentication
 
 class GenericResource(ContextAwareResource):
     def applications_asked(self, bundle):
@@ -98,11 +102,6 @@ class GenericResource(ContextAwareResource):
     #        bundle.data["koukli"] = {"lol": 1}
 
         return bundle
-        
-    def make_fb_connection(self, user):
-        """ Use facepy to make a Graph API call """
-        return FBprovider(
-            access_token=SocialToken.objects.filter(account__user=user.id, account__provider='facebook'))
     
     def get_list(self, request, **kwargs):
         """
@@ -136,49 +135,7 @@ class GenericResource(ContextAwareResource):
             
             result = executable.make_all_connections()
             return self.create_response(request, result)
-
-        # TODO: Uncached for now. Invalidation that works for everyone may be
-        #       impossible.
-        if (request.GET.get("facebook") == 'on'):
-            fbconnector = self.make_fb_connection(request.user)
-            limit = 1
-            if request.GET.get("limit"):
-                limit = int(request.GET.get("limit"))
-            photos = fbconnector.get_photos(limit)
-            result = { "meta": 
-                        {
-                         "limit": limit,
-                         "total_count": len(photos["data"]),
-                         },
-                       "obj" : [] }
-            for photo in photos["data"]:
-                if "name" in photo:
-                    name = photo["name"]
-                else:
-                    name = ""
-                if "place" in photo:
-                    location = photo["place"]
-                else:
-                    location = ""
-                result["obj"].append({
-                                "objectType": "photo",
-                                "service":"openi",
-                                "id": photo["id"],
-                                "url": photo["source"],
-                                "profile":{
-                                    "title": name,
-                                    "description": "Doesn't Exist",
-                                    "format": "Doesn't Exist",
-                                    "size": "Doesn't Exist - Various Sizes"
-                                },
-                                "properties":{
-                                    "width": photo["width"],
-                                    "height": photo["height"],
-                                    "tags" : location
-                                }
-                            })
-            return self.create_response(request, result)
-
+        
         # Default actions down here, for get_list (that is if there is no fb or other CBS request!
         base_bundle = self.build_bundle(request=request)
         objects = self.obj_get_list(bundle=base_bundle, **self.remove_api_resource_names(kwargs))
@@ -197,3 +154,94 @@ class GenericResource(ContextAwareResource):
         to_be_serialized[self._meta.collection_name] = bundles
         to_be_serialized = self.alter_list_data_to_serialize(request, to_be_serialized)
         return self.create_response(request, to_be_serialized)
+
+    def prepend_urls(self):
+        return [
+            url(r"^(?P<resource_name>%s)/generic%s$" % (self._meta.resource_name, trailing_slash()), self.wrap_view('get_list'), name="generic"),
+        ]
+
+class GenericMeta:
+    list_allowed_methods = ['get', 'post']
+    detail_allowed_methods = ['get', 'post', 'put', 'delete']
+    authentication = Authentication()
+    authorization = Authorization()
+    # filtering = {
+    #     'slug': ALL,
+    #     'user': ALL_WITH_RELATIONS,
+    #     'created': ['exact', 'range', 'gt', 'gte', 'lt', 'lte'],
+    # }
+
+
+    extra_actions = [
+
+        {
+            "name": "generic",
+            "http_method": "GET",
+            "resource_type": "list",
+            "description": "Apply Method",
+            "fields": {
+                "user": {
+                    "type": "string",
+                    "required": True,
+                    "description": "The user required for this action"
+                },
+                "apps": {
+                    "type": "string",
+                    "required": True,
+                    "description": "The CBS along with the App we want to do a request to"
+                },
+                "method": {
+                    "type": "string",
+                    "required": True,
+                    "description": "Method needed"
+                },
+                "data": {
+                    "type": "string",
+                    "required": True,
+                    "description": "The required data"
+                },
+            }
+        },
+
+        {
+            "name": "comments",
+            "http_method": "GET",
+            "resource_type": "list",
+            "description": "comments from CBS",
+            "fields": {
+                "cbs": {
+                    "type": "string",
+                    "required": True,
+                    "description": "list of selected CBS"
+                }
+            }
+        },
+
+        {
+            "name": "likes",
+            "http_method": "GET",
+            "resource_type": "list",
+            "description": "likes from CBS",
+            "fields": {
+                "cbs": {
+                    "type": "string",
+                    "required": True,
+                    "description": "list of selected CBS"
+                }
+            }
+        },
+
+        {
+            "name": "dislikes",
+            "http_method": "GET",
+            "resource_type": "list",
+            "description": "dislikes from CBS",
+            "fields": {
+                "cbs": {
+                    "type": "string",
+                    "required": True,
+                    "description": "list of selected CBS"
+                }
+            }
+        }
+    ]
