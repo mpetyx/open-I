@@ -1,4 +1,5 @@
 from OPENiapp.Providers.baseConnector import basicProvider
+import json
 
 from provider import citygridplaces
 # https://github.com/CityGrid/CityGrid-Python-Samples/blob/master/class-citygrid-places-api.py
@@ -30,7 +31,8 @@ class provider(basicProvider):
                                             format = self.check_if_exists(data ,'format', ''),
                                             callback = self.check_if_exists(data ,'callback', ''),
                                             i = self.check_if_exists(data ,'i', ''))
-        fields = ['locations.location.id', 'type', 'service', 'locations.location.urls.profile_url', 'user.id', 'user.username', 'locations.location.contact_info.display_url', 'locations.location.name', 'locations.location.address.street', 'locations.location.address.number', 'locations.location.address.latitude', 'locations.location.address.longitude', 'locations.location.years_in_business', 'types']
+        raw_data = json.loads(raw_data)['locations'][0]
+        fields = ['id', 'type', 'service', 'urls.profile_url', 'user.id', 'user.username', 'contact_info.display_url', 'name', 'address.street', 'address.number', 'address.latitude', 'address.longitude', 'years_in_business', 'types']
         alternatives = ['', 'place', 'openi', '', '', '', '', '', '', '', '', '', '', '']
         data = self.get_fields(raw_data, fields, alternatives)
         response = {
