@@ -5,6 +5,7 @@ from Instagram.connector import provider as INprovider
 from Foursquare.connector import provider as FOprovider
 from Google.connector import GOPprovider
 from Citygrid.connector import provider as CGprovider
+from Flickr.connector import provider as FLprovider
 
 class execution:
     def __init__(self, user, apps, method, data):
@@ -39,6 +40,8 @@ class execution:
             provider = GOPprovider()
         elif (cbs == "citygrid"):
             provider = CGprovider()
+        elif (cbs == "flickr"):
+            provider = FLprovider()
 
         return provider
 
@@ -46,7 +49,7 @@ class execution:
         try:
             method_to_call = getattr(provider, self.method)
         except AttributeError:
-            print AttributeError
+            return {'attributeError': 'Such method does not exist in this service'}
         return method_to_call(self.data)
 
 
