@@ -7,30 +7,32 @@ class bcMedia:
     #   region Photo Object
     #   As described here: https://opensourceprojects.eu/p/openi/wiki/photo/
 
-    def format_photo_response(self, id, obj_type, service, url, from_id, from_username, from_url, prof_title, prof_icon, prof_format, location, time_created, time_edited, tags, width, height):
+    def format_photo_response(self, data):
         response = {
-                        "id": id,
-                        "objectType": obj_type,
-                        "service": service,
-                        "url": url,
-                        "from":{
-                               "id": from_id,
-                               "username": from_username,
-                               "url": from_url
-                               },
-                        "profile":{
-                            "title": prof_title,
-                            "icon": prof_icon,
-                            "format": prof_format,
-                        },
-                        "location": location,
-                        "time":{
-                                "created_time": time_created,
-                                "edited_time": time_edited
-                        },
-                        "tags": tags,
-                        "width": width,
-                        "height": height
+                        "id": data['id'],
+                        "objectType": data['object_type'],
+                        "service": data['service'],
+                        "url": data['url'],
+                        "file": format_file(data['file_title'],
+                                            data['file_description'],
+                                            data['file_format'],
+                                            data['file_size'],
+                                            data['file_icon']),
+                        "from": format_person(data['from_id'],
+                                              data['from_name'],
+                                              data['from_surname'],
+                                              data['from_middlename'],
+                                              data['from_birthdate'],
+                                              data['from_organizations']),
+                        "location": format_location(data['location_latitude'],
+                                                    data['location_longtitude'],
+                                                    data['location_height']),
+                        "tags": data['tags'],
+                        "time": format_time(data['created_time'],
+                                            data['edited_time'],
+                                            data['deleted_time']),
+                        "height": data['height'],
+                        "width": data['width']
                    }
         return response
     
@@ -119,6 +121,11 @@ class bcMedia:
                         "objectType": data['object_type'],
                         "service": data['service'],
                         "url": data['url'],
+                        "file": format_file(data['file_title'],
+                                            data['file_description'],
+                                            data['file_format'],
+                                            data['file_size'],
+                                            data['file_icon']),
                         "from": format_person(data['from_id'],
                                               data['from_name'],
                                               data['from_surname'],
@@ -128,12 +135,7 @@ class bcMedia:
                         "time": format_time(data['created_time'],
                                             data['edited_time'],
                                             data['deleted_time']),
-                        "data": data['data'],
-                        "file": format_file(data['file_title'],
-                                            data['file_description'],
-                                            data['file_format'],
-                                            data['file_size'],
-                                            data['file_icon'])
+                        "data": data['data']
                    }
         return response
 

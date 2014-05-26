@@ -1,4 +1,5 @@
 from OPENiapp.Providers.base.media import bcMedia
+from OPENiapp.Providers.base.common import *
 
 class fbMedia(bcMedia):
     """ This class is used to:
@@ -13,7 +14,33 @@ class fbMedia(bcMedia):
 
     def get_a_photo(self, data):
         """ Get a photo by its id """
-        return self.connector.get(data['photo_id'])
+        # /photo_id (ie /10153665526210315)
+        raw_data = self.connector.get('/' + data['photo_id'])
+
+
+        names = ['id', 'object_type', 'service', 'url', 'file_title', 'file_description', 'file_format', 'file_size', 'file_icon', 'from_id', 'from_name', 'from_surname', 'from_middlename', 'from_birthdate', 'from_organizations', 'location_latitude', 'location_longtitude', 'location_height', 'tags', 'created_time', 'edited_time', 'deleted_time', 'height', 'width']
+
+        fields = ['id', 'object_type', 'service', 'link', 'name', 'description', 'format', 'size', 'icon', 'from.id', 'from.name', 'from.surname', 'from.middlename', 'from.birthdate', 'from.organizations', 'place.location.latitude', 'place.location.longtitude', 'place.location.height', 'tags.data', 'created_time', 'updated_time', 'deleted_time', 'height', 'width']
+
+        alternatives = ['', 'album', 'facebook', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
+
+        data = self.get_fields(raw_data, names, fields, alternatives)
+        response = {
+                    'meta':
+                        {
+                         'total_count': 1,
+                         'next': None
+                        },
+                    'data': self.format_photo_response(data)
+                    }
+
+        # Curate tag array from Facebook
+        tag_array = []
+        for tag in raw_data['tags']['data']:
+            tag_array.append(format_tags(tag['id'], tag['name'], tag['created_time'], '', '', tag['x'], tag['y']))
+        response['data']['tags'] = tag_array
+        
+        return { 'response': response }
     
     def get_all_photos_for_account(self, data):
         """ Get all photos for an account """
@@ -96,9 +123,10 @@ class fbMedia(bcMedia):
         """ GET API_PATH/[FOLDER_ID] """
         # /album_id (ie /10153665525255315)
         raw_data = self.connector.get('/' + data['album_id'])
+        raw_data2 = self.connector.get('/' + data['album_id'] + '/photos')
 
-        names = ['id', 'object_type', 'service', 'url', 'from_id', 'from_name', 'from_surname', 'from_middlename', 'from_birthdate', 'from_organizations', 'created_time', 'edited_time', 'deleted_time', 'data', 'file_title', 'file_description', 'file_format', 'file_size', 'file_icon']
-        fields = ['id', 'object_type', 'service', 'link', 'from.id', 'from.name', 'from.surname', 'from.middlename', 'from.birthdate', 'from.organizations', 'created_time', 'updated_time', 'deleted_time', 'data', 'name', 'description', 'format', 'size', 'icon']
+        names = ['id', 'object_type', 'service', 'url', 'file_title', 'file_description', 'file_format', 'file_size', 'file_icon', 'from_id', 'from_name', 'from_surname', 'from_middlename', 'from_birthdate', 'from_organizations', 'created_time', 'edited_time', 'deleted_time', 'data']
+        fields = ['id', 'object_type', 'service', 'link', 'name', 'description', 'format', 'size', 'icon', 'from.id', 'from.name', 'from.surname', 'from.middlename', 'from.birthdate', 'from.organizations', 'created_time', 'updated_time', 'deleted_time', 'data']
         alternatives = ['', 'album', 'facebook', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '']
 
         data = self.get_fields(raw_data, names, fields, alternatives)
@@ -108,21 +136,9 @@ class fbMedia(bcMedia):
                          'total_count': 1,
                          'next': None
                         },
-                    'data': [self.format_folder_response(data)]
+                    'data': self.format_folder_response(data)
                     }
         return { 'response': response }
-
-    def post_folder_to_account(self, data):
-        """ POST API_PATH/[ACCOUNT_ID] """
-        return defaultMethodResponse
-
-    def edit_a_folder(self, data):
-        """ PUT API_PATH/[FOLDER_ID] """
-        return defaultMethodResponse
-
-    def delete_a_folder(self, data):
-        """ DELETE API_PATH/[FOLDER_ID] """
-        return defaultMethodResponse
 
     #   endregion Folder Aggregation
 
