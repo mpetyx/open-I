@@ -18,3 +18,4 @@ mimeparse
 django-tastypie-swagger==0.1.2
 south
 python-google-places
+flickr_api
