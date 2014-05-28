@@ -151,7 +151,7 @@ INSTALLED_APPS = (
     # 'allauth.socialaccount.providers.bitly',
     # 'allauth.socialaccount.providers.dropbox',
     'allauth.socialaccount.providers.facebook',
-    # 'allauth.socialaccount.providers.flickr',
+    'allauth.socialaccount.providers.flickr',
     'allauth.socialaccount.providers.foursquare',
     # 'allauth.socialaccount.providers.feedly',
     # 'allauth.socialaccount.providers.github',
