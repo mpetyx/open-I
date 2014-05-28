@@ -1,5 +1,5 @@
 import sys
-from base.variables import defJsonRes, defaultMethodResponse
+from base.common import defJsonRes, defaultMethodResponse
 
 class basicProvider:
     """ This class is used to:
