@@ -7,6 +7,8 @@ from django.views.generic.base import TemplateView
 # from APIS.Location.urls import urlpatterns as Location_Urls
 # from user_management.SignIn import facebook, twitter
 from APIS.urls import urlpatterns as Object_Urls
+from django.conf import settings
+from django.conf.urls.static import static
 
 from views import *
 
@@ -40,3 +42,8 @@ urlpatterns = patterns('',
 
 # urlpatterns = urlpatterns + Media_Urls + Location_Urls
 urlpatterns = urlpatterns + Object_Urls
+
+
+
+
+urlpatterns = urlpatterns + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
