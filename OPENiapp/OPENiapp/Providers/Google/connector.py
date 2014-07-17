@@ -1,10 +1,11 @@
-from OPENiapp.Providers.baseConnector import basicProvider
-import json
-
 from googleplaces import GooglePlaces, types, lang
 # https://github.com/slimkrazy/python-google-places
 
-class GOPprovider(basicProvider):
+from OPENiapp.Providers.baseConnector import basicProvider
+import json
+from _golocation import goLocation
+
+class GOPprovider(basicProvider, goLocation):
     ''' This class is used to:
         1. Make the connection to the Google Places API
         2. Get user's Photos
@@ -15,23 +16,6 @@ class GOPprovider(basicProvider):
         ''' Initiate the connector '''
         YOUR_API_KEY = 'AIzaSyDoZ455JKv5GS2DgmK1jQc7R8Oj5JVjEnI'
         self.connector = GooglePlaces(YOUR_API_KEY)
-
-    def get_a_place(self, data):
-        """ GET API_PATH/[PLACE_ID] """
-        # Returns a detailed instance of googleplaces.Place
-        raw_data = self.connector.get_place(data['reference'])
-        fields = ['id', 'type', 'service', 'url', 'user.id', 'user.username', 'website', 'name', 'details.formatted_address', 'details.formatted_address.number', 'geo_location.lat', 'geo_location.lng', 'created_time', 'types']
-        alternatives = ['', 'place', 'openi', '', '', '', '', '', '', '', '', '', '', '']
-        data = self.get_fields(raw_data, fields, alternatives)
-        response = {
-                    'meta':
-                        {
-                         'total_count': 1,
-                         'next': None
-                        },
-                    'data': [self.format_place_response(data)]
-                    }
-        return { 'response': response }
 
     def get_nearby_places(self, data):
         """ EXTRA!!! Find nearby places """
@@ -49,7 +33,7 @@ class GOPprovider(basicProvider):
         for raw_data in raw_datas.places:
             data = self.get_fields(raw_data, fields, alternatives)
             response['data'].append(self.format_place_response(data))
-        return { 'response': response }
+        return response
 
     def add_a_place(self, data):
         """ EXTRA!!! Add a new place """
@@ -63,7 +47,7 @@ class GOPprovider(basicProvider):
                         'added_place_reference': raw_data.reference,
                         'added_place_id': raw_data.id
                     }
-        return { 'response': response }
+        return response
     
     def delete_a_place(self, data):
         """ DELETE API_PATH/[PLACE_ID] """

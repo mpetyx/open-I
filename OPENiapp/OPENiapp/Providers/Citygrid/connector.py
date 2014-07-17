@@ -43,4 +43,4 @@ class provider(basicProvider):
                         },
                     'data': [self.format_place_response(data)]
                     }
-        return { 'response': response }
+        return response

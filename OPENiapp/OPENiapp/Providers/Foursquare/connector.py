@@ -9,7 +9,7 @@ class provider(basicProvider):
         3. Get OPENi album Photos
         4. Post Photos to OPENi album
     '''
-    def __init__(self, application, access_token):
+    def __init__(self, access_token):
         ''' Initiate the connector '''
         self.connector = Foursquare(access_token=access_token, version='20140116')
     
@@ -51,7 +51,7 @@ class provider(basicProvider):
                                         self.defJsonRes
                                         )]
                     }
-        return { 'response': response }
+        return response
 
     def get_all_photos_for_account(self, data):
         ''' GET API_PATH/[ACCOUNT_ID]/photos '''
@@ -83,7 +83,7 @@ class provider(basicProvider):
                                          self.defJsonRes,
                                          self.defJsonRes
                                          ))
-        return { 'response': response }
+        return response
 
     #   region Connections
 
@@ -112,7 +112,7 @@ class provider(basicProvider):
                                          raw_data['text'],
                                          defJsonRes
                                          ))
-        return { 'response': response }
+        return response
 
     def post_comment(self, data):
         ''' POST API_PATH/[PHOTO_ID]/comments '''
@@ -124,13 +124,13 @@ class provider(basicProvider):
         ''' DELETE API_PATH/[COMMENT_ID] '''
         # /media/media-id/comments/comment-id (ie media/628147512937366504_917877895/comments/628902539272471262)
         response = self.connector.delete_comment(data['media_id'], data['comment_id'])
-        return { 'response': response }
+        return response
 
     def like_a_photo(self, data):
         ''' POST API_PATH/[PHOTO_ID]/likes '''
         # /media/media-id/likes (ie media/628147512937366504_917877895/likes)
         response = self.connector.like_media(data['media_id'])
-        return { 'response': response }
+        return response
 
     def get_photo_likes(self, data):
         ''' GET API_PATH/[PHOTO_ID]/likes '''
@@ -161,7 +161,7 @@ class provider(basicProvider):
         ''' DELETE API_PATH/[PHOTO_ID]/likes '''
         # /media/media-id/likes (ie media/628147512937366504_917877895/likes)
         response = self.connector.unlike_media(data['media_id'])
-        return { 'response': response }
+        return response
 
 
     #   endregion Connections

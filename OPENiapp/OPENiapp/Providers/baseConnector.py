@@ -14,7 +14,7 @@ class basicProvider:
         response["extra"] = extra
 
     def check_if_exists(self, data, check, otherwise = defJsonRes):
-        """ Loop through the  """
+        """ Check if a certain field exists in our json """
         checkArray = check.split('.')
         ret = data
         for allChecks in checkArray:
